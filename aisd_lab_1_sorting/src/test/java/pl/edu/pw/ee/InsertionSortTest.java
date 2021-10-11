@@ -20,7 +20,7 @@ public class InsertionSortTest {
         double[] nums = { 4, 2, 3 };
         // when
         insertionSort.sort(nums);
-        // then
+        // then 
         double[] expected = { 2, 3, 4 };
         assertEquals(expected, nums);
     }
