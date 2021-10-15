@@ -1,12 +1,17 @@
 package pl.edu.pw.ee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.edu.pw.ee.services.Sorting;
 
 public class QuickSort implements Sorting {
 
     @Override
     public void sort(double[] nums) {
-        if (unsortedVector == null) {
+        // Zmienna unsrotedVector nie została zainicjonowana
+        // unsrotedVector -> nums
+        if (nums == null) {
             throw new IllegalArgumentException("Nums array cannot be null");
         }
 
@@ -14,11 +19,14 @@ public class QuickSort implements Sorting {
     }
 
     private void quicksort(double[] data) {
+        // Brak odpowiedniego importu dla List i ArrayList
         List<Integer> starts = new ArrayList<>();
         List<Integer> ends = new ArrayList<>();
 
-        Integer left = 0;
-        Integer right = data.length - 1;
+        // Integer -> int
+        int left = 0;
+        // Integer -> int
+        int right = data.length - 1;
 
         starts.add(left);
         ends.add(right);
@@ -30,8 +38,13 @@ public class QuickSort implements Sorting {
 
             while (n > 0) {
                 n--;
+                // Metoda get nie usuwa z listy elementu
+                // + starts.remove(n);
+                // + ends.remove(n);
                 left = starts.get(n);
+                starts.remove(n);
                 right = ends.get(n);
+                ends.remove(n);
                 pivot = splitData(data, left, right);
 
                 if (pivot - 1 > left) {
@@ -81,5 +94,4 @@ public class QuickSort implements Sorting {
             data[secondId] = firstValue;
         }
     }
-
 }

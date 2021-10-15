@@ -6,24 +6,28 @@ public class InsertionSort implements Sorting {
 
     @Override
     public void sort(double[] nums) {
-        if (nums != null && nums.length != 1) {
+        if (nums == null) {
+            throw new IllegalArgumentException("Nums array cannot be null");
+        }
+
+        if (nums.length != 1) {
+            // Second index
             int i = 1;
+            // First index
             int j = i - 1;
 
-            while (i > nums.length - 1) {
-                while (j >= 0) {
-                    if (nums[i] > nums[j]) {
-                        double tmp = nums[j];
-                        nums[j] = nums[i];
-                        nums[i] = tmp;
+            while (i < nums.length) {
+                if (nums[j] > nums[i]) {
+                    double tmp = nums[i];
+                    while (j >= 0 && nums[j] >= tmp) {
+                        nums[j + 1] = nums[j];
+                        j--;
                     }
-                    j--;
+                    nums[j + 1] = tmp;
                 }
                 i++;
                 j = i - 1;
             }
         }
-
     }
-
 }
