@@ -139,23 +139,20 @@ public class QuickSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 100_000;
+        final int lenght = 120_000_000;
+        // 100_000_000 -> 51s
 
         double[] nums = new double[lenght];
         Random random = new Random(SEED);
-        for (double x : nums) {
-            x = random.nextDouble();
-        }
+        double[] expected = new double[lenght];
         // when
-        for (double x : nums) {
-            System.out.print(x);
+        for (int i = 0; i < lenght; i++) {
+            double tmp = random.nextDouble();
+            nums[i] = tmp;
+            expected[i] = tmp;
         }
         quickSort.sort(nums);
         // then
-        double[] expected = new double[lenght];
-        for (double x : expected) {
-            x = random.nextDouble();
-        }
         Arrays.sort(expected);
 
         assertArrayEquals(expected, nums, 0);
