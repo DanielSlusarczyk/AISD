@@ -116,11 +116,11 @@ public class QuickSortTest {
     @Test
     public void should_ReturnArray_When_OptimisticArray() {
         // given
-        double[] nums = { 5, 1, 2, 3, 4, 6, 7, 8, 9 };
+        double[] nums = { 6, 3, 2, 1, 4, 5, 9, 8, 7, 10, 11 };
         // when
         quickSort.sort(nums);
         // then
-        double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
         assertArrayEquals(expected, nums, 0);
     }
 
@@ -139,7 +139,7 @@ public class QuickSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 120_000_000;
+        final int lenght = 100_000_000;
         // 100_000_000 -> 51s
 
         double[] nums = new double[lenght];

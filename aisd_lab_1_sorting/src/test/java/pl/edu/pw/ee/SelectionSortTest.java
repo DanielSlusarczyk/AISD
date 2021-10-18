@@ -116,7 +116,7 @@ public class SelectionSortTest {
     @Test
     public void should_ReturnArray_When_OptimisticArray() {
         // given
-        double[] nums = { 5, 1, 2, 3, 4, 6, 7, 8, 9 };
+        double[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         // when
         selectionSort.sort(nums);
         // then
