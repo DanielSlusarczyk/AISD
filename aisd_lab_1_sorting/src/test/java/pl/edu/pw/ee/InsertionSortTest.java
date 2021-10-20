@@ -8,13 +8,15 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
+import pl.edu.pw.ee.services.Sorting;
+
 public class InsertionSortTest {
 
-    private InsertionSort insertionSort;
+    private Sorting sortingMethod;
 
     @Before
     public void setUp() {
-        insertionSort = new InsertionSort();
+        sortingMethod = new InsertionSort();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -22,7 +24,7 @@ public class InsertionSortTest {
         // given
         double[] nums = null;
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
     }
 
     @Test
@@ -30,7 +32,7 @@ public class InsertionSortTest {
         // given
         double[] nums = {};
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = {};
         assertArrayEquals(expected, nums, 0);
@@ -41,7 +43,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 1 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1 };
         assertArrayEquals(expected, nums, 0);
@@ -52,7 +54,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 1, 2 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1, 2 };
         assertArrayEquals(expected, nums, 0);
@@ -63,7 +65,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 2, 1 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1, 2 };
         assertArrayEquals(expected, nums, 0);
@@ -74,7 +76,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 1, 1 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1, 1 };
         assertArrayEquals(expected, nums, 0);
@@ -85,7 +87,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         assertArrayEquals(expected, nums, 0);
@@ -96,7 +98,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 7, 3, 1, 8, 4, 2, 6, 3, 5, 9, 0 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9 };
         assertArrayEquals(expected, nums, 0);
@@ -107,7 +109,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { -3, -4, -2, -4 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { -4, -4, -3, -2 };
         assertArrayEquals(expected, nums, 0);
@@ -118,7 +120,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         assertArrayEquals(expected, nums, 0);
@@ -129,7 +131,7 @@ public class InsertionSortTest {
         // given
         double[] nums = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
         // when
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         assertArrayEquals(expected, nums, 0);
@@ -151,7 +153,7 @@ public class InsertionSortTest {
             nums[i] = tmp;
             expected[i] = tmp;
         }
-        insertionSort.sort(nums);
+        sortingMethod.sort(nums);
         // then
         Arrays.sort(expected);
 

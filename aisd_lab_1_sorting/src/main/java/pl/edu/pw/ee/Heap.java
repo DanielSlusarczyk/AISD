@@ -17,54 +17,75 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
 
     @Override
     public void put(T item) {
-        items.add(item);
+        items.add(size, item);
         size++;
-        heapUp(item);
+        heapUp(size - 1);
     }
 
     @Override
     public T pop() {
+        if(size == 0){
+            throw new ArrayIndexOutOfBoundsException("Cannot pop from empty heap");
+        }
         size--;
         Collections.swap(items, 0, size);
-        heapDown(items.get(0));
+        heapDown(0);
         return items.get(size);
     }
 
     public void printHeap() {
         System.out.println("KOPIEC:");
-        for (T item : items) {
+        for(int i = 0; i < size; i++){
             try {
-                System.out.println("ITEM: " + item + "(" + items.indexOf(item) + "):");
-                System.out.println("Parent: " + getParent(item) + "(" + items.indexOf(getParent(item)) + ")");
-                System.out.println("Children: Left: " + getLeftChildren(item) + " Right: " + getRightChildren(item));
-                System.out.println("");
-            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("ITEM: " + items.get(i) + "(" + i + "):");
+                System.out.println("Parent: " + items.get(getIndexParent(i)) + "(" + getIndexParent(i) + ")");
 
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Parent: brak");
             }
+            try{
+                System.out.println("Children: Left: " + items.get(getIndexLeftChildren(i)));
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("Children: Left: brak");
+            }
+            try{
+                System.out.println("Right: " + items.get(getIndexRightChildren(i)));
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("Children: Right: brak");
+            }
+            System.out.println("");
         }
     }
 
-    private void heapUp(T node) {
-        if (hasParent(node) && node.compareTo(getParent(node)) >= 1) {
-            Collections.swap(items, items.indexOf(node), items.indexOf(getParent(node)));
-            heapUp(node);
+    public int getSize(){
+        return size;
+    }
+
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    private void heapUp(int index) {
+
+        if (hasParent(index) && items.get(index).compareTo(items.get(getIndexParent(index))) >= 1) {
+            Collections.swap(items, index, getIndexParent(index));
+            heapUp(getIndexParent(index));
         }
     }
 
-    private void heapDown(T node) {
-        if (numberOfChildren(node) > 0 && node.compareTo(getGreaterChildren(node)) < 0) {
-            Collections.swap(items, items.indexOf(node), items.indexOf(getGreaterChildren(node)));
-            heapDown(node);
+    private void heapDown(int index) {
+        if (getNumberOfChildren(index) > 0 && items.get(index).compareTo(items.get(getIndexGreaterChildren(index))) < 0) {
+            int swapIndex = getIndexGreaterChildren(index);
+            Collections.swap(items, index, swapIndex);
+            heapDown(swapIndex);
         }
     }
 
-    private boolean hasParent(T node) {
-        int index = items.indexOf(node);
+    private boolean hasParent(int index) {
         return index > 0;
     }
 
-    private int numberOfChildren(T node) {
-        int index = items.indexOf(node);
+    private int getNumberOfChildren(int index) {
         if ((index * 2) + 1 == size - 1)
             return 1;
         else if ((index * 2) + 1 < size)
@@ -73,34 +94,31 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
             return 0;
     }
 
-    private T getGreaterChildren(T node){
-        if(numberOfChildren(node) == 1){
-            return getLeftChildren(node);
+    private int getIndexGreaterChildren(int index){
+        if(getNumberOfChildren(index) == 1){
+            return getIndexLeftChildren(index);
         }
-        else if (numberOfChildren(node) == 2){
-            if(getLeftChildren(node).compareTo(getRightChildren(node)) > 0){
-                return getLeftChildren(node);
+        else if (getNumberOfChildren(index) == 2){
+            if(items.get(getIndexLeftChildren(index)).compareTo(items.get(getIndexRightChildren(index))) > 0){
+                return getIndexLeftChildren(index);
             }
             else{
-                return getRightChildren(node);
+                return getIndexRightChildren(index);
             }
         }
-        return null;
+        return -1;
     }
 
-    private T getLeftChildren(T parentNode) {
-        int index = items.indexOf(parentNode);
-        return items.size() > index * 2 + 1 ? items.get(index * 2 + 1) : null;
+    private int getIndexLeftChildren(int parentIndex) {
+        return items.size() > parentIndex * 2 + 1 ? (parentIndex * 2 + 1) : -1;
     }
 
-    private T getRightChildren(T parentNode) {
-        int index = items.indexOf(parentNode);
-        return items.size() > index * 2 + 2 ? items.get(index * 2 + 2) : null;
+    private int getIndexRightChildren(int parentIndex) {
+        return items.size() > parentIndex * 2 + 2 ? (parentIndex * 2 + 2) : -1;
     }
 
-    private T getParent(T childrenNode) {
-        int index = items.indexOf(childrenNode);
-        return index > 0 ? items.get((index - 1) / 2) : null;
+    private int getIndexParent(int index) {
+        return index > 0 && index < size ? ((index - 1) / 2) : -1;
     }
 
 }

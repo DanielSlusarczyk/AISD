@@ -10,13 +10,13 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-public class SelectionSortTest {
+public class HeapSortTest {
 
     private Sorting sortingMethod;
 
     @Before
     public void setUp() {
-        sortingMethod = new SelectionSort();
+        sortingMethod = new HeapSort();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -118,11 +118,11 @@ public class SelectionSortTest {
     @Test
     public void should_ReturnArray_When_OptimisticArray() {
         // given
-        double[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        double[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         // when
         sortingMethod.sort(nums);
         // then
-        double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         assertArrayEquals(expected, nums, 0);
     }
 
@@ -141,8 +141,8 @@ public class SelectionSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 500_000;
-        // 500_000 -> 55,7s
+        final int lenght = 10_000_000;
+        // 
 
         double[] nums = new double[lenght];
         Random random = new Random(SEED);
