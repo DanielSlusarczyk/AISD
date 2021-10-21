@@ -118,11 +118,11 @@ public class HeapSortTest {
     @Test
     public void should_ReturnArray_When_OptimisticArray() {
         // given
-        double[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        double[] nums = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
         // when
         sortingMethod.sort(nums);
         // then
-        double[] expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        double[] expected = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
         assertArrayEquals(expected, nums, 0);
     }
 
@@ -141,8 +141,7 @@ public class HeapSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 10_000_000;
-        // 
+        final int lenght = 100_000;
 
         double[] nums = new double[lenght];
         Random random = new Random(SEED);

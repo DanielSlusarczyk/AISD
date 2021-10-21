@@ -11,8 +11,8 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     private int size;
     private List<T> items;
 
-    public Heap(){
-        items= new ArrayList<>();
+    public Heap() {
+        items = new ArrayList<>();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
 
     @Override
     public T pop() {
-        if(size == 0){
+        if (isEmpty()) {
             throw new ArrayIndexOutOfBoundsException("Cannot pop from empty heap");
         }
         size--;
@@ -33,40 +33,15 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         return items.get(size);
     }
 
-    public void printHeap() {
-        System.out.println("KOPIEC:");
-        for(int i = 0; i < size; i++){
-            try {
-                System.out.println("ITEM: " + items.get(i) + "(" + i + "):");
-                System.out.println("Parent: " + items.get(getIndexParent(i)) + "(" + getIndexParent(i) + ")");
-
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Parent: brak");
-            }
-            try{
-                System.out.println("Children: Left: " + items.get(getIndexLeftChildren(i)));
-            } catch (IndexOutOfBoundsException e){
-                System.out.println("Children: Left: brak");
-            }
-            try{
-                System.out.println("Right: " + items.get(getIndexRightChildren(i)));
-            } catch (IndexOutOfBoundsException e){
-                System.out.println("Children: Right: brak");
-            }
-            System.out.println("");
-        }
-    }
-
-    public int getSize(){
+    public int getSize() {
         return size;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 
     private void heapUp(int index) {
-
         if (hasParent(index) && items.get(index).compareTo(items.get(getIndexParent(index))) >= 1) {
             Collections.swap(items, index, getIndexParent(index));
             heapUp(getIndexParent(index));
@@ -74,7 +49,8 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     }
 
     private void heapDown(int index) {
-        if (getNumberOfChildren(index) > 0 && items.get(index).compareTo(items.get(getIndexGreaterChildren(index))) < 0) {
+        if (getNumberOfChildren(index) > 0
+                && items.get(index).compareTo(items.get(getIndexGreaterChildren(index))) < 0) {
             int swapIndex = getIndexGreaterChildren(index);
             Collections.swap(items, index, swapIndex);
             heapDown(swapIndex);
@@ -94,15 +70,13 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
             return 0;
     }
 
-    private int getIndexGreaterChildren(int index){
-        if(getNumberOfChildren(index) == 1){
+    private int getIndexGreaterChildren(int index) {
+        if (getNumberOfChildren(index) == 1) {
             return getIndexLeftChildren(index);
-        }
-        else if (getNumberOfChildren(index) == 2){
-            if(items.get(getIndexLeftChildren(index)).compareTo(items.get(getIndexRightChildren(index))) > 0){
+        } else if (getNumberOfChildren(index) == 2) {
+            if (items.get(getIndexLeftChildren(index)).compareTo(items.get(getIndexRightChildren(index))) > 0) {
                 return getIndexLeftChildren(index);
-            }
-            else{
+            } else {
                 return getIndexRightChildren(index);
             }
         }

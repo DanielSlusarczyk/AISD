@@ -141,7 +141,7 @@ public class InsertionSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 350_000;
+        final int lenght = 100_000;
         // 350_000 -> 57s
 
         double[] nums = new double[lenght];

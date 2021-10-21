@@ -141,7 +141,7 @@ public class QuickSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 10_000_000;
+        final int lenght = 100_000;
         // 100_000_000 -> 51s
 
         double[] nums = new double[lenght];

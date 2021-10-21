@@ -141,7 +141,7 @@ public class SelectionSortTest {
     public void should_ReturnSortedArray_When_ArrayHasManyElem() {
         // given
         final long SEED = 1410;
-        final int lenght = 500_000;
+        final int lenght = 100_000;
         // 500_000 -> 55,7s
 
         double[] nums = new double[lenght];

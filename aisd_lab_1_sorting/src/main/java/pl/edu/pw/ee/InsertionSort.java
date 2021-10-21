@@ -11,9 +11,7 @@ public class InsertionSort implements Sorting {
         }
 
         if (nums.length != 1) {
-            // Second index
             int i = 1;
-            // First index
             int j = i - 1;
 
             while (i < nums.length) {
