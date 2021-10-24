@@ -83,9 +83,20 @@ public class InsertionSortTest {
     }
 
     @Test
-    public void should_ReturnSortedArray_When_ArrayHasUnsortedElem() {
+    public void should_ReturnSortedArray_When_ArrayHasReverseSortedElem() {
         // given
         double[] nums = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        // when
+        sortingMethod.sort(nums);
+        // then
+        double[] expected = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        assertArrayEquals(expected, nums, 0);
+    }
+
+    @Test
+    public void should_ReturnSortedArray_When_ArrayHasSortedElem() {
+        // given
+        double[] nums = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         // when
         sortingMethod.sort(nums);
         // then
@@ -101,6 +112,17 @@ public class InsertionSortTest {
         sortingMethod.sort(nums);
         // then
         double[] expected = { 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9 };
+        assertArrayEquals(expected, nums, 0);
+    }
+
+    @Test
+    public void should_ReturnSortedArray_When_ArrayHasEqualElem() {
+        // given
+        double[] nums = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        // when
+        sortingMethod.sort(nums);
+        // then
+        double[] expected = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
         assertArrayEquals(expected, nums, 0);
     }
 
@@ -159,5 +181,4 @@ public class InsertionSortTest {
 
         assertArrayEquals(expected, nums, 0);
     }
-
 }

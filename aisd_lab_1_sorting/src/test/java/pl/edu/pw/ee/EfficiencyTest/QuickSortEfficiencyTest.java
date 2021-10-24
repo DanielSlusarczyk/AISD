@@ -14,7 +14,7 @@ import pl.edu.pw.ee.services.Sorting;
 public class QuickSortEfficiencyTest {
 
     // Number of element:
-    private final int lenght = 100;
+    private final int lenght = 10_000;
     private final long SEED = 1410;
 
     private Sorting sortingMethod;
@@ -33,17 +33,16 @@ public class QuickSortEfficiencyTest {
     private double[] A_nums;
     private double[] A_expected;
 
-    private void generateBestCase(double sortedNums[], int startIndex, int endIndex) {
-        // swap middle element always to first position in each subset
-        int size = endIndex - startIndex + 1;
-        if (size > 1) {
-            int mid = (size % 2) == 0 ? startIndex + (size / 2) : startIndex + ((size - 1) / 2);
-            double tmp = sortedNums[mid];
-            System.arraycopy(sortedNums, startIndex, sortedNums, startIndex + 1, mid - startIndex);
-            sortedNums[startIndex] = tmp;
-            generateBestCase(sortedNums, startIndex + 1, mid);
-            generateBestCase(sortedNums, mid + 1, endIndex);
-        }
+    private void generateBestCase(double nums[]) {
+        double[] sortedNums = new double[nums.length];
+        System.arraycopy(nums, 0, sortedNums, 0, nums.length);
+        Arrays.sort(sortedNums);
+        int indexOfMid = 0;
+        while (nums[indexOfMid] != sortedNums[sortedNums.length / 2])
+            indexOfMid++;
+        double tmp = nums[0];
+        nums[0] = nums[indexOfMid];
+        nums[indexOfMid] = tmp;
     }
 
     @Before
@@ -56,8 +55,7 @@ public class QuickSortEfficiencyTest {
         O_nums = randomNums.doubles(lenght).toArray();
         O_expected = randomExpected.doubles(lenght).toArray();
         Arrays.sort(O_expected);
-        Arrays.sort(O_nums);
-        generateBestCase(O_nums, 0, O_nums.length - 1);
+        generateBestCase(O_nums);
 
         // pessimisticCase
         randomNums = new Random(SEED);
@@ -98,5 +96,4 @@ public class QuickSortEfficiencyTest {
         // then
         assertArrayEquals(A_expected, A_nums, 0);
     }
-
 }

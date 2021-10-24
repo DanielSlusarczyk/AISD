@@ -14,7 +14,7 @@ import pl.edu.pw.ee.services.Sorting;
 public class InsertionSortEfficiencyTest {
 
     // Number of element:
-    private final int lenght = 100;
+    private final int lenght = 10_000;
     private final long SEED = 1410;
 
     private Sorting sortingMethod;

@@ -9,7 +9,7 @@ public class QuickSort implements Sorting {
 
     @Override
     public void sort(double[] nums) {
-        // Zmienna unsrotedVector nie została zainicjonowana
+        // Zmienna unsrotedVector nie została zadeklarowana
         // unsrotedVector -> nums
         if (nums == null) {
             throw new IllegalArgumentException("Nums array cannot be null");

@@ -42,16 +42,16 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     }
 
     private void heapUp(int index) {
-        if (hasParent(index) && items.get(index).compareTo(items.get(getIndexParent(index))) >= 1) {
-            Collections.swap(items, index, getIndexParent(index));
-            heapUp(getIndexParent(index));
+        if (hasParent(index) && items.get(index).compareTo(items.get(getIndexOfParent(index))) >= 1) {
+            Collections.swap(items, index, getIndexOfParent(index));
+            heapUp(getIndexOfParent(index));
         }
     }
 
     private void heapDown(int index) {
         if (getNumberOfChildren(index) > 0
-                && items.get(index).compareTo(items.get(getIndexGreaterChildren(index))) < 0) {
-            int swapIndex = getIndexGreaterChildren(index);
+                && items.get(index).compareTo(items.get(getIndexOfGreaterChildren(index))) < 0) {
+            int swapIndex = getIndexOfGreaterChildren(index);
             Collections.swap(items, index, swapIndex);
             heapDown(swapIndex);
         }
@@ -70,29 +70,28 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
             return 0;
     }
 
-    private int getIndexGreaterChildren(int index) {
+    private int getIndexOfGreaterChildren(int index) {
         if (getNumberOfChildren(index) == 1) {
-            return getIndexLeftChildren(index);
+            return getIndexOfLeftChildren(index);
         } else if (getNumberOfChildren(index) == 2) {
-            if (items.get(getIndexLeftChildren(index)).compareTo(items.get(getIndexRightChildren(index))) > 0) {
-                return getIndexLeftChildren(index);
+            if (items.get(getIndexOfLeftChildren(index)).compareTo(items.get(getIndexOfRightChildren(index))) > 0) {
+                return getIndexOfLeftChildren(index);
             } else {
-                return getIndexRightChildren(index);
+                return getIndexOfRightChildren(index);
             }
         }
         return -1;
     }
 
-    private int getIndexLeftChildren(int parentIndex) {
+    private int getIndexOfLeftChildren(int parentIndex) {
         return items.size() > parentIndex * 2 + 1 ? (parentIndex * 2 + 1) : -1;
     }
 
-    private int getIndexRightChildren(int parentIndex) {
+    private int getIndexOfRightChildren(int parentIndex) {
         return items.size() > parentIndex * 2 + 2 ? (parentIndex * 2 + 2) : -1;
     }
 
-    private int getIndexParent(int index) {
+    private int getIndexOfParent(int index) {
         return index > 0 && index < size ? ((index - 1) / 2) : -1;
     }
-
 }

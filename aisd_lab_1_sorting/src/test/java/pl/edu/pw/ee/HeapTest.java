@@ -5,34 +5,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class HeapTest {
 
     private Heap<Double> heap;
 
+    @Before
+    public void setUp() {
+        heap = new Heap<>();
+    }
+
     @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void should_ThrowArrayIndexOutOfBoundsException_popByEmptyHeap() {
-        //given
-        heap = new Heap<>();
         // when
         heap.pop();
     }
 
     @Test
     public void should_beEmpty_atFirst() {
-        // given
-        heap = new Heap<>();
-        // when
-        
         // then
         assertTrue(heap.isEmpty());
     }
 
     @Test
     public void should_beNotEmpty_afterPut() {
-        // given
-        heap = new Heap<>();
         // when
         heap.put(1.0);
         // then
@@ -41,8 +39,6 @@ public class HeapTest {
 
     @Test
     public void should_beEmpty_afterPutAndPop() {
-        // given
-        heap = new Heap<>();
         // when
         heap.put(1.0);
         heap.pop();
@@ -52,8 +48,6 @@ public class HeapTest {
 
     @Test
     public void should_hasSizeOfZero_atFirst() {
-        // given
-        heap = new Heap<>();
         // when
         int actual = heap.getSize();
         // then
@@ -63,8 +57,6 @@ public class HeapTest {
 
     @Test
     public void should_hasSizeOfOne_afterPut() {
-        // given
-        heap = new Heap<>();
         // when
         heap.put(1.0);
         int actual = heap.getSize();
@@ -75,8 +67,6 @@ public class HeapTest {
 
     @Test
     public void should_hasSizeOfTwo_afterDoublePut() {
-        // given
-        heap = new Heap<>();
         // when
         heap.put(1.0);
         heap.put(1.1);
@@ -88,8 +78,6 @@ public class HeapTest {
 
     @Test
     public void should_hasSizeOfZero_afterPutAndPop() {
-        // given
-        heap = new Heap<>();
         // when
         heap.put(1.0);
         heap.pop();
@@ -100,9 +88,7 @@ public class HeapTest {
     }
 
     @Test
-    public void should_popMaxElement_PositiveElements() {
-        // given
-        heap = new Heap<>();
+    public void should_popMaxElement_positiveElements() {
         // when
         heap.put(1.0);
         heap.put(2.0);
@@ -116,9 +102,7 @@ public class HeapTest {
     }
 
     @Test
-    public void should_popMaxElement_NegativeElements() {
-        // given
-        heap = new Heap<>();
+    public void should_popMaxElement_negativeElements() {
         // when
         heap.put(-1.0);
         heap.put(-2.0);
@@ -133,9 +117,7 @@ public class HeapTest {
     }
 
     @Test
-    public void should_popMaxElement_MixedElements() {
-        // given
-        heap = new Heap<>();
+    public void should_popMaxElement_mixedElements() {
         // when
         heap.put(-1.0);
         heap.put(2.0);
@@ -150,9 +132,7 @@ public class HeapTest {
     }
 
     @Test
-    public void should_PopProperOrder() {
-        // given
-        heap = new Heap<>();
+    public void should_popProperOrder() {
         // when
         heap.put(-1.0);
         heap.put(2.0);
@@ -160,15 +140,12 @@ public class HeapTest {
         heap.put(-2.0);
         heap.put(1.0);
         heap.put(0.0);
-        double [] actual = new double[6];
-        for(int i = 0; i < 6; i ++){
+        double[] actual = new double[6];
+        for (int i = 0; i < 6; i++) {
             actual[i] = heap.pop();
         }
         // then
-        double[] expected = {2.0, 1.0, 0.0, -1.0, -2.0, -3.0};
+        double[] expected = { 2.0, 1.0, 0.0, -1.0, -2.0, -3.0 };
         assertArrayEquals(expected, actual, 0);
     }
-
-
 }
-

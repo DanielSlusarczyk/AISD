@@ -14,7 +14,7 @@ import pl.edu.pw.ee.services.Sorting;
 public class SelectionSortEfficiencyTest {
 
     // Number of element:
-    private final int lenght = 3_250_000;
+    private final int lenght = 10_000;
     private final long SEED = 1410;
 
     private Sorting sortingMethod;
@@ -89,5 +89,4 @@ public class SelectionSortEfficiencyTest {
         // then
         assertArrayEquals(P_expected, P_nums, 0);
     }
-
 }

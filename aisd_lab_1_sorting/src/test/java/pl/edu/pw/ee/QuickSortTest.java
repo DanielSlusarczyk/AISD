@@ -83,9 +83,20 @@ public class QuickSortTest {
     }
 
     @Test
-    public void should_ReturnSortedArray_When_ArrayHasUnsortedElem() {
+    public void should_ReturnSortedArray_When_ArrayHasReverseUnsortedElem() {
         // given
         double[] nums = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        // when
+        sortingMethod.sort(nums);
+        // then
+        double[] expected = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        assertArrayEquals(expected, nums, 0);
+    }
+
+    @Test
+    public void should_ReturnSortedArray_When_ArrayHasSortedElem() {
+        // given
+        double[] nums = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         // when
         sortingMethod.sort(nums);
         // then
@@ -105,6 +116,17 @@ public class QuickSortTest {
     }
 
     @Test
+    public void should_ReturnSortedArray_When_ArrayHasEqualElem() {
+        // given
+        double[] nums = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        // when
+        sortingMethod.sort(nums);
+        // then
+        double[] expected = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        assertArrayEquals(expected, nums, 0);
+    }
+
+    @Test
     public void should_ReturnSortedArray_When_ArrayHasNegativedElem() {
         // given
         double[] nums = { -3, -4, -2, -4 };
@@ -118,7 +140,7 @@ public class QuickSortTest {
     @Test
     public void should_ReturnArray_When_OptimisticArray() {
         // given
-        double[] nums = { 6, 3, 2, 1, 4, 5, 9, 8, 7, 10, 11 };
+        double[] nums = { 6, 5, 2, 1, 4, 3, 7, 8, 9, 10, 11 };
         // when
         sortingMethod.sort(nums);
         // then
@@ -156,8 +178,6 @@ public class QuickSortTest {
         sortingMethod.sort(nums);
         // then
         Arrays.sort(expected);
-
         assertArrayEquals(expected, nums, 0);
     }
-
 }
