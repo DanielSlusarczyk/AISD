@@ -6,30 +6,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HashListChainingTest {
-    private HashListChaining hashListChaining;
+    private HashListChaining<Double> hashListChaining;
     private int size = 4096;
 
     @Before
     public void setUp(){
-        hashListChaining = new HashListChaining(size);
+        hashListChaining = new HashListChaining<>(size);
     }
 
     @Test
     public void getAddedElement(){
         //given
         double value = 10;
+        //when
         hashListChaining.add(value);
-        //when
-
+        double actual = hashListChaining.get(value);
         //then
-        Object expected = hashListChaining.get(value);
-        assertEquals(expected, value);
-    }
-
-    @Test
-    public void getMissElement(){
-        //when
-        
+        double expected = value;
+        assertEquals(expected, actual, 0);
     }
 
     @Test

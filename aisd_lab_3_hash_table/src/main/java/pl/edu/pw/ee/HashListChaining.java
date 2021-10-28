@@ -1,75 +1,131 @@
 package pl.edu.pw.ee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashListChaining implements HashTable {
+public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     private final Elem nil = null;
-    private Elem[] hashElems;
+    private List<Elem> hashElems;
     private int nElem;
+    private int size;
 
     private class Elem {
-        private Object value;
+        private T value;
         private Elem next;
 
-        Elem(Object value, Elem nextElem) {
+        Elem(T value, Elem nextElem) {
             this.value = value;
+            this.next = nextElem;
+        }
+
+        public void setNext(Elem nextElem) {
             this.next = nextElem;
         }
     }
 
     public HashListChaining(int size) {
-        hashElems = new Elem[size];
+        hashElems = new ArrayList<>();
+        this.size = size;
         initializeHash();
     }
 
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
-        Elem oldElem = hashElems[hashId];
-        while (oldElem != nil && !oldElem.equals(value)) {
-            oldElem = oldElem.next;
-        }
-        if (oldElem != nil) {
-            oldElem.value = value;
-        } else {
-            hashElems[hashId] = new Elem(value, hashElems[hashId]);
+        // new Element
+        if (hashElems.get(hashId) == nil) {
+            System.out.println("Dodaje nowy element: " + value + " [" + hashId + "]");
+            hashElems.set(hashId, new Elem(value, nil));
             nElem++;
+        } else {
+            Elem oldElem = hashElems.get(hashId);
+            while (oldElem.next != nil && !oldElem.value.equals(value)) {
+                oldElem = oldElem.next;
+            }
+            if (oldElem.value.equals(value)) {
+                System.out.println("Element się powtarza: " + value + " [" + hashId + "]");
+                oldElem.value = value;
+            } else {
+                System.out.println("Rozszerzam listę: " + value + " [" + hashId + "]");
+                oldElem.setNext(new Elem(value, nil));
+                nElem++;
+            }
         }
     }
 
     @Override
-    public Object get(Object value) {
+    public T get(T value) {
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
-        Elem elem = hashElems[hashId];
+        Elem elem = hashElems.get(hashId);
 
         while (elem != nil && !elem.value.equals(value)) {
             elem = elem.next;
         }
 
-        return elem != nil ? elem.value : nil;
+        return elem != nil ? elem.value : null;
+    }
+
+    @Override
+    public void delete(T value) {
+        int hashCode = value.hashCode();
+        int hashId = countHashId(hashCode);
+
+        Elem elem = hashElems.get(hashId);
+        if (elem != nil && elem.value.equals(value)) {
+            hashElems.set(hashId, elem.next);
+        }
+        if (elem != nil) {
+            while (elem.next != nil && !elem.next.value.equals(value)) {
+                elem = elem.next;
+            }
+            if (elem.next != nil) {
+                elem.setNext(elem.next.next);
+            }
+        }
     }
 
     public double countLoadFactor() {
-        double size = hashElems.length;
-        return nElem / size;
+        return Double.valueOf(nElem) / size;
     }
 
     private void initializeHash() {
-        int n = hashElems.length;
-
-        for (int i = 0; i < n; i++) {
-            hashElems[i] = nil;
+        for (int i = 0; i < size; i++) {
+            hashElems.add(i, nil);
         }
     }
 
     private int countHashId(int hashCode) {
-        int n = hashElems.length;
-        return Math.abs(hashCode) % n;
+        return Math.abs(hashCode) % size;
     }
 
+    public void printAll() {
+        System.out.println("HASH TABLE: ");
+        System.out.println("Rozmiar: " + size + " Zapełnienie: " + countLoadFactor());
+        System.out.println("");
+        int counter = 0;
+        for (Elem elem : hashElems) {
+            System.out.println("[" + counter + "]");
+            int elemCounter = 1;
+            while (elem != nil) {
+                System.out.println(elem.value);
+                for (int i = 0; i < elemCounter; i++) {
+                    System.out.print(" ");
+                }
+                elemCounter = elemCounter + 3;
+                System.out.print("->");
+                elem = elem.next;
+                if (elem == nil) {
+                    System.out.println("Null");
+                }
+            }
+            counter++;
+        }
+    }
 }
