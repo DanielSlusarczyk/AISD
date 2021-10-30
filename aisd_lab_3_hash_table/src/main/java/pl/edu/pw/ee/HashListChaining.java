@@ -39,7 +39,7 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
         // new Element
         if (hashElems.get(hashId) == nil) {
-            System.out.println("Dodaje nowy element: " + value + " [" + hashId + "]");
+            //System.out.println("Dodaje nowy element: " + value + " [" + hashId + "]");
             hashElems.set(hashId, new Elem(value, nil));
             nElem++;
         } else {
@@ -48,10 +48,10 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
                 oldElem = oldElem.next;
             }
             if (oldElem.value.equals(value)) {
-                System.out.println("Element się powtarza: " + value + " [" + hashId + "]");
+                //System.out.println("Element się powtarza: " + value + " [" + hashId + "]");
                 oldElem.value = value;
             } else {
-                System.out.println("Rozszerzam listę: " + value + " [" + hashId + "]");
+                //System.out.println("Rozszerzam listę: " + value + " [" + hashId + "]");
                 oldElem.setNext(new Elem(value, nil));
                 nElem++;
             }
@@ -80,6 +80,7 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
         Elem elem = hashElems.get(hashId);
         if (elem != nil && elem.value.equals(value)) {
             hashElems.set(hashId, elem.next);
+            nElem --;
         }
         if (elem != nil) {
             while (elem.next != nil && !elem.next.value.equals(value)) {
@@ -87,12 +88,17 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
             }
             if (elem.next != nil) {
                 elem.setNext(elem.next.next);
+                nElem--;
             }
         }
     }
 
     public double countLoadFactor() {
         return Double.valueOf(nElem) / size;
+    }
+
+    public int getNumberOfElements(){
+        return nElem;
     }
 
     private void initializeHash() {
