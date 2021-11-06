@@ -2,11 +2,8 @@ package pl.edu.pw.ee.performance;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Before;
@@ -15,60 +12,66 @@ import org.junit.Test;
 import pl.edu.pw.ee.HashListChaining;
 
 public class HashListChainingPerformanceTest {
-    private HashListChaining<String> hashListChaining;
+
     private int size = 4096 * 8;
+    private HashListChaining<String> hashListChaining;
     private List<String> wordList;
+
     //Time Log
-    private String fileName = "src/test/java/pl/edu/pw/ee/performance/wordlist.txt";
-    private String logFile = "src/test/java/pl/edu/pw/ee/performance/timeLog.txt";
-    private BufferedWriter writer;
+    private FilesHandler filesHandler;
     private List <Long> results;
+    private boolean allTest = false;
 
     @Before
     public void setUp() throws IOException{
         hashListChaining = new HashListChaining<>(size);
-        writer = new BufferedWriter(new FileWriter(logFile));
         results = new ArrayList<>();
-        wordList = FileReader.addFromFile(fileName);
+        filesHandler = new FilesHandler();
+        wordList = filesHandler.addFromFile();
 
         for(String toAdd : wordList){
             hashListChaining.add(toAdd);
         }
+        hashListChaining.printAll();
     }
 
     @Test
-    public <T> void performanceTest() throws IOException{
+    public void performanceTest() throws IOException{
         //given
         long startTime;
         long endTime;
+        int nmbOfRuns = 30;
+
         //when 
-        writer.write("NUMER PRZEBIEGU -> CZAS \n");
-        for(int run = 0; run < 30; run++){
+        for(int runCounter = 0; runCounter < nmbOfRuns; runCounter++){
             startTime = System.currentTimeMillis();
+
             for(String toGet : wordList){
                 String actual = hashListChaining.get(toGet);
                 String expected = toGet;
                 assertEquals(expected, actual);
             }
-            endTime = System.currentTimeMillis();
-            results.add(endTime - startTime);
-        }
-        results.sort(new Comparator<Long>() {
-            @Override
-            public int compare(Long o1, Long o2) {
-                return o1.compareTo(o2);
-            } 
-        });
 
-        int counter = 1;
-        for(Long result : results){
-            writer.write(counter + " -> " + result + "\n");
-            if(counter%10==0){
-                writer.write("\n");
-            }
-            counter ++;
+            endTime = System.currentTimeMillis();
+            results.add((endTime - startTime));
         }
-        writer.close();
+        filesHandler.writeResult(results, allTest, size);
     }
 
+    @Test
+    public void complexPerformanceTest() throws IOException{
+        double power = 0;
+        double basis = 2;
+        int nmbOfTest = 7;
+        allTest = true;
+
+        for(int i = 0; i < nmbOfTest; i++){
+            double multipler = Math.pow(basis, power);
+            size = 1000 * (int)multipler;
+            performanceTest();
+            results.clear();
+            power ++;
+        }
+    }
+    
 }

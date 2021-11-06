@@ -37,9 +37,7 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
-        // new Element
         if (hashElems.get(hashId) == nil) {
-            //System.out.println("Dodaje nowy element: " + value + " [" + hashId + "]");
             hashElems.set(hashId, new Elem(value, nil));
             nElem++;
         } else {
@@ -48,10 +46,8 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
                 oldElem = oldElem.next;
             }
             if (oldElem.value.equals(value)) {
-                //System.out.println("Element się powtarza: " + value + " [" + hashId + "]");
                 oldElem.value = value;
             } else {
-                //System.out.println("Rozszerzam listę: " + value + " [" + hashId + "]");
                 oldElem.setNext(new Elem(value, nil));
                 nElem++;
             }
