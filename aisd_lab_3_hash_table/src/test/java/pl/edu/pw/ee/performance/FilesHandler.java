@@ -11,9 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FilesHandler {
-
     private String fileName = "src/test/java/pl/edu/pw/ee/performance/wordlist.txt";
-    private String logFile = "src/test/java/pl/edu/pw/ee/performance/timeLog.txt";
+    private String logFile = "src/test/java/pl/edu/pw/ee/performance/results/timeLog.txt";
     private BufferedWriter writer;
     private FileWriter fileWriter;
 
@@ -53,7 +52,7 @@ public class FilesHandler {
         writer.close();
     }
 
-    private void writeComplexResult(List<Long> results) throws IOException {  
+    private void writeComplexResult(List<Long> results) throws IOException {
         writer.write("NUMER PRZEBIEGU - CZAS [ms] \n");
         int counter = 1;
         double average = 0;
@@ -82,7 +81,7 @@ public class FilesHandler {
             if (counter % 10 == 0) {
                 average = average / 10;
                 if (counter % 20 == 0) {
-                    writer.write(size + " : " + average);
+                    writer.write(size + " : " + String.valueOf(average).replace(".", ","));
                     writer.write("\n");
                 }
                 average = 0;

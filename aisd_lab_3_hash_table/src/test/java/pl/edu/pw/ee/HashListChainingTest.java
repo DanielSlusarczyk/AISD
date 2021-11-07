@@ -3,6 +3,8 @@ package pl.edu.pw.ee;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
@@ -15,6 +17,16 @@ public class HashListChainingTest {
     @Before
     public void setUp() {
         hashListChaining = new HashListChaining<>(size);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void size_setToZero() {
+        hashListChaining = new HashListChaining<>(0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void size_setToNegativeNumber() {
+        hashListChaining = new HashListChaining<>(-1);
     }
 
     @Test
@@ -50,10 +62,18 @@ public class HashListChainingTest {
     public void add_manyDifferentElements() {
         // given
         int testLength = 10_000;
+        long SEED = 1410;
+        Random random = new Random(SEED);
+        List<Double> addedValues = new ArrayList<>();
 
         // when
         for (int i = 0; i < testLength; i++) {
-            hashListChaining.add(new Random().nextDouble());
+            double toAdd = random.nextDouble();
+            while (addedValues.contains(toAdd)) {
+                toAdd = random.nextDouble();
+            }
+            hashListChaining.add(random.nextDouble());
+            addedValues.add(toAdd);
         }
 
         // then
@@ -98,14 +118,13 @@ public class HashListChainingTest {
     public void add_andDeleteManyElements() {
         // given
         int testLength = 10_000;
-        double value = 0.0;
 
         // when
         for (int i = 0; i < testLength; i++) {
-            hashListChaining.add(value);
+            hashListChaining.add(Double.valueOf(i));
         }
         for (int i = 0; i < testLength; i++) {
-            hashListChaining.delete(value);
+            hashListChaining.delete(Double.valueOf(i));
         }
 
         // then
@@ -114,17 +133,22 @@ public class HashListChainingTest {
         assertEquals(expected, actual);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void get_null() {
+        hashListChaining.get(null);
+    }
+
     @Test
     public void get_unaddedElement() {
         // given
-        double value = 10.0;
+        double getValue = 10.0;
         double addValue = 0.0;
 
         // when
         hashListChaining.add(addValue);
 
         // then
-        Object actual = hashListChaining.get(value);
+        Object actual = hashListChaining.get(getValue);
         assertNull(actual);
     }
 
@@ -248,5 +272,53 @@ public class HashListChainingTest {
         // then
         Object actual = hashListChaining.get(value);
         assertNull(actual);
+    }
+
+    @Test
+    public void delete_notIncludedElement() {
+        // given
+        double value = 1.0;
+
+        // when
+        hashListChaining.add(0.5);
+        hashListChaining.delete(value);
+
+        // then
+        int actual = hashListChaining.getNumberOfElements();
+        int expected = 1;
+        assertEquals(expected, actual, 0);
+    }
+
+    @Test
+    public void countLoadFactor_addOneElement() {
+        // given
+        double valueToAdd = 1.0;
+
+        // when
+        hashListChaining.add(valueToAdd);
+
+        // then
+        double actual = hashListChaining.countLoadFactor();
+        double expected = valueToAdd / size;
+        assertEquals(expected, actual, 0);
+    }
+
+    @Test
+    public void countLoadFactor_addManyElements() {
+        // given
+        int testLength = 10_000;
+        long SEED = 1410;
+        int toAdd = new Random(SEED).nextInt(testLength);
+        Random random = new Random(SEED);
+
+        // when
+        for (int i = 0; i < toAdd; i++) {
+            hashListChaining.add(random.nextDouble());
+        }
+
+        // then
+        double actual = hashListChaining.countLoadFactor();
+        double expected = Double.valueOf(toAdd) / size;
+        assertEquals(expected, actual, 0);
     }
 }

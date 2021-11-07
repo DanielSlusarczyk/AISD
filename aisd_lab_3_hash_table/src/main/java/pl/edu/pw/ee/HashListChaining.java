@@ -27,6 +27,10 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
     }
 
     public HashListChaining(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Cannot set size to: " + size);
+        }
+
         hashElems = new ArrayList<>();
         this.size = size;
         initializeHash();
@@ -56,9 +60,12 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     @Override
     public T get(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot get a null element");
+        }
+
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
-
         Elem elem = hashElems.get(hashId);
 
         while (elem != nil && !elem.value.equals(value)) {
@@ -76,7 +83,7 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
         Elem elem = hashElems.get(hashId);
         if (elem != nil && elem.value.equals(value)) {
             hashElems.set(hashId, elem.next);
-            nElem --;
+            nElem--;
         }
         if (elem != nil) {
             while (elem.next != nil && !elem.next.value.equals(value)) {
@@ -93,7 +100,7 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
         return Double.valueOf(nElem) / size;
     }
 
-    public int getNumberOfElements(){
+    public int getNumberOfElements() {
         return nElem;
     }
 
@@ -105,29 +112,5 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     private int countHashId(int hashCode) {
         return Math.abs(hashCode) % size;
-    }
-
-    public void printAll() {
-        System.out.println("HASH TABLE: ");
-        System.out.println("Rozmiar: " + size + " Zapełnienie: " + countLoadFactor());
-        System.out.println("");
-        int counter = 0;
-        for (Elem elem : hashElems) {
-            System.out.println("[" + counter + "]");
-            int elemCounter = 1;
-            while (elem != nil) {
-                System.out.println(elem.value);
-                for (int i = 0; i < elemCounter; i++) {
-                    System.out.print(" ");
-                }
-                elemCounter = elemCounter + 3;
-                System.out.print("->");
-                elem = elem.next;
-                if (elem == nil) {
-                    System.out.println("Null");
-                }
-            }
-            counter++;
-        }
     }
 }
