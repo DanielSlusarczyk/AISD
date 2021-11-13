@@ -1,11 +1,11 @@
 package pl.edu.pw.ee;
 
-import pl.edu.pw.ee.exceptions.NotImplementedException;
 import pl.edu.pw.ee.services.HashTable;
 
 public abstract class HashOpenAdressing<T extends Comparable<T>> implements HashTable<T> {
 
     private final T nil = null;
+    private final Object deleted = null;
     private int size;
     private int nElems;
     private T[] hashElems;
@@ -15,12 +15,19 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         this(2039); // initial size as random prime number
     }
 
+    @SuppressWarnings("unchecked")
     HashOpenAdressing(int size) {
         validateHashInitSize(size);
 
         this.size = size;
         this.hashElems = (T[]) new Comparable[this.size];
         this.correctLoadFactor = 0.75;
+    }
+
+    void comp(){
+        if(nil == deleted){
+            System.out.println("Nołpa lumpa");
+        }
     }
 
     @Override
@@ -32,25 +39,67 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != nil) {
+        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem)!=0) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
         }
-
+        if (hashElems[hashId] == nil) {
+            nElems++;
+        }
+        //System.out.println("Na pozycji: " + hashId + " Element: " + newElem);
         hashElems[hashId] = newElem;
-        nElems++;
     }
 
     @Override
     public T get(T elem) {
-        // TODO Auto-generated method stub
+        validateInputElem(elem);
+
+        int key = elem.hashCode();
+        int i = 0;
+        int hashId = hashFunc(key, i);
+
+        while (hashElems[hashId] != nil) {
+            if (hashElems[hashId].compareTo(elem) == 0) {
+                return hashElems[hashId];
+            }
+            i = (i + 1) % size;
+            hashId = hashFunc(key, i);
+        }
         return null;
     }
 
     @Override
     public void delete(T elem) {
-        // TODO Auto-generated method stub
+        validateInputElem(elem);
 
+        int key = elem.hashCode();
+        int i = 0;
+        int hashId = hashFunc(key, i);
+
+        while (hashElems[hashId] != nil) {
+            if (hashElems[hashId].compareTo(elem)==0) {
+                orderArray(key, hashId, i);
+                nElems--;
+                break;
+            }
+            i = (i + 1) % size;
+            hashId = hashFunc(key, i);
+        }
+    }
+
+
+    abstract public int getNumOfElems();
+
+    private void orderArray(int key, int hashId, int i) {
+        int iterator = (i + 1) % size;
+        int nextHashId = hashFunc(key, iterator);
+        while (hashElems[nextHashId] != nil) {
+            hashElems[hashId] = hashElems[nextHashId];
+            hashId = nextHashId;
+            iterator = (iterator + 1) % size;
+            nextHashId = hashFunc(key, iterator);
+        }
+        hashElems[hashId] = nil;
     }
 
     private void validateHashInitSize(int initialSize) {
@@ -71,6 +120,20 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         return size;
     }
 
+    int getNElem() {
+        return nElems;
+    }
+
+    double getCorrectLoadFactor(){
+        return correctLoadFactor;
+    }
+
+    void print(){
+        for(int i =0; i < hashElems.length; i++){
+            System.out.println("[" + i + "]" + hashElems[i]);
+        }
+    }
+
     private void resizeIfNeeded() {
         double loadFactor = countLoadFactor();
 
@@ -83,8 +146,11 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         return (double) nElems / size;
     }
 
+    @SuppressWarnings("unchecked")
     private void doubleResize() {
         this.size *= 2;
-        throw new NotImplementedException("This method is not yet implemented!");
+        T[] tmp = (T[]) new Comparable[size];
+        System.arraycopy(hashElems, 0, tmp, 0, size / 2);
+        hashElems = tmp;
     }
 }
