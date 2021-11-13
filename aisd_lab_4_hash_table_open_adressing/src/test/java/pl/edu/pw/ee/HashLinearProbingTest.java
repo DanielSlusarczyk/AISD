@@ -433,6 +433,33 @@ public class HashLinearProbingTest {
     }
 
     @Test
+    public void should_CorrectlyDeleteAllDoubleElems() {
+        // given
+        int testLength = 100;
+        long SEED = 1410;
+        Random random = new Random(SEED);
+        List<Double> doubleList = new ArrayList<>();
+
+        // when
+        for (int i = 0; i < testLength; i++) {
+            double randomDouble = random.nextDouble();
+            while (doubleList.contains(randomDouble)) {
+                randomDouble = random.nextDouble();
+            }
+            doubleList.add(randomDouble);
+            doubleHash.put(randomDouble);
+        }
+        //stringHash.print();
+        for (int i = 0; i < testLength; i++) {
+            doubleHash.delete(doubleList.get(i));
+        }
+        //then
+        double expectedSize = 0;
+        double actualSize = doubleHash.getNElem();
+        assertEquals(expectedSize, actualSize, 0);
+    }
+
+    @Test
     public void should_CorrectlyDeleteAllStringElems() {
         // given
         int testLength = 100;
@@ -447,7 +474,6 @@ public class HashLinearProbingTest {
             stringHash.put(randomString);
         }
         //stringHash.print();
-        stringHash.comp();
         for (int i = 0; i < testLength; i++) {
             stringHash.delete(stringList.get(i));
         }
@@ -455,5 +481,68 @@ public class HashLinearProbingTest {
         double expectedSize = 0;
         double actualSize = stringHash.getNElem();
         assertEquals(expectedSize, actualSize, 0);
+    }
+
+    @Test
+    public void doubleElementShould_NotExistInHashTable_WhenIsDeleted(){
+        //given
+        int testLength = 100;
+        long SEED = 1410;
+        Random random = new Random(SEED);
+        List<Double> doubleList = new ArrayList<>();
+        int indexToDelete = random.nextInt(testLength);
+        double toDelete = 0;
+        //when
+        for(int i = 0; i < testLength; i++){
+            double randomDouble = random.nextDouble();
+            while (doubleList.contains(randomDouble)) {
+                randomDouble = random.nextDouble();
+            }
+            doubleList.add(randomDouble);
+            doubleHash.put(randomDouble);
+            if(i == indexToDelete){
+                toDelete = randomDouble;
+            }
+        }
+        //then
+        double expectedValueBeforeDelete = toDelete;
+        double actualdValueBeforeDelete = doubleHash.get(toDelete);
+        doubleHash.delete(toDelete);
+        Object expectedValueAfterDelete = null;
+        Object actualdValueAfterDelete = doubleHash.get(toDelete);
+        assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete, 0);
+        assertEquals(expectedValueAfterDelete, actualdValueAfterDelete);
+    }
+
+    @Test
+    public void stringElementShould_NotExistInHashTable_WhenIsDeleted(){
+        //given
+        int testLength = 100;
+        long SEED = 1410;
+        Random random = new Random(SEED);
+        List<String> stringList = new ArrayList<>();
+        int indexToDelete = random.nextInt(testLength);
+        String toDelete = "";
+        //when
+        for(int i = 0; i < testLength; i++){
+            String randomString = RandomStringUtils.randomAlphanumeric(10);
+            while (stringList.contains(randomString)) {
+                randomString = RandomStringUtils.randomAlphanumeric(10);
+            }
+            stringList.add(randomString);
+            stringHash.put(randomString);
+            if(i == indexToDelete){
+                toDelete = randomString;
+            }
+        }
+        //then
+        String expectedValueBeforeDelete = toDelete;
+        String actualdValueBeforeDelete = stringHash.get(toDelete);
+        stringHash.delete(toDelete);
+        Object expectedValueAfterDelete = null;
+        Object actualdValueAfterDelete = stringHash.get(toDelete);
+        assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete);
+        assertEquals(expectedValueAfterDelete, actualdValueAfterDelete);
+        
     }
 }

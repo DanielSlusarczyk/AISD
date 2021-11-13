@@ -13,7 +13,9 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
     @Override
     int hashFunc(int key, int i) {
         int m = getSize();
-        return ((key % m) + i * (1 + (key % (m-3)) % m));
+        int hash = ((key % m) + i * (1 + (key % (m-3)))) % m;
+        hash = hash < 0 ? -hash : hash;
+        return hash;
     }
 
     @Override
