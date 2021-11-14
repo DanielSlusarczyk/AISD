@@ -13,11 +13,14 @@ import org.junit.Test;
 public class HashLinearProbingTest {
     private HashOpenAdressing<Double> doubleHash;
     private HashOpenAdressing<String> stringHash;
+    private long SEED = 1410;
+    private Random random;
 
     @Before
     public void setUp() {
         doubleHash = new HashLinearProbing<>();
         stringHash = new HashLinearProbing<>();
+        random = new Random(SEED);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -71,11 +74,9 @@ public class HashLinearProbingTest {
     @Test
     public void should_CorrectlyDoubleSize_IfNeeded() {
         // given
-        int size = 100;
+        int testLength = 1000;
+        int size = (int) ((testLength - 1)/doubleHash.getCorrectLoadFactor());
         doubleHash = new HashLinearProbing<>(size);
-        int testLength = (int) (doubleHash.getCorrectLoadFactor() * size) + 1;
-        long SEED = 1410;
-        Random random = new Random(SEED);
         List<Double> doubleList = new ArrayList<>();
 
         // when
@@ -85,6 +86,7 @@ public class HashLinearProbingTest {
             while (doubleList.contains(randomDouble)) {
                 randomDouble = random.nextDouble();
             }
+
             doubleHash.put(random.nextDouble());
             doubleList.add(randomDouble);
         }
@@ -215,7 +217,7 @@ public class HashLinearProbingTest {
         // when
         int nOfElemsBeforePut = doubleHash.getNElem();
         for (int i = 0; i < testLength; i++) {
-            doubleHash.put(new Random().nextDouble());
+            doubleHash.put(random.nextDouble());
         }
         int nOfElemsAfterPut = doubleHash.getNElem();
 
@@ -300,8 +302,6 @@ public class HashLinearProbingTest {
     public void should_CorrectlyGetManyDoubleElems_WhenExistInHashTable() {
         // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
         List<Double> doubleList = new ArrayList<>();
 
         // when
@@ -314,7 +314,7 @@ public class HashLinearProbingTest {
             doubleList.add(randomDouble);
             doubleHash.put(randomDouble);
         }
-        
+
         // then
         for (int i = 0; i < testLength; i++) {
             double expectedValue = doubleList.get(i);
@@ -352,10 +352,8 @@ public class HashLinearProbingTest {
     public void should_ReturnNull_WhenDeletedElementNotExistInHastTable() {
         // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
-        List<Double> doubleList = new ArrayList<>();
         double toDelete = random.nextDouble();
+        List<Double> doubleList = new ArrayList<>();
 
         // when
         for (int i = 0; i < testLength; i++) {
@@ -387,11 +385,9 @@ public class HashLinearProbingTest {
     public void should_CorrectlyDeleteOneDoubleElems_WhenExistInHastTable() {
         // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
-        List<Double> doubleList = new ArrayList<>();
         int indexToDelete = random.nextInt(testLength);
         double toDelete = 0;
+        List<Double> doubleList = new ArrayList<>();
 
         // when
         for (int i = 0; i < testLength; i++) {
@@ -423,11 +419,9 @@ public class HashLinearProbingTest {
     public void should_CorrectlyDeleteOneStringElems_WhenExistInHastTable() {
         // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
-        List<String> stringList = new ArrayList<>();
         int indexToDelete = random.nextInt(testLength);
         String toDelete = "";
+        List<String> stringList = new ArrayList<>();
 
         // when
         for (int i = 0; i < testLength; i++) {
@@ -459,8 +453,6 @@ public class HashLinearProbingTest {
     public void should_CorrectlyDeleteAllDoubleElems() {
         // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
         List<Double> doubleList = new ArrayList<>();
 
         // when
@@ -479,7 +471,7 @@ public class HashLinearProbingTest {
         }
         double actualNOfElems = doubleHash.getNElem();
 
-        //then
+        // then
         double expectedNOfElems = 0;
         assertEquals(expectedNOfElems, actualNOfElems, 0);
     }
@@ -496,6 +488,7 @@ public class HashLinearProbingTest {
             while (stringList.contains(randomString)) {
                 randomString = RandomStringUtils.randomAlphanumeric(10);
             }
+
             stringList.add(randomString);
             stringHash.put(randomString);
         }
@@ -505,23 +498,21 @@ public class HashLinearProbingTest {
         }
         double actualNOfElems = stringHash.getNElem();
 
-        //then
+        // then
         double expectedNOfElems = 0;
         assertEquals(expectedNOfElems, actualNOfElems, 0);
     }
 
     @Test
-    public void doubleElementShould_NotExistInHashTable_WhenIsDeleted(){
-        //given
+    public void doubleElementShould_NotExistInHashTable_WhenIsDeleted() {
+        // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
-        List<Double> doubleList = new ArrayList<>();
         int indexToDelete = random.nextInt(testLength);
         double toDelete = 0;
+        List<Double> doubleList = new ArrayList<>();
 
-        //when
-        for(int i = 0; i < testLength; i++){
+        // when
+        for (int i = 0; i < testLength; i++) {
             double randomDouble = random.nextDouble();
             while (doubleList.contains(randomDouble)) {
                 randomDouble = random.nextDouble();
@@ -530,7 +521,7 @@ public class HashLinearProbingTest {
             doubleList.add(randomDouble);
             doubleHash.put(randomDouble);
 
-            if(i == indexToDelete){
+            if (i == indexToDelete) {
                 toDelete = randomDouble;
             }
         }
@@ -538,7 +529,7 @@ public class HashLinearProbingTest {
         doubleHash.delete(toDelete);
         Object actualdValueAfterDelete = doubleHash.get(toDelete);
 
-        //then
+        // then
         double expectedValueBeforeDelete = toDelete;
         Object expectedValueAfterDelete = null;
         assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete, 0);
@@ -546,17 +537,15 @@ public class HashLinearProbingTest {
     }
 
     @Test
-    public void stringElementShould_NotExistInHashTable_WhenIsDeleted(){
-        //given
+    public void stringElementShould_NotExistInHashTable_WhenIsDeleted() {
+        // given
         int testLength = 100;
-        long SEED = 1410;
-        Random random = new Random(SEED);
-        List<String> stringList = new ArrayList<>();
         int indexToDelete = random.nextInt(testLength);
         String toDelete = "";
+        List<String> stringList = new ArrayList<>();
 
-        //when
-        for(int i = 0; i < testLength; i++){
+        // when
+        for (int i = 0; i < testLength; i++) {
             String randomString = RandomStringUtils.randomAlphanumeric(10);
             while (stringList.contains(randomString)) {
                 randomString = RandomStringUtils.randomAlphanumeric(10);
@@ -565,7 +554,7 @@ public class HashLinearProbingTest {
             stringList.add(randomString);
             stringHash.put(randomString);
 
-            if(i == indexToDelete){
+            if (i == indexToDelete) {
                 toDelete = randomString;
             }
         }
@@ -573,10 +562,11 @@ public class HashLinearProbingTest {
         stringHash.delete(toDelete);
         Object actualdValueAfterDelete = stringHash.get(toDelete);
 
-        //then
+        // then
         String expectedValueBeforeDelete = toDelete;
         Object expectedValueAfterDelete = null;
         assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete);
         assertEquals(expectedValueAfterDelete, actualdValueAfterDelete);
     }
+
 }

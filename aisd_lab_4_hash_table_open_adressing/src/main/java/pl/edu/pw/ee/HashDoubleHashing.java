@@ -17,9 +17,4 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
         hash = hash < 0 ? -hash : hash;
         return hash;
     }
-
-    @Override
-    public int getNumOfElems() {
-        return getNElem();
-    }
 }

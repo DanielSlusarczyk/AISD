@@ -1,5 +1,8 @@
 package pl.edu.pw.ee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.edu.pw.ee.services.HashTable;
 
 public abstract class HashOpenAdressing<T extends Comparable<T>> implements HashTable<T> {
@@ -9,14 +12,15 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     private Element<T>[] hashElems;
     private final double correctLoadFactor;
 
-    private class Element<T1>{
+    private class Element<T1> {
         private T1 element;
         boolean deleted = false;
 
-        Element(T1 element){
+        Element(T1 element) {
             this.element = element;
         }
-        Element(boolean deleted){
+
+        Element(boolean deleted) {
             element = null;
             deleted = true;
         }
@@ -44,14 +48,15 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != null && hashElems[hashId].element.compareTo(newElem)!=0) {
+        while (hashElems[hashId] != null) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
         }
         if (hashElems[hashId] == null) {
             nElems++;
         }
-        //System.out.println("Na pozycji: " + hashId + " Element: " + newElem);
+        //TODO: Usunąć wiersz
+        //System.out.println("[" + nElems + "] Na pozycji: " + hashId + " Element: " + newElem);
         hashElems[hashId] = new Element<T>(newElem);
     }
 
@@ -64,7 +69,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int hashId = hashFunc(key, i);
 
         while (hashElems[hashId] != null) {
-            if (hashElems[hashId].element!=null && hashElems[hashId].element.compareTo(elem) == 0) {
+            if (hashElems[hashId].element != null && hashElems[hashId].element.compareTo(elem) == 0) {
                 return hashElems[hashId].element;
             }
             i = (i + 1) % size;
@@ -82,7 +87,8 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int hashId = hashFunc(key, i);
 
         while (hashElems[hashId] != null) {
-            if (!hashElems[hashId].deleted && hashElems[hashId].element != null && hashElems[hashId].element.compareTo(elem)==0) {
+            if (!hashElems[hashId].deleted && hashElems[hashId].element != null
+                    && hashElems[hashId].element.compareTo(elem) == 0) {
                 hashElems[hashId] = new Element<>(true);
                 nElems--;
                 break;
@@ -91,9 +97,6 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
             hashId = hashFunc(key, i);
         }
     }
-
-
-    abstract public int getNumOfElems();
 
     private void validateHashInitSize(int initialSize) {
         if (initialSize < 1) {
@@ -117,12 +120,13 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         return nElems;
     }
 
-    double getCorrectLoadFactor(){
+    double getCorrectLoadFactor() {
         return correctLoadFactor;
     }
 
-    void print(){
-        for(int i =0; i < hashElems.length; i++){
+    // TODO: Usunąć metodę
+    void print() {
+        for (int i = 0; i < hashElems.length; i++) {
             System.out.println("[" + i + "]" + hashElems[i]);
         }
     }
@@ -142,8 +146,13 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     @SuppressWarnings("unchecked")
     private void doubleResize() {
         this.size *= 2;
-        Element<T>[] tmp = new Element[size];
-        System.arraycopy(hashElems, 0, tmp, 0, size / 2);
-        hashElems = tmp;
+        Element<T>[] src = hashElems;
+        hashElems = new Element[this.size];
+        nElems = 0;
+        for (int i = 0; i < src.length; i++) {
+            if(src[i] != null && !src[i].deleted){
+                put(src[i].element);
+            }
+        }
     }
 }

@@ -22,8 +22,4 @@ public class HashLinearProbing<T extends Comparable<T>> extends HashOpenAdressin
         return hash;
     }
 
-    @Override
-    public int getNumOfElems() {
-        return getNElem();
-    }
 }

@@ -1,8 +1,8 @@
 package pl.edu.pw.ee;
 
 public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdressing<T> {
-    private double a = 1;
-    private double b = 1;
+    private double a = 3;
+    private double b = 2;
 
     public HashQuadraticProbing() {
         super();
@@ -10,6 +10,7 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
 
     public HashQuadraticProbing(int size, double a, double b) {
         super(size);
+        validateInput(a, b);
         this.a = a;
         this.b = b;
     }
@@ -22,8 +23,10 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
         return hash;
     }
 
-    @Override
-    public int getNumOfElems() {
-        return getNElem();
+    private void validateInput(double a, double b) {
+        if (a == 0 || b == 0) {
+            throw new IllegalArgumentException();
+        }
     }
+
 }
