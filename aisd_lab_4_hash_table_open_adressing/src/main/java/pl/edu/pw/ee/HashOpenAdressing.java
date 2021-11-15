@@ -1,7 +1,5 @@
 package pl.edu.pw.ee;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import pl.edu.pw.ee.services.HashTable;
 
@@ -48,7 +46,10 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != null) {
+        while (hashElems[hashId] != null && hashElems[hashId].element!=null) {
+            if(hashElems[hashId].element.compareTo(newElem)==0){
+                break;
+            }
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
         }
