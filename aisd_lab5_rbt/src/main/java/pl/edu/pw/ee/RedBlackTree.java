@@ -151,4 +151,21 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                 ? false
                 : node.isRed();
     }
+    public void deleteMax() { 
+    }
+
+    public String getPreOrder() { 
+        return null;
+    //TODO  klucz1:wartość1 klucz2:wartość2 klucz3:wartość3 ... 
+    } 
+
+    public String getInOrder() { 
+        return null;
+    //TODO  klucz1:wartość1 klucz2:wartość2 klucz3:wartość3 ... 
+    } 
+
+    public String getPostOrder() { 
+        return null;
+    //TODO klucz1:wartość1 klucz2:wartość2 klucz3:wartość3 ... 
+    } 
 }
