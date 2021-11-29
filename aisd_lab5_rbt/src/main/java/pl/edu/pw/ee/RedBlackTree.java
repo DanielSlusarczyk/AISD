@@ -6,7 +6,9 @@ import static pl.edu.pw.ee.Color.RED;
 public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> root;
-    private String result = "";
+    private String traversalResult = "";
+    private int nmbOfRecursiveCalls = 0;
+
 
     public V get(K key) {
         validateKey(key);
@@ -32,49 +34,54 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     public void put(K key, V value) {
         validateParams(key, value);
+        nmbOfRecursiveCalls = 0;
         root = put(root, key, value);
         root.setColor(BLACK);
     }
 
     public String returnInOrder() {
-        result = "";
+        traversalResult = "";
         returnInOrder(root);
-        return result;
+        return traversalResult;
     }
 
     private void returnInOrder(Node<K, V> node) {
         if (node != null) {
             returnInOrder(node.getLeft());
-            result = result + node.getKey() + ":" + node.getValue() + " ";
+            traversalResult = traversalResult + node.getKey() + ":" + node.getValue() + " ";
             returnInOrder(node.getRight());
         }
     }
 
     public String returnPreOrder() {
-        result = "";
+        traversalResult = "";
         returnPreOrder(root);
-        return result;
+        return traversalResult;
     }
 
     private void returnPreOrder(Node<K, V> node) {
         if (node != null) {
-            result = result + node.getKey() + ":" + node.getValue() + " ";
+            traversalResult = traversalResult + node.getKey() + ":" + node.getValue() + " ";
             returnPreOrder(node.getLeft());
             returnPreOrder(node.getRight());
         }
     }
 
     public String returnPostOrder() {
-        result = "";
+        traversalResult = "";
         returnPostOrder(root);
-        return result;
+        return traversalResult;
     }
 
+    public int getNumberOfCalls(){
+        return nmbOfRecursiveCalls;
+    }
+    
     private void returnPostOrder(Node<K, V> node) {
         if (node != null) {
             returnPostOrder(node.getLeft());
             returnPostOrder(node.getRight());
-            result = result + node.getKey() + ":" + node.getValue() + " ";
+            traversalResult = traversalResult + node.getKey() + ":" + node.getValue() + " ";
         }
     }
 
@@ -99,6 +106,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     private Node<K, V> put(Node<K, V> node, K key, V value) {
+        nmbOfRecursiveCalls ++;
         if (node == null) {
             return new Node<>(key, value);
         }
@@ -200,35 +208,48 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     public void deletedMax() {
-        deleteMax(root);
+        root = deleteMax(root);
     }
 
     private Node<K, V> deleteMax(Node<K, V> node) {
         if (node != null) {
-            if (isRed(node.getLeft())) {
-                node = rotateRight(node);
-            }
-            if (node.getRight() == null) {
-                return null;
-            }
-            if (!isRed(node.getRight()) && !isRed(node.getRight().getLeft())) {
-                node.getRight().setColor(RED);
-                node.getRight().getLeft().setColor(RED);
-                if (node.getLeft() != null && node.getLeft().getLeft() != null && isRed(node.getLeft().getLeft())) {
-                    node = rotateRight(node);
-                    changeColors(node);
+            if(node.getRight() == null){
+                if(node.getLeft() != null){
+                    node.getLeft().setColor(BLACK);
                 }
+                return node.getLeft();
             }
-            node.setRight(deleteMax(node.getRight()));
-            if (isRed(node.getRight())) {
-                node = rotateLeft(node);
-            }
-            if (isRed(node.getLeft()) && isRed(node.getLeft().getLeft())) {
+
+            if(isRed(node.getLeft())){
                 node = rotateRight(node);
+                node.setColor(node.getRight().getColor());
+                node.getRight().setColor(RED);
             }
-            if (isRed(node.getLeft()) && isRed(node.getRight())) {
-                changeColors(node);
+
+            if(!isRed(node.getRight()) && !isRed(node.getRight().getLeft())){
+                node = moveRedRight(node);
             }
+
+            node.setRight(deleteMax(node.getRight()));
+            if(isRed(node.getRight())){
+                node = rotateLeft(node);
+                node.setColor(node.getLeft().getColor());
+                node.getLeft().setColor(RED);
+            }
+        }
+        return node;
+    }
+
+    private Node<K,V> moveRedRight(Node<K,V> node){
+        node.setColor(BLACK);
+        node.getRight().setColor(RED);
+        if(isRed(node.getLeft().getLeft())){
+            node=rotateRight(node);
+            node.setColor(RED);
+            node.getLeft().setColor(BLACK);
+        }
+        else {
+            node.getLeft().setColor(RED);
         }
         return node;
     }

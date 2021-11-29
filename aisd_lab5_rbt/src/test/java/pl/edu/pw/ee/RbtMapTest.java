@@ -26,8 +26,10 @@ public class RbtMapTest {
     public void should_ThrowException_WhenPutValueNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
+        
         // when
         rbtMap.setValue("key", null);
+
         // then
         assert false;
     }
@@ -36,8 +38,10 @@ public class RbtMapTest {
     public void should_ThrowException_WhenPutKeyNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
+
         // when
         rbtMap.setValue(null, "value");
+
         // then
         assert false;
     }
@@ -46,10 +50,24 @@ public class RbtMapTest {
     public void should_ThrowException_WhenGetNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
+
         // when
         rbtMap.getValue(null);
+
         // then
         assert false;
+    }
+
+    @Test
+    public void should_DoNothing_WhenDeleteFromEmptyMap() {
+        // given
+        RbtMap<String, String> rbtMap = new RbtMap<>();
+
+        // when
+        rbtMap.deleteMax();
+
+        // then
+        assert true;
     }
 
     @Test
@@ -134,7 +152,7 @@ public class RbtMapTest {
     }
 
     @Test
-    public void should_CorrectlyGetValues_WhenExistInMap(){
+    public void should_CorrectlyGetValues_WhenExistInMap() {
         // given
         double toGet = 1.0;
 
@@ -148,7 +166,7 @@ public class RbtMapTest {
     }
 
     @Test
-    public void should_CorrectlyGetManyValues_WhenExistInMap(){
+    public void should_CorrectlyGetManyValues_WhenExistInMap() {
         // given
         int testLength = 100;
         List<Double> doubleList = new ArrayList<>();
@@ -173,7 +191,7 @@ public class RbtMapTest {
     }
 
     @Test
-    public void should_CorrectlyGetValues_WhenNotExistInMap(){
+    public void should_CorrectlyGetValues_WhenNotExistInMap() {
         // given
         double toGet = 1.0;
 
@@ -200,18 +218,53 @@ public class RbtMapTest {
     @Test
     public void should_CorrectlyDeletedKey_WhenExistInMap() {
         // given
-        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 25.0, 30.0, 80.0 };
+        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 30.0, 80.0, 25.0 };
 
         // when
         for (double added : addSequence) {
             rbtMap.setValue(added, added);
         }
+        String actualInOrderBeforeDelete = rbtMap.getInOrder();
         rbtMap.deleteMax();
-        String actualInOrder = rbtMap.getInOrder();
+        String actualInOrderAfterDelete = rbtMap.getInOrder();
 
         // then
-        String expectedInOrder = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 ";
-        assertEquals(expectedInOrder, actualInOrder);
+        String expectedInOrderBeforeDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 80.0:80.0 ";
+        String expectedInOrderAfterDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 ";
+        assertEquals(expectedInOrderBeforeDelete, actualInOrderBeforeDelete);
+        assertEquals(expectedInOrderAfterDelete, actualInOrderAfterDelete);
+    }
+
+    @Test
+    public void deletedKey_shouldNotExistInMap_AfterDelete() {
+        // given
+        int testLength = 100;
+        List<Double> doubleList = new ArrayList<>();
+        Double maxElement = -1.0;
+
+        // when
+        for (int i = 0; i < testLength; i++) {
+            double randomDouble = random.nextDouble();
+            while (doubleList.contains(randomDouble)) {
+                randomDouble = random.nextDouble();
+            }
+            if(randomDouble > maxElement){
+                maxElement = randomDouble;
+            }
+
+            doubleList.add(randomDouble);
+            rbtMap.setValue(randomDouble, randomDouble);
+        }
+
+        Object actualValueBeforeDelete = rbtMap.getValue(maxElement);
+        rbtMap.deleteMax();
+        Object actualValueAfterDelete = rbtMap.getValue(maxElement);
+
+        // then
+        Object expectedValueBeforeDelete = maxElement;
+        Object expectedValueAfterDelete = null;
+        assertEquals(expectedValueBeforeDelete, actualValueBeforeDelete);
+        assertEquals(expectedValueAfterDelete, actualValueAfterDelete);
     }
 
     @Test
@@ -231,14 +284,24 @@ public class RbtMapTest {
             rbtMap.setValue(randomDouble, randomDouble);
         }
         String actualInOrderBeforeDelete = rbtMap.getInOrder();
-        for (int i = 0; i < testLength + 10; i++){
+        for (int i = 0; i < testLength; i++) {
             rbtMap.deleteMax();
         }
         String actualInOrderAfterDelete = rbtMap.getInOrder();
 
         // then
         String expectedInOrderBeforeDelete = "";
+        doubleList.sort(new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        for (Double x : doubleList) {
+            expectedInOrderBeforeDelete = expectedInOrderBeforeDelete + x + ":" + x + " ";
+        }
         String expectedInOrderAfterDelete = "";
+        assertEquals(expectedInOrderBeforeDelete, actualInOrderBeforeDelete);
         assertEquals(expectedInOrderAfterDelete, actualInOrderAfterDelete);
     }
 
@@ -289,8 +352,6 @@ public class RbtMapTest {
         String expectedPreOrder = "17.0:17.0 8.0:8.0 5.0:5.0 15.0:15.0 25.0:25.0 18.0:18.0 80.0:80.0 30.0:30.0 ";
         assertEquals(expectedPreOrder, actualPreOrder);
     }
-
-
 
     @Test
     public void should_CorrectlyMakeLeftSwap() {

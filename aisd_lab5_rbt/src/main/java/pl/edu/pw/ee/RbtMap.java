@@ -42,4 +42,8 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
         return tree.returnPostOrder();
     }
 
+    public int getNumberOfCalls(){
+        return tree.getNumberOfCalls();
+    }
+
 }
