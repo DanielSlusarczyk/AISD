@@ -1,6 +1,5 @@
 package pl.edu.pw.ee;
 
-
 import pl.edu.pw.ee.services.HashTable;
 
 public abstract class HashOpenAdressing<T extends Comparable<T>> implements HashTable<T> {
@@ -10,17 +9,24 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     private Element<T>[] hashElems;
     private final double correctLoadFactor;
 
-    private class Element<T1> {
+    private class Element<T1 extends Comparable<T1>>{
         private T1 element;
-        boolean deleted = false;
+        private boolean deleted = false;
 
         Element(T1 element) {
             this.element = element;
         }
 
-        Element(boolean deleted) {
-            element = null;
+        void setAsDeleted() {
             deleted = true;
+        }
+
+        boolean isDeleted() {
+            return deleted;
+        }
+
+        boolean isEqueal(T1 elem) {
+            return element.compareTo(elem) == 0;
         }
     }
 
@@ -31,7 +37,6 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     @SuppressWarnings("unchecked")
     HashOpenAdressing(int size) {
         validateHashInitSize(size);
-
         this.size = size;
         this.hashElems = new Element[this.size];
         this.correctLoadFactor = 0.75;
@@ -46,18 +51,21 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != null && hashElems[hashId].element!=null) {
-            if(hashElems[hashId].element.compareTo(newElem)==0){
+        while (hashElems[hashId] != null) {
+            if (hashElems[hashId].isDeleted() || hashElems[hashId].isEqueal(newElem)) {
                 break;
             }
-            i = (i + 1) % size;
+            i = (i + 1);
+            if (i > size) {
+                System.out.println("Zapętlenie");
+                doubleResize();
+                i = 0;
+            }
             hashId = hashFunc(key, i);
         }
         if (hashElems[hashId] == null) {
             nElems++;
         }
-        //TODO: Usunąć wiersz
-        //System.out.println("[" + nElems + "] Na pozycji: " + hashId + " Element: " + newElem);
         hashElems[hashId] = new Element<T>(newElem);
     }
 
@@ -70,10 +78,13 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int hashId = hashFunc(key, i);
 
         while (hashElems[hashId] != null) {
-            if (hashElems[hashId].element != null && hashElems[hashId].element.compareTo(elem) == 0) {
+            if (!hashElems[hashId].isDeleted() && hashElems[hashId].isEqueal(elem)) {
                 return hashElems[hashId].element;
             }
-            i = (i + 1) % size;
+            i = i + 1;
+            if( i > size){
+                break;
+            }
             hashId = hashFunc(key, i);
         }
         return null;
@@ -88,9 +99,8 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int hashId = hashFunc(key, i);
 
         while (hashElems[hashId] != null) {
-            if (!hashElems[hashId].deleted && hashElems[hashId].element != null
-                    && hashElems[hashId].element.compareTo(elem) == 0) {
-                hashElems[hashId] = new Element<>(true);
+            if (!hashElems[hashId].isDeleted() && hashElems[hashId].isEqueal(elem)) {
+                hashElems[hashId].setAsDeleted();
                 nElems--;
                 break;
             }
@@ -151,7 +161,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         hashElems = new Element[this.size];
         nElems = 0;
         for (int i = 0; i < src.length; i++) {
-            if(src[i] != null && !src[i].deleted){
+            if (src[i] != null && !src[i].isDeleted()) {
                 put(src[i].element);
             }
         }

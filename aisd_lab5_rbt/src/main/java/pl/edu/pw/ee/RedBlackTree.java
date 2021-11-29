@@ -6,6 +6,7 @@ import static pl.edu.pw.ee.Color.RED;
 public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> root;
+    private String result = "";
 
     public V get(K key) {
         validateKey(key);
@@ -35,6 +36,48 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         root.setColor(BLACK);
     }
 
+    public String returnInOrder() {
+        result = "";
+        returnInOrder(root);
+        return result;
+    }
+
+    private void returnInOrder(Node<K, V> node) {
+        if (node != null) {
+            returnInOrder(node.getLeft());
+            result = result + node.getKey() + ":" + node.getValue() + " ";
+            returnInOrder(node.getRight());
+        }
+    }
+
+    public String returnPreOrder() {
+        result = "";
+        returnPreOrder(root);
+        return result;
+    }
+
+    private void returnPreOrder(Node<K, V> node) {
+        if (node != null) {
+            result = result + node.getKey() + ":" + node.getValue() + " ";
+            returnPreOrder(node.getLeft());
+            returnPreOrder(node.getRight());
+        }
+    }
+
+    public String returnPostOrder() {
+        result = "";
+        returnPostOrder(root);
+        return result;
+    }
+
+    private void returnPostOrder(Node<K, V> node) {
+        if (node != null) {
+            returnPostOrder(node.getLeft());
+            returnPostOrder(node.getRight());
+            result = result + node.getKey() + ":" + node.getValue() + " ";
+        }
+    }
+
     private void validateKey(K key) {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null.");
@@ -57,7 +100,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> put(Node<K, V> node, K key, V value) {
         if (node == null) {
-            return new Node(key, value);
+            return new Node<>(key, value);
         }
 
         if (isKeyBiggerThanNode(key, node)) {
@@ -126,8 +169,12 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     private Node<K, V> rotateRight(Node<K, V> node) {
-	// TODO
-        return null;
+        Node<K, V> head = node.getLeft();
+        node.setLeft(head.getRight());
+        head.setRight(node);
+        head.setColor(node.getColor());
+        node.setColor(RED);
+        return head;
     }
 
     private void changeColorsIfNeeded(Node<K, V> node) {
@@ -150,5 +197,39 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         return node == null
                 ? false
                 : node.isRed();
+    }
+
+    public void deletedMax() {
+        deleteMax(root);
+    }
+
+    private Node<K, V> deleteMax(Node<K, V> node) {
+        if (node != null) {
+            if (isRed(node.getLeft())) {
+                node = rotateRight(node);
+            }
+            if (node.getRight() == null) {
+                return null;
+            }
+            if (!isRed(node.getRight()) && !isRed(node.getRight().getLeft())) {
+                node.getRight().setColor(RED);
+                node.getRight().getLeft().setColor(RED);
+                if (node.getLeft() != null && node.getLeft().getLeft() != null && isRed(node.getLeft().getLeft())) {
+                    node = rotateRight(node);
+                    changeColors(node);
+                }
+            }
+            node.setRight(deleteMax(node.getRight()));
+            if (isRed(node.getRight())) {
+                node = rotateLeft(node);
+            }
+            if (isRed(node.getLeft()) && isRed(node.getLeft().getLeft())) {
+                node = rotateRight(node);
+            }
+            if (isRed(node.getLeft()) && isRed(node.getRight())) {
+                changeColors(node);
+            }
+        }
+        return node;
     }
 }

@@ -1,6 +1,6 @@
 package pl.edu.pw.ee;
 
-import pl.edu.pw.services.MapInterface;
+import pl.edu.pw.ee.services.MapInterface;
 
 public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
 
@@ -24,6 +24,22 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
             throw new IllegalArgumentException("Cannot get value by null key.");
         }
         return tree.get(key);
+    }
+
+    public void deleteMax() {
+        tree.deletedMax();
+    }
+
+    public String getPreOrder() {
+        return tree.returnPreOrder();
+    } 
+
+    public String getInOrder() {
+        return tree.returnInOrder();
+    }
+    
+    public String getPostOrder() {
+        return tree.returnPostOrder();
     }
 
 }

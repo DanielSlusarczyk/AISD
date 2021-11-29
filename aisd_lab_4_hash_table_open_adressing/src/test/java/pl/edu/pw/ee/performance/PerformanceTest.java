@@ -13,7 +13,7 @@ import pl.edu.pw.ee.HashQuadraticProbing;
 import pl.edu.pw.ee.services.HashTable;
 
 public class PerformanceTest {
-    private int size = 16384;
+    private int size = 65536;
     private List<String> wordList;
 
     // Time Log
@@ -22,45 +22,31 @@ public class PerformanceTest {
     private List<Long> resultsOfGet;
     private boolean allTest = false;
     private HashTable<String> hashOpen;
-    private double aRatio = 2;
-    private double bRatio = 3;
+    private double aRatio = 1;
+    private double bRatio = 1;
 
     @Before
     public void setUp() throws IOException {
+        filesHandler = new FilesHandler();
         resultsOfAdd = new ArrayList<>();
         resultsOfGet = new ArrayList<>();
-        filesHandler = new FilesHandler();
         wordList = filesHandler.addFromFile();
     }
 
     @Test
     public void performanceTest_HashLinearProbing() throws IOException {
         // given
-        long startTimeOfAdd;
-        long endTimeOfAdd;
-        long startTimeOfGet;
-        long endTimeOfGet;
         int nmbOfRuns = 30;
 
         // when
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashLinearProbing<>(size);
-            System.out.println("Zaczynam: " + runCounter);
 
-            startTimeOfAdd = System.currentTimeMillis();
-            for(String toAdd: wordList){
-                hashOpen.put(toAdd);
+            if (!allTest) {
+                System.out.println("Zaczynam test numer: " + runCounter);
             }
-            endTimeOfAdd = System.currentTimeMillis();
-            resultsOfAdd.add((endTimeOfAdd - startTimeOfAdd));
 
-            startTimeOfGet = System.currentTimeMillis();
-            for (String toGet : wordList) {
-                hashOpen.get(toGet);
-            }
-            endTimeOfGet = System.currentTimeMillis();
-            resultsOfGet.add(endTimeOfGet - startTimeOfGet);
-            
+            makeTest();
         }
         filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, "Linear Probing");
     }
@@ -70,11 +56,11 @@ public class PerformanceTest {
         double power = 0;
         double basis = 2;
         double startSize = 512;
-        int nmbOfTest = 15;
+        int nmbOfTest = 12;
         allTest = true;
 
         for (int i = 0; i < nmbOfTest; i++) {
-            System.out.println("Zaczynam test: " + i);
+            System.out.println("Zaczynam grupę testów numer: " + i);
             size = (int) Math.round(startSize * Math.pow(basis, power));
 
             performanceTest_HashLinearProbing();
@@ -87,33 +73,20 @@ public class PerformanceTest {
     @Test
     public void performanceTest_HashQuadraticProbing() throws IOException {
         // given
-        long startTimeOfAdd;
-        long endTimeOfAdd;
-        long startTimeOfGet;
-        long endTimeOfGet;
         int nmbOfRuns = 30;
 
         // when
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashQuadraticProbing<>(size, aRatio, bRatio);
-            System.out.println("Zaczynam: " + runCounter);
 
-            startTimeOfAdd = System.currentTimeMillis();
-            for(String toAdd: wordList){
-                hashOpen.put(toAdd);
+            if (!allTest) {
+                System.out.println("Zaczynam test numer: " + runCounter);
             }
-            endTimeOfAdd = System.currentTimeMillis();
-            resultsOfAdd.add((endTimeOfAdd - startTimeOfAdd));
 
-            startTimeOfGet = System.currentTimeMillis();
-            for (String toGet : wordList) {
-                hashOpen.get(toGet);
-            }
-            endTimeOfGet = System.currentTimeMillis();
-            resultsOfGet.add(endTimeOfGet - startTimeOfGet);
-            
+            makeTest();
         }
-        filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, "Quadratic Probing [a: " + aRatio + " b: " + bRatio + "]");
+        String title = "Quadratic Probing [a: " + aRatio + " b: " + bRatio + "]";
+        filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, title);
     }
 
     @Test
@@ -122,8 +95,10 @@ public class PerformanceTest {
         double basis = 2;
         double startSize = 512;
         int nmbOfTest = 10;
+        this.aRatio = 1;
+        this.bRatio = 2;
         allTest = true;
-
+        System.out.println(aRatio + " " + bRatio);
         for (int i = 0; i < nmbOfTest; i++) {
             System.out.println("Zaczynam test: " + i);
             size = (int) Math.round(startSize * Math.pow(basis, power));
@@ -138,31 +113,17 @@ public class PerformanceTest {
     @Test
     public void performanceTest_HashDoubleAdressing() throws IOException {
         // given
-        long startTimeOfAdd;
-        long endTimeOfAdd;
-        long startTimeOfGet;
-        long endTimeOfGet;
         int nmbOfRuns = 30;
 
         // when
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashDoubleHashing<>(size);
-            System.out.println("Zaczynam: " + runCounter);
 
-            startTimeOfAdd = System.currentTimeMillis();
-            for(String toAdd: wordList){
-                hashOpen.put(toAdd);
+            if (!allTest) {
+                System.out.println("Zaczynam test numer: " + runCounter);
             }
-            endTimeOfAdd = System.currentTimeMillis();
-            resultsOfAdd.add((endTimeOfAdd - startTimeOfAdd));
 
-            startTimeOfGet = System.currentTimeMillis();
-            for (String toGet : wordList) {
-                hashOpen.get(toGet);
-            }
-            endTimeOfGet = System.currentTimeMillis();
-            resultsOfGet.add(endTimeOfGet - startTimeOfGet);
-            
+            makeTest();
         }
         filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, "Double Hashing");
     }
@@ -171,8 +132,8 @@ public class PerformanceTest {
     public void complexPerformanceTest_HashDoubleHashing() throws IOException {
         double power = 0;
         double basis = 2;
-        double startSize = 16384;
-        int nmbOfTest = 1;
+        double startSize = 512;
+        int nmbOfTest = 12;
         allTest = true;
 
         for (int i = 0; i < nmbOfTest; i++) {
@@ -184,6 +145,27 @@ public class PerformanceTest {
             resultsOfGet.clear();
             power++;
         }
+    }
+
+    private void makeTest() {
+        long startTimeOfAdd;
+        long endTimeOfAdd;
+        long startTimeOfGet;
+        long endTimeOfGet;
+
+        startTimeOfAdd = System.currentTimeMillis();
+        for (String toAdd : wordList) {
+            hashOpen.put(toAdd);
+        }
+        endTimeOfAdd = System.currentTimeMillis();
+        resultsOfAdd.add((endTimeOfAdd - startTimeOfAdd));
+
+        startTimeOfGet = System.currentTimeMillis();
+        for (String toGet : wordList) {
+            hashOpen.get(toGet);
+        }
+        endTimeOfGet = System.currentTimeMillis();
+        resultsOfGet.add(endTimeOfGet - startTimeOfGet);
     }
 
 }
