@@ -26,7 +26,7 @@ public class RbtMapTest {
     public void should_ThrowException_WhenPutValueNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
-        
+
         // when
         rbtMap.setValue("key", null);
 
@@ -68,6 +68,20 @@ public class RbtMapTest {
 
         // then
         assert true;
+    }
+
+    @Test
+    public void should_CorrectlySetValue_WhenNotExistInMap() {
+        // given
+        Double toAdd = 1.0;
+
+        // when
+        rbtMap.setValue(toAdd, toAdd);
+        String actual = rbtMap.getInOrder().trim();
+
+        // then
+        String expected = "1.0:1.0";
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -115,6 +129,7 @@ public class RbtMapTest {
             System.out.println("S");
             expected = expected + element + ":" + element + " ";
         }
+        expected = expected.trim();
         assertEquals(expected, actual);
     }
 
@@ -148,16 +163,18 @@ public class RbtMapTest {
 
         // then
         String expected = randomDouble + ":" + randomDouble + " ";
+        expected = expected.trim();
         assertEquals(expected, actual);
     }
 
     @Test
     public void should_CorrectlyGetValues_WhenExistInMap() {
         // given
-        double toGet = 1.0;
+        double toAdd = 1.0;
+        double toGet = toAdd;
 
         // when
-        rbtMap.setValue(toGet, toGet);
+        rbtMap.setValue(toAdd, toAdd);
         double actualKey = rbtMap.getValue(toGet);
 
         // then
@@ -216,6 +233,21 @@ public class RbtMapTest {
     }
 
     @Test
+    public void should_CorrectlyDeletedKey_WhenMapHasOneElement() {
+        // given
+        Double toAdd = 1.0;
+
+        // when
+        rbtMap.setValue(toAdd, toAdd);
+        rbtMap.deleteMax();
+        String actualInOrder = rbtMap.getInOrder();
+
+        // then
+        String expectedInOrder = "";
+        assertEquals(expectedInOrder, actualInOrder);
+    }
+
+    @Test
     public void should_CorrectlyDeletedKey_WhenExistInMap() {
         // given
         double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 30.0, 80.0, 25.0 };
@@ -229,8 +261,8 @@ public class RbtMapTest {
         String actualInOrderAfterDelete = rbtMap.getInOrder();
 
         // then
-        String expectedInOrderBeforeDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 80.0:80.0 ";
-        String expectedInOrderAfterDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 ";
+        String expectedInOrderBeforeDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 80.0:80.0";
+        String expectedInOrderAfterDelete = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0";
         assertEquals(expectedInOrderBeforeDelete, actualInOrderBeforeDelete);
         assertEquals(expectedInOrderAfterDelete, actualInOrderAfterDelete);
     }
@@ -248,7 +280,7 @@ public class RbtMapTest {
             while (doubleList.contains(randomDouble)) {
                 randomDouble = random.nextDouble();
             }
-            if(randomDouble > maxElement){
+            if (randomDouble > maxElement) {
                 maxElement = randomDouble;
             }
 
@@ -300,148 +332,10 @@ public class RbtMapTest {
         for (Double x : doubleList) {
             expectedInOrderBeforeDelete = expectedInOrderBeforeDelete + x + ":" + x + " ";
         }
+        expectedInOrderBeforeDelete = expectedInOrderBeforeDelete.trim();
         String expectedInOrderAfterDelete = "";
         assertEquals(expectedInOrderBeforeDelete, actualInOrderBeforeDelete);
         assertEquals(expectedInOrderAfterDelete, actualInOrderAfterDelete);
     }
 
-    @Test
-    public void should_CorrectlyTraverseTree_InOrder() {
-        // given
-        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 25.0, 30.0, 80.0 };
-
-        // when
-        for (double added : addSequence) {
-            rbtMap.setValue(added, added);
-        }
-        String actualInOrder = rbtMap.getInOrder();
-
-        // then
-        String expectedInOrder = "5.0:5.0 8.0:8.0 15.0:15.0 17.0:17.0 18.0:18.0 25.0:25.0 30.0:30.0 80.0:80.0 ";
-        assertEquals(expectedInOrder, actualInOrder);
-    }
-
-    @Test
-    public void should_CorrectlyTraverseTree_PostOrder() {
-        // given
-        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 25.0, 30.0, 80.0 };
-
-        // when
-        for (double added : addSequence) {
-            rbtMap.setValue(added, added);
-        }
-        String actualPostOrder = rbtMap.getPostOrder();
-
-        // then
-        String expectedPostOrder = "5.0:5.0 15.0:15.0 8.0:8.0 18.0:18.0 30.0:30.0 80.0:80.0 25.0:25.0 17.0:17.0 ";
-        assertEquals(expectedPostOrder, actualPostOrder);
-    }
-
-    @Test
-    public void should_CorrectlyTraverseTree_PreOrder() {
-        // given
-        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 25.0, 30.0, 80.0 };
-
-        // when
-        for (double added : addSequence) {
-            rbtMap.setValue(added, added);
-        }
-        String actualPreOrder = rbtMap.getPreOrder();
-
-        // then
-        String expectedPreOrder = "17.0:17.0 8.0:8.0 5.0:5.0 15.0:15.0 25.0:25.0 18.0:18.0 80.0:80.0 30.0:30.0 ";
-        assertEquals(expectedPreOrder, actualPreOrder);
-    }
-
-    @Test
-    public void should_CorrectlyMakeLeftSwap() {
-        // given
-        double[] addSequence = { 1.0, 2.0 };
-
-        // when
-        rbtMap.setValue(addSequence[0], addSequence[0]);
-        String actualBeforeLeftSwap = rbtMap.getPreOrder();
-        rbtMap.setValue(addSequence[1], addSequence[1]);
-        String actualAfterLeftSwap = rbtMap.getPreOrder();
-
-        // then
-        String expectedBeforeLeftSwap = "1.0:1.0 ";
-        String expectedAfterLeftSwap = "2.0:2.0 1.0:1.0 ";
-        assertEquals(expectedBeforeLeftSwap, actualBeforeLeftSwap);
-        assertEquals(expectedAfterLeftSwap, actualAfterLeftSwap);
-
-    }
-
-    @Test
-    public void should_CorrectlyMakeRightSwap() {
-        // given
-        double[] addSequence = { 3.0, 2.0, 1.0 };
-
-        // when
-        rbtMap.setValue(addSequence[0], addSequence[0]);
-        rbtMap.setValue(addSequence[1], addSequence[1]);
-        String actualBeforeRightSwap = rbtMap.getPreOrder();
-        rbtMap.setValue(addSequence[2], addSequence[2]);
-        String actualAfterRightSwap = rbtMap.getPreOrder();
-
-        // then
-        String expectedBeforeRightSwap = "3.0:3.0 2.0:2.0 ";
-        String expectedAfterRightSwap = "2.0:2.0 1.0:1.0 3.0:3.0 ";
-        assertEquals(expectedBeforeRightSwap, actualBeforeRightSwap);
-        assertEquals(expectedAfterRightSwap, actualAfterRightSwap);
-    }
-
-    @Test
-    public void should_CorrectlyMakeLeftAndRightSwap() {
-        // given
-        double[] addSequence = { 3.0, 1.0, 2.0 };
-
-        // when
-        rbtMap.setValue(addSequence[0], addSequence[0]);
-        rbtMap.setValue(addSequence[1], addSequence[1]);
-        String actualBeforeSwap = rbtMap.getPreOrder();
-        rbtMap.setValue(addSequence[2], addSequence[2]);
-        String actualAfterSwap = rbtMap.getPreOrder();
-
-        // then
-        String expectedBeforeSwap = "3.0:3.0 1.0:1.0 ";
-        String expectedAfterSwap = "2.0:2.0 1.0:1.0 3.0:3.0 ";
-        assertEquals(expectedBeforeSwap, actualBeforeSwap);
-        assertEquals(expectedAfterSwap, actualAfterSwap);
-    }
-
-    @Test
-    public void should_CorrectlyMakeRightAndLeftSwap() {
-        // given
-        double[] addSequence = { 3.0, 1.0, 2.0 };
-
-        // when
-        rbtMap.setValue(addSequence[0], addSequence[0]);
-        rbtMap.setValue(addSequence[1], addSequence[1]);
-        String actualAfterLeftBeforeRightSwap = rbtMap.getPreOrder();
-        rbtMap.setValue(addSequence[2], addSequence[2]);
-        String actualAfterLeftAfterRightSwap = rbtMap.getPreOrder();
-
-        // then
-        String expectedAfterLeftBeforeRightSwap = "3.0:3.0 1.0:1.0 ";
-        String expectedAfterLeftAfterRightSwap = "2.0:2.0 1.0:1.0 3.0:3.0 ";
-        assertEquals(expectedAfterLeftBeforeRightSwap, actualAfterLeftBeforeRightSwap);
-        assertEquals(expectedAfterLeftAfterRightSwap, actualAfterLeftAfterRightSwap);
-    }
-
-    @Test
-    public void should_CorrectlyOrganizeTree() {
-        // given
-        double[] addSequence = { 8.0, 18.0, 5.0, 15.0, 17.0, 25.0, 30.0, 80.0 };
-
-        // when
-        for (double added : addSequence) {
-            rbtMap.setValue(added, added);
-        }
-        String actualSwap = rbtMap.getPreOrder();
-
-        // then
-        String expectedSwap = "17.0:17.0 8.0:8.0 5.0:5.0 15.0:15.0 25.0:25.0 18.0:18.0 80.0:80.0 30.0:30.0 ";
-        assertEquals(expectedSwap, actualSwap);
-    }
 }

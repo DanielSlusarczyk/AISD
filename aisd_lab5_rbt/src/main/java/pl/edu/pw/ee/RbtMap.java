@@ -27,19 +27,19 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
     }
 
     public void deleteMax() {
-        tree.deletedMax();
+        tree.deleteMax();
     }
 
     public String getPreOrder() {
-        return tree.returnPreOrder();
+        return tree.getPreOrder();
     } 
 
     public String getInOrder() {
-        return tree.returnInOrder();
+        return tree.getInOrder();
     }
     
     public String getPostOrder() {
-        return tree.returnPostOrder();
+        return tree.getPostOrder();
     }
 
     public int getNumberOfCalls(){
