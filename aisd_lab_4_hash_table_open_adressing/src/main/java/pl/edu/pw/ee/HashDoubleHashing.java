@@ -2,11 +2,11 @@ package pl.edu.pw.ee;
 
 public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressing<T> {
 
-    public HashDoubleHashing(){
+    public HashDoubleHashing() {
         super();
     }
 
-    public HashDoubleHashing(int size){
+    public HashDoubleHashing(int size) {
         super(size);
     }
 
@@ -18,7 +18,7 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
         return hash;
     }
 
-    private int getValueOfSecondHash(int key, int m){
-        return (1 + (key % (m-3)));
+    private int getValueOfSecondHash(int key, int m) {
+        return (1 + (key % (m - 3)));
     }
 }

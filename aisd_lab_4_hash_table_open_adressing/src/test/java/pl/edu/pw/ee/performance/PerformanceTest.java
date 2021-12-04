@@ -42,10 +42,6 @@ public class PerformanceTest {
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashLinearProbing<>(size);
 
-            if (!allTest) {
-                System.out.println("Zaczynam test numer: " + runCounter);
-            }
-
             makeTest();
         }
         filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, "Linear Probing");
@@ -60,7 +56,6 @@ public class PerformanceTest {
         allTest = true;
 
         for (int i = 0; i < nmbOfTest; i++) {
-            System.out.println("Zaczynam grupę testów numer: " + i);
             size = (int) Math.round(startSize * Math.pow(basis, power));
 
             performanceTest_HashLinearProbing();
@@ -79,10 +74,6 @@ public class PerformanceTest {
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashQuadraticProbing<>(size, aRatio, bRatio);
 
-            if (!allTest) {
-                System.out.println("Zaczynam test numer: " + runCounter);
-            }
-
             makeTest();
         }
         String title = "Quadratic Probing [a: " + aRatio + " b: " + bRatio + "]";
@@ -98,9 +89,7 @@ public class PerformanceTest {
         this.aRatio = 1;
         this.bRatio = 2;
         allTest = true;
-        System.out.println(aRatio + " " + bRatio);
         for (int i = 0; i < nmbOfTest; i++) {
-            System.out.println("Zaczynam test: " + i);
             size = (int) Math.round(startSize * Math.pow(basis, power));
 
             performanceTest_HashQuadraticProbing();
@@ -119,10 +108,6 @@ public class PerformanceTest {
         for (int runCounter = 0; runCounter < nmbOfRuns; runCounter++) {
             hashOpen = new HashDoubleHashing<>(size);
 
-            if (!allTest) {
-                System.out.println("Zaczynam test numer: " + runCounter);
-            }
-
             makeTest();
         }
         filesHandler.writeResult(resultsOfAdd, resultsOfGet, allTest, size, "Double Hashing");
@@ -137,7 +122,6 @@ public class PerformanceTest {
         allTest = true;
 
         for (int i = 0; i < nmbOfTest; i++) {
-            System.out.println("Zaczynam test: " + i);
             size = (int) Math.round(startSize * Math.pow(basis, power));
 
             performanceTest_HashDoubleAdressing();

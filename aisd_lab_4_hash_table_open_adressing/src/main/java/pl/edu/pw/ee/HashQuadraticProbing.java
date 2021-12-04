@@ -28,5 +28,4 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
             throw new IllegalArgumentException();
         }
     }
-
 }

@@ -29,7 +29,7 @@ public class HashDoubleHashingTest {
         int initialSize = 0;
 
         // when
-        doubleHash = new HashLinearProbing<>(initialSize);
+        doubleHash = new HashDoubleHashing<>(initialSize);
 
         // then
         assert false;
@@ -41,7 +41,8 @@ public class HashDoubleHashingTest {
         int initialSize = -1;
 
         // when
-        doubleHash = new HashLinearProbing<>(initialSize);
+        doubleHash = new HashDoubleHashing<>(initialSize);
+        stringHash = new HashDoubleHashing<>(initialSize);
 
         // then
         assert false;
@@ -74,14 +75,13 @@ public class HashDoubleHashingTest {
     @Test
     public void should_CorrectlyDoubleSize_IfNeeded() {
         // given
-        int testLength = 1000;
-        int size = (int) ((testLength - 1)/doubleHash.getCorrectLoadFactor());
-        doubleHash = new HashLinearProbing<>(size);
+        int testLength = 100;
+        int size = (int) ((testLength - 1) / doubleHash.getCorrectLoadFactor());
+        doubleHash = new HashDoubleHashing<>(size);
         List<Double> doubleList = new ArrayList<>();
 
         // when
-        int sizeBefore = doubleHash.getSize();
-        for (int i = 0; i < testLength; i++) {
+        for (int i = 0; i < testLength - 1; i++) {
             double randomDouble = random.nextDouble();
             while (doubleList.contains(randomDouble)) {
                 randomDouble = random.nextDouble();
@@ -90,13 +90,15 @@ public class HashDoubleHashingTest {
             doubleHash.put(random.nextDouble());
             doubleList.add(randomDouble);
         }
+        int sizeBefore = doubleHash.getSize();
+        doubleHash.put(random.nextDouble());
         int sizeAfter = doubleHash.getSize();
 
         // then
-        int expectedBefore = size;
-        int expectedAfter = size * 2;
-        assertEquals(expectedBefore, sizeBefore);
-        assertEquals(expectedAfter, sizeAfter);
+        int expectedSizeBefore = size;
+        int expectedSizeAfter = size * 2;
+        assertEquals(expectedSizeBefore, sizeBefore);
+        assertEquals(expectedSizeAfter, sizeAfter);
     }
 
     @Test
@@ -105,15 +107,15 @@ public class HashDoubleHashingTest {
         String newEleme = "nothing special";
 
         // when
-        int nOfElemsBeforePut = stringHash.getNElem();
+        int numOfElemsBeforePut = stringHash.getNumOfElem();
         stringHash.put(newEleme);
-        int nOfElemsAfterPut = stringHash.getNElem();
+        int numOfElemsAfterPut = stringHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 1;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -122,15 +124,15 @@ public class HashDoubleHashingTest {
         double newEleme = 1.0;
 
         // when
-        int nOfElemsBeforePut = doubleHash.getNElem();
+        int numOfElemsBeforePut = doubleHash.getNumOfElem();
         doubleHash.put(newEleme);
-        int nOfElemsAfterPut = doubleHash.getNElem();
+        int numOfElemsAfterPut = doubleHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 1;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -140,16 +142,16 @@ public class HashDoubleHashingTest {
         String secondEleme = "nothing special too";
 
         // when
-        int nOfElemsBeforePut = stringHash.getNElem();
+        int numOfElemsBeforePut = stringHash.getNumOfElem();
         stringHash.put(firstEleme);
         stringHash.put(secondEleme);
-        int nOfElemsAfterPut = stringHash.getNElem();
+        int numOfElemsAfterPut = stringHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 2;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -159,16 +161,16 @@ public class HashDoubleHashingTest {
         double secondEleme = 1.0;
 
         // when
-        int nOfElemsBeforePut = doubleHash.getNElem();
+        int numOfElemsBeforePut = doubleHash.getNumOfElem();
         doubleHash.put(firstEleme);
         doubleHash.put(secondEleme);
-        int nOfElemsAfterPut = doubleHash.getNElem();
+        int numOfElemsAfterPut = doubleHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 2;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -178,16 +180,35 @@ public class HashDoubleHashingTest {
         String secondEleme = "nothing special";
 
         // when
-        int nOfElemsBeforePut = stringHash.getNElem();
+        int numOfElemsBeforePut = stringHash.getNumOfElem();
         stringHash.put(firstEleme);
         stringHash.put(secondEleme);
-        int nOfElemsAfterPut = stringHash.getNElem();
+        int numOfElemsAfterPut = stringHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 1;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
+    }
+
+    @Test
+    public void should_CorrectlyAddTwoNewDoubleElems_WhenExistInHashTable() {
+        // given
+        double firstEleme = 1.0;
+        double secondEleme = 1.0;
+
+        // when
+        int numOfElemsBeforePut = doubleHash.getNumOfElem();
+        doubleHash.put(firstEleme);
+        doubleHash.put(secondEleme);
+        int numOfElemsAfterPut = doubleHash.getNumOfElem();
+
+        // then
+        int expectedBeforePut = 0;
+        int expectedAfterPut = 1;
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -196,17 +217,17 @@ public class HashDoubleHashingTest {
         int testLength = 100;
 
         // when
-        int nOfElemsBeforePut = stringHash.getNElem();
+        int numOfElemsBeforePut = stringHash.getNumOfElem();
         for (int i = 0; i < testLength; i++) {
             stringHash.put(RandomStringUtils.randomAlphanumeric(10));
         }
-        int nOfElemsAfterPut = stringHash.getNElem();
+        int numOfElemsAfterPut = stringHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = testLength;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -215,17 +236,17 @@ public class HashDoubleHashingTest {
         int testLength = 100;
 
         // when
-        int nOfElemsBeforePut = doubleHash.getNElem();
+        int numOfElemsBeforePut = doubleHash.getNumOfElem();
         for (int i = 0; i < testLength; i++) {
             doubleHash.put(random.nextDouble());
         }
-        int nOfElemsAfterPut = doubleHash.getNElem();
+        int numOfElemsAfterPut = doubleHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = testLength;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -235,17 +256,17 @@ public class HashDoubleHashingTest {
         String toPut = RandomStringUtils.randomAlphanumeric(10);
 
         // when
-        int nOfElemsBeforePut = stringHash.getNElem();
+        int numOfElemsBeforePut = stringHash.getNumOfElem();
         for (int i = 0; i < testLength; i++) {
             stringHash.put(toPut);
         }
-        int nOfElemsAfterPut = stringHash.getNElem();
+        int numOfElemsAfterPut = stringHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 1;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -255,17 +276,17 @@ public class HashDoubleHashingTest {
         double toPut = 1.0;
 
         // when
-        int nOfElemsBeforePut = doubleHash.getNElem();
+        int numOfElemsBeforePut = doubleHash.getNumOfElem();
         for (int i = 0; i < testLength; i++) {
             doubleHash.put(toPut);
         }
-        int nOfElemsAfterPut = doubleHash.getNElem();
+        int numOfElemsAfterPut = doubleHash.getNumOfElem();
 
         // then
         int expectedBeforePut = 0;
         int expectedAfterPut = 1;
-        assertEquals(expectedBeforePut, nOfElemsBeforePut);
-        assertEquals(expectedAfterPut, nOfElemsAfterPut);
+        assertEquals(expectedBeforePut, numOfElemsBeforePut);
+        assertEquals(expectedAfterPut, numOfElemsAfterPut);
     }
 
     @Test
@@ -349,7 +370,7 @@ public class HashDoubleHashingTest {
     }
 
     @Test
-    public void should_ReturnNull_WhenDeletedElementNotExistInHastTable() {
+    public void should_ReturnNull_WhenDeletedElementNotExistInHashTable() {
         // given
         int testLength = 100;
         double toDelete = random.nextDouble();
@@ -366,13 +387,13 @@ public class HashDoubleHashingTest {
             doubleHash.put(randomDouble);
         }
 
-        double beforeDelete = doubleHash.getNElem();
+        double beforeDelete = doubleHash.getNumOfElem();
         while (doubleList.contains(toDelete)) {
             toDelete = random.nextDouble();
         }
 
         doubleHash.delete(toDelete);
-        double afterDelete = doubleHash.getNElem();
+        double afterDelete = doubleHash.getNumOfElem();
 
         // then
         double expectedBefore = testLength;
@@ -382,7 +403,7 @@ public class HashDoubleHashingTest {
     }
 
     @Test
-    public void should_CorrectlyDeleteOneDoubleElems_WhenExistInHastTable() {
+    public void should_CorrectlyDeleteOneDoubleElem_WhenExistInHashTable() {
         // given
         int testLength = 100;
         int indexToDelete = random.nextInt(testLength);
@@ -404,9 +425,9 @@ public class HashDoubleHashingTest {
             doubleHash.put(randomDouble);
         }
 
-        int beforeDelete = doubleHash.getNElem();
+        int beforeDelete = doubleHash.getNumOfElem();
         doubleHash.delete(toDelete);
-        int afterDelete = doubleHash.getNElem();
+        int afterDelete = doubleHash.getNumOfElem();
 
         // then
         int expectedBefore = testLength;
@@ -416,7 +437,7 @@ public class HashDoubleHashingTest {
     }
 
     @Test
-    public void should_CorrectlyDeleteOneStringElems_WhenExistInHastTable() {
+    public void should_CorrectlyDeleteOneStringElem_WhenExistInHashTable() {
         // given
         int testLength = 100;
         int indexToDelete = random.nextInt(testLength);
@@ -438,9 +459,9 @@ public class HashDoubleHashingTest {
             stringHash.put(randomString);
         }
 
-        int beforeDelete = stringHash.getNElem();
+        int beforeDelete = stringHash.getNumOfElem();
         stringHash.delete(toDelete);
-        int afterDelete = stringHash.getNElem();
+        int afterDelete = stringHash.getNumOfElem();
 
         // then
         int expectedBefore = testLength;
@@ -469,11 +490,11 @@ public class HashDoubleHashingTest {
         for (int i = 0; i < testLength; i++) {
             doubleHash.delete(doubleList.get(i));
         }
-        double actualNOfElems = doubleHash.getNElem();
+        double actualNumOfElems = doubleHash.getNumOfElem();
 
         // then
-        double expectedNOfElems = 0;
-        assertEquals(expectedNOfElems, actualNOfElems, 0);
+        double expectedNumOfElems = 0;
+        assertEquals(expectedNumOfElems, actualNumOfElems, 0);
     }
 
     @Test
@@ -496,11 +517,11 @@ public class HashDoubleHashingTest {
         for (int i = 0; i < testLength; i++) {
             stringHash.delete(stringList.get(i));
         }
-        double actualNOfElems = stringHash.getNElem();
+        double actualNumOfElems = stringHash.getNumOfElem();
 
         // then
-        double expectedNOfElems = 0;
-        assertEquals(expectedNOfElems, actualNOfElems, 0);
+        double expectedNumOfElems = 0;
+        assertEquals(expectedNumOfElems, actualNumOfElems, 0);
     }
 
     @Test
@@ -525,15 +546,15 @@ public class HashDoubleHashingTest {
                 toDelete = randomDouble;
             }
         }
-        double actualdValueBeforeDelete = doubleHash.get(toDelete);
+        double valueBeforeDelete = doubleHash.get(toDelete);
         doubleHash.delete(toDelete);
-        Object actualdValueAfterDelete = doubleHash.get(toDelete);
+        Object valueAfterDelete = doubleHash.get(toDelete);
 
         // then
-        double expectedValueBeforeDelete = toDelete;
-        Object expectedValueAfterDelete = null;
-        assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete, 0);
-        assertEquals(expectedValueAfterDelete, actualdValueAfterDelete);
+        double expectedBefore = toDelete;
+        Object expectedAfter = null;
+        assertEquals(expectedBefore, valueBeforeDelete, 0);
+        assertEquals(expectedAfter, valueAfterDelete);
     }
 
     @Test
@@ -558,15 +579,14 @@ public class HashDoubleHashingTest {
                 toDelete = randomString;
             }
         }
-        String actualdValueBeforeDelete = stringHash.get(toDelete);
+        String valueBeforeDelete = stringHash.get(toDelete);
         stringHash.delete(toDelete);
-        Object actualdValueAfterDelete = stringHash.get(toDelete);
+        Object valueAfterDelete = stringHash.get(toDelete);
 
         // then
-        String expectedValueBeforeDelete = toDelete;
-        Object expectedValueAfterDelete = null;
-        assertEquals(expectedValueBeforeDelete, actualdValueBeforeDelete);
-        assertEquals(expectedValueAfterDelete, actualdValueAfterDelete);
+        String expectedBefore = toDelete;
+        Object expectedAfter = null;
+        assertEquals(expectedBefore, valueBeforeDelete);
+        assertEquals(expectedAfter, valueAfterDelete);
     }
-
 }
