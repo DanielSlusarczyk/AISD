@@ -23,7 +23,7 @@ public class RbtMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowException_WhenPutValueNull() {
+    public void should_ThrowException_WhenPutValueIsNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
 
@@ -35,7 +35,7 @@ public class RbtMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowException_WhenPutKeyNull() {
+    public void should_ThrowException_WhenPutKeyIsNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
 
@@ -47,7 +47,7 @@ public class RbtMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowException_WhenGetNull() {
+    public void should_ThrowException_WhenGetIsNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
 
@@ -126,7 +126,6 @@ public class RbtMapTest {
         });
         String expected = "";
         for (Double element : doubleList) {
-            System.out.println("S");
             expected = expected + element + ":" + element + " ";
         }
         expected = expected.trim();
@@ -136,7 +135,7 @@ public class RbtMapTest {
     @Test
     public void should_CorrectlySetValues_WhenExistInMap() {
         // given
-        Double toAdd[] = { 1.0, 1.0, 1.0, 1.0, 1.0 };
+        Double toAdd[] = { 1.0, 1.0 };
 
         // when
         for (Double added : toAdd) {
@@ -338,4 +337,24 @@ public class RbtMapTest {
         assertEquals(expectedInOrderAfterDelete, actualInOrderAfterDelete);
     }
 
+    @Test
+    public void should_replace_OldValueByNew() {
+        // given
+        RbtMap<Double, String> redBlackTreeMap = new RbtMap<>();
+        Double[] numberSequence = { 4.0, 4.0, 4.0, 4.0 };
+        String[] valueSequence = { "D", "B", "C", "A" };
+
+        // when
+        if (numberSequence.length != valueSequence.length) {
+            assert false;
+        }
+        for (int i = 0; i < numberSequence.length; i++) {
+            redBlackTreeMap.setValue(numberSequence[i], valueSequence[i]);
+        }
+        String actualValue = redBlackTreeMap.getPreOrder();
+
+        // then
+        String expectedValue = "4.0:A";
+        assertEquals(expectedValue, actualValue);
+    }
 }

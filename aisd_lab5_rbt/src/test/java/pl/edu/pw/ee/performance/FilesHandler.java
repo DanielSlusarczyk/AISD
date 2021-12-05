@@ -13,16 +13,22 @@ public class FilesHandler {
     private String logFile = "src/test/java/pl/edu/pw/ee/performance/results/logTime.txt";
     private FileWriter fileWriter;
     private BufferedWriter writer;
+    private File file;
+    private Scanner reader;
 
-    public FilesHandler() throws IOException {
-        fileWriter = new FileWriter(logFile);
-        writer = new BufferedWriter(fileWriter);
+    public FilesHandler() {
+        try {
+            fileWriter = new FileWriter(logFile);
+            writer = new BufferedWriter(fileWriter);
+            file = new File(fileName);
+            reader = new Scanner(file);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("There is no required file");
+        }
     }
 
-    public List<String> addFromFile() throws IOException {
+    public List<String> addFromFile(){
         List<String> wordsList = new ArrayList<>();
-        File file = new File(fileName);
-        Scanner reader = new Scanner(file);
 
         while (reader.hasNextLine()) {
             wordsList.add(reader.nextLine());
@@ -32,9 +38,9 @@ public class FilesHandler {
         return wordsList;
     }
 
-    public void writeResult(List<Integer> results) throws IOException {
-        for (int i = 1; i <= results.size(); i++) {
-            writer.write(i + ":" + results.get(i - 1) + "\n");
+    public void writeResult(List<Integer> results, List<Integer> sizes) throws IOException {
+        for (int i = 0; i < results.size(); i++) {
+            writer.write(sizes.get(i) + ":" + results.get(i) + "\n");
         }
         writer.close();
     }

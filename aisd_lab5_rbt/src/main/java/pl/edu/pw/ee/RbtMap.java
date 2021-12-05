@@ -32,18 +32,17 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
 
     public String getPreOrder() {
         return tree.getPreOrder();
-    } 
+    }
 
     public String getInOrder() {
         return tree.getInOrder();
     }
-    
+
     public String getPostOrder() {
         return tree.getPostOrder();
     }
 
-    public int getNumberOfCalls(){
+    public int getNumberOfCalls() {
         return tree.getNumberOfCalls();
     }
-
 }

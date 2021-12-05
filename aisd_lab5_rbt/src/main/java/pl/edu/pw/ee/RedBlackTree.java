@@ -181,6 +181,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         head.setRight(node);
         head.setColor(node.getColor());
         node.setColor(RED);
+
         return head;
     }
 
@@ -215,9 +216,11 @@ public class RedBlackTree<K extends Comparable<K>, V> {
             if (isRed(node.getLeft())) {
                 node = rotateRight(node);
             }
+
             if (node.getRight() == null) {
                 return null;
             }
+
             if (!isRed(node.getRight()) && !isRed(node.getRight().getLeft())) {
                 swapColor(node);
                 swapColor(node.getLeft());
@@ -229,6 +232,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                     swapColor(node.getRight());
                 }
             }
+
             node.setRight(deleteMax(node.getRight()));
             return reorganizeTree(node);
         }

@@ -17,7 +17,7 @@ public class RedBlackTreeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowException_WhenPutValueNull() {
+    public void should_ThrowException_WhenPutValueIsNull() {
         // given
 
         // when
@@ -28,7 +28,7 @@ public class RedBlackTreeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowException_WhenPutKeyNull() {
+    public void should_ThrowException_WhenPutKeyIsNull() {
         // given
 
         // when
@@ -157,7 +157,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_be_LeftLeaning_afterPutTreeElement() {
+    public void should_be_LeftLeaning_afterPutElement() {
         // given
         double[] addSequence = { 1.0, 2.0 };
 
