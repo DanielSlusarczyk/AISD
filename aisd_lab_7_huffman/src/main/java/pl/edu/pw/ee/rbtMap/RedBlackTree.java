@@ -38,6 +38,24 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         root.setColor(BLACK);
     }
 
+    public Node<K,V> getMaxValue() {
+        if (root != null) {
+            return findMaxValue(root);
+        } else {
+            return null;
+        }
+    }
+
+    private Node<K, V> findMaxValue(Node<K, V> node) {
+        if (node == null) {
+            return null;
+        } else if (node.getRight() == null) {
+            return node;
+        } else {
+            return findMaxValue(node.getRight());
+        }
+    }
+
     public String getReverseOrder() {
         traversalResult = "";
         returnReverseOrder(root);
@@ -63,8 +81,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
             traversalResult = traversalResult + node.getKey() + ":" + node.getValue() + " ";
             returnPreOrder(node.getLeft());
             returnPreOrder(node.getRight());
-        }
-        else {
+        } else {
             traversalResult = traversalResult + " # ";
         }
     }

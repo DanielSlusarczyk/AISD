@@ -5,6 +5,7 @@ public class Node implements Comparable<Node> {
     private int frequency;
     private Node leftNode;
     private Node rightNode;
+    private String code;
 
     Node(char sign, int frequnecy) {
         this.sign = sign;
@@ -18,6 +19,25 @@ public class Node implements Comparable<Node> {
         this.frequency = frequency;
         this.leftNode = left;
         this.rightNode = right;
+    }
+
+    Node(char sign, String code){
+        this.sign = sign;
+        this.code = code;
+        this.leftNode = null;
+        this.rightNode = null;
+    }
+
+    public void increaseFrequency(){
+        frequency++;
+    }
+
+    public void setCode(String code){
+        this.code = code;
+    }
+
+    public String getCode(){
+        return code;
     }
 
     public Character getSign() {
@@ -63,16 +83,12 @@ public class Node implements Comparable<Node> {
             return false;
         }
         Node comparedNode = (Node) node;
-        return Integer.compare(this.frequency, comparedNode.getFrequency()) == 0 && Character.compare(this.sign, comparedNode.getSign()) == 0;
+        return Character.compare(this.sign, comparedNode.getSign()) == 0;
     }
 
     @Override
-    public String toString() {
-        if (leftNode != null && rightNode != null) {
-            return "[" + frequency + ":" + sign + "]\n" + "Left: " + leftNode.getSign() + "\nRigth:"
-                    + rightNode.getSign() + "\n";
-        }
-        return "[" + frequency + ":" + sign + "]";
+    public String toString(){
+        return "["+ sign + "->" + frequency + "]";
     }
 
 }
