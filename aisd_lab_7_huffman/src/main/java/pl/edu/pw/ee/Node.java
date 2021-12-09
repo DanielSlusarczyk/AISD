@@ -1,6 +1,6 @@
 package pl.edu.pw.ee;
 
-public class Node implements Comparable<Node> {
+public class Node {
     private Character sign;
     private int frequency;
     private Node leftNode;
@@ -21,22 +21,22 @@ public class Node implements Comparable<Node> {
         this.rightNode = right;
     }
 
-    Node(char sign, String code){
+    Node(char sign, String code) {
         this.sign = sign;
         this.code = code;
         this.leftNode = null;
         this.rightNode = null;
     }
 
-    public void increaseFrequency(){
+    public void increaseFrequency() {
         frequency++;
     }
 
-    public void setCode(String code){
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getCode(){
+    public String getCode() {
         return code;
     }
 
@@ -52,29 +52,12 @@ public class Node implements Comparable<Node> {
         return leftNode == null && rightNode == null;
     }
 
-    public Node getLeft(){
+    public Node getLeft() {
         return leftNode;
     }
 
-    public Node getRight(){
+    public Node getRight() {
         return rightNode;
-    }
-
-    @Override
-    public int compareTo(Node node) {
-        if (this.getFrequency() != node.getFrequency()) {
-            return Integer.compare(node.getFrequency(), this.frequency);
-        }
-        if (!this.isLeaf() && node.isLeaf()) {
-            return 1;
-        }
-        if (this.isLeaf() && !node.isLeaf()) {
-            return -1;
-        }
-        if(this.isLeaf() && node.isLeaf()){
-            return Character.compare(this.getSign(), node.getSign());
-        }
-        return -1;
     }
 
     @Override
@@ -83,12 +66,16 @@ public class Node implements Comparable<Node> {
             return false;
         }
         Node comparedNode = (Node) node;
-        return Character.compare(this.sign, comparedNode.getSign()) == 0;
+        if (this.isLeaf() && comparedNode.isLeaf()) {
+            return Character.compare(this.sign, comparedNode.getSign()) == 0;
+        } else {
+            return Integer.compare(comparedNode.getFrequency(), this.getFrequency()) == 0;
+        }
     }
 
     @Override
-    public String toString(){
-        return "["+ sign + "->" + frequency + "]";
+    public String toString() {
+        return "[" + sign + "->" + frequency + "->" + code +"]";
     }
 
 }

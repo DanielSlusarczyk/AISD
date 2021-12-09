@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,21 +27,19 @@ public class Huffman {
     File keyFile;
 
     public int huffman(String pathToRootDir, boolean compress) {
-        List<Node> listOfOccuredChars = new ArrayList<>();
+        List<Node> listOfNodes = new ArrayList<>();
         try {
             validateInput(pathToRootDir, compress);
             if (compress) {
-                Heap<Node> heap = new Heap<>();
-                readFrequencyOfSigns(listOfOccuredChars);
-                addNodesToHeap(listOfOccuredChars, heap);
-                root = createHuffmanTree(heap);
+                readFrequencyOfSigns(listOfNodes);
+                root = createHuffmanTree(listOfNodes);
                 codeValues(root, "");
-                saveHuffmanTree(listOfOccuredChars);
-                return codeFile(listOfOccuredChars);
+                saveHuffmanTree(listOfNodes);
+                return codeFile(listOfNodes);
 
             } else {
-                readHuffmanTree(listOfOccuredChars);
-                return decodeFile(listOfOccuredChars);
+                readHuffmanTree(listOfNodes);
+                return decodeFile(listOfNodes);
             }
 
         } catch (IOException execption) {
@@ -49,7 +48,8 @@ public class Huffman {
     }
 
     private void readFrequencyOfSigns(List<Node> listOfOccuredChars) throws IOException {
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
+        reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
         String line = reader.readLine();
         while (line != null) {
             line = line + '\n';
@@ -73,19 +73,48 @@ public class Huffman {
         reader.close();
     }
 
-    private void addNodesToHeap(List<Node> listOfOccuredChars, Heap<Node> heap) {
-        for (Node node : listOfOccuredChars) {
-            heap.put(node);
+    private Node createHuffmanTree(List<Node> listOfNodes) {
+        List<Node> listToMakeHuffmanTree = new ArrayList<>(listOfNodes);
+        while (listToMakeHuffmanTree.size() > 1) {
+            sortList(listToMakeHuffmanTree);
+            Node first = listToMakeHuffmanTree.get(listToMakeHuffmanTree.size() - 1);
+            Node second = listToMakeHuffmanTree.get(listToMakeHuffmanTree.size() - 2);
+            listToMakeHuffmanTree.remove(listToMakeHuffmanTree.size() - 1);
+            listToMakeHuffmanTree.remove(listToMakeHuffmanTree.size() - 1);
+            listToMakeHuffmanTree.add(new Node(first.getFrequency() + second.getFrequency(), first, second));
         }
+        return listToMakeHuffmanTree.get(0);
     }
 
-    private Node createHuffmanTree(Heap<Node> heap) {
-        while (heap.getSize() > 1) {
-            Node first = heap.pop();
-            Node second = heap.pop();
-            heap.put(new Node(first.getFrequency() + second.getFrequency(), first, second));
-        }
-        return heap.pop();
+    private void sortList(List<Node> listOfNodes) {
+        listOfNodes.sort(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                if (o1.getFrequency() != o2.getFrequency()) {
+                    return Integer.compare(o2.getFrequency(), o1.getFrequency());
+                }
+                if (!o1.isLeaf() && o2.isLeaf()) {
+                    return 1;
+                }
+                if (o1.isLeaf() && !o2.isLeaf()) {
+                    return -1;
+                }
+                if (o1.isLeaf() && o2.isLeaf()) {
+                    return Character.compare(o1.getSign(), o1.getSign());
+                }
+                return -1;
+            }
+
+        });
+    }
+
+    private void sortListByLengthOfCode(List<Node> listOfNodes){
+        listOfNodes.sort(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Integer.compare(o1.getCode().length(), o2.getCode().length());
+            }
+        });
     }
 
     private void codeValues(Node node, String code) {
@@ -99,9 +128,11 @@ public class Huffman {
         codeValues(node.getRight(), code + "1");
     }
 
-    private int codeFile(List<Node> listOfNodes) throws IOException {
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
-        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(compressedFile), StandardCharsets.UTF_8));
+    private int codeFile(List<Node> listOfCodes) throws IOException {
+        reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
+        writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(compressedFile), StandardCharsets.UTF_8));
         String encodedText = "";
         String line = reader.readLine();
         int counter = 0;
@@ -109,7 +140,7 @@ public class Huffman {
             line = line + '\n';
             for (int i = 0; i < line.length(); i++) {
                 char actualChar = line.charAt(i);
-                for (Node node : listOfNodes) {
+                for (Node node : listOfCodes) {
                     if (Character.compare(actualChar, node.getSign()) == 0) {
                         encodedText = encodedText + node.getCode();
                         break;
@@ -118,7 +149,7 @@ public class Huffman {
             }
             writer.write(encodedText);
             counter += encodedText.length();
-            encodedText ="";
+            encodedText = "";
             line = reader.readLine();
         }
         writer.close();
@@ -149,10 +180,12 @@ public class Huffman {
 
     private int decodeFile(List<Node> listOfNodes) throws IOException {
         reader = new BufferedReader(new InputStreamReader(new FileInputStream(compressedFile), StandardCharsets.UTF_8));
-        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(decompressedFile), StandardCharsets.UTF_8));
+        writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(decompressedFile), StandardCharsets.UTF_8));
         String line = reader.readLine();
         String encodedText = "";
         int counter = 0;
+        sortListByLengthOfCode(listOfNodes);
         while (line != null) {
             line = line + '\n';
             String code = "";
@@ -164,6 +197,9 @@ public class Huffman {
                         counter++;
                         break;
                     }
+                }
+                if(code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()){
+                    throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
                 }
                 code = code + String.valueOf(line.charAt(i));
             }
@@ -197,7 +233,7 @@ public class Huffman {
             if (!decompressedFile.canRead()) {
                 throw new IllegalArgumentException("Cannot read the file " + decompressedFile.getName());
             }
-            if(!compressedFile.canWrite() || !keyFile.canWrite()){
+            if (!compressedFile.canWrite() || !keyFile.canWrite()) {
                 compressedFile.createNewFile();
                 keyFile.createNewFile();
             }
@@ -205,13 +241,13 @@ public class Huffman {
             if (!compressedFile.canRead() || !keyFile.canRead()) {
                 throw new IllegalArgumentException("Cannot write/read the file");
             }
-            if(!decompressedFile.canWrite()){
+            if (!decompressedFile.canWrite()) {
                 decompressedFile.createNewFile();
             }
         }
     }
 
     public static void main(String[] argv) {
-            System.out.println("Wynik: " + new Huffman().huffman("input", false));
+        System.out.println("Wynik: " + new Huffman().huffman("input", true));
     }
 }
