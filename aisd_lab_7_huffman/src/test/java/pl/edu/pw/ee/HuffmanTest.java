@@ -1,9 +1,9 @@
 package pl.edu.pw.ee;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +21,6 @@ import org.junit.Test;
 public class HuffmanTest {
     private Huffman testHuffman;
     private BufferedWriter writer;
-    private BufferedReader reader;
     private String pathToTestDir = "src/test/java/pl/edu/pw/ee/testInput";
     private String pathToSamplesDir = "src/test/java/pl/edu/pw/ee/testInputSamples";
     private String nameOfDecompressedFile = "decompressedFile.txt";
@@ -43,9 +42,12 @@ public class HuffmanTest {
         // given
         String pathToRootDir = null;
         Boolean compress = true;
+
         // when
         testHuffman.huffman(pathToRootDir, compress);
+
         // then
+        assert false;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -58,6 +60,20 @@ public class HuffmanTest {
         testHuffman.huffman(pathToRootDir, compress);
 
         // then
+        assert false;
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void should_throwException_whenPathLeadToFile() {
+        // given
+        String pathToRootDir = compressedFile.getPath();
+        Boolean compress = true;
+
+        // when
+        testHuffman.huffman(pathToRootDir, compress);
+
+        // then
+        assert false;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -73,6 +89,7 @@ public class HuffmanTest {
         testHuffman.huffman(pathToTestDir, compress);
 
         // then
+        assert false;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -88,6 +105,7 @@ public class HuffmanTest {
         testHuffman.huffman(pathToTestDir, compress);
 
         // then
+        assert false;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -103,6 +121,24 @@ public class HuffmanTest {
         testHuffman.huffman(pathToTestDir, compress);
 
         // then
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throwException_whenTheCompressedCodeIsInvalid() {
+        // given
+        String text = "abc";
+
+        // when
+        prepareWriter(decompressedFile);
+        writeString(text);
+        testHuffman.huffman(pathToTestDir, true);
+        prepareWriter(compressedFile);
+        writeString("code");
+        testHuffman.huffman(pathToTestDir, false);
+
+        // then
+        assert false;
     }
 
     @Test
@@ -253,7 +289,7 @@ public class HuffmanTest {
     }
 
     @Test
-    public void should_correctlyCompressAndDecompress_examplaryFile_first() {
+    public void should_correctlyCompressAndDecompress_examplaryFile_niemanie() {
         // given
         int actualResultOfCompress = 0;
         int actualResultOfDecompress = 0;
@@ -271,7 +307,7 @@ public class HuffmanTest {
     }
 
     @Test
-    public void should_correctlyCompressAndDecompress_examplaryFile_second() {
+    public void should_correctlyCompressAndDecompress_examplaryFile_niemanie_refren() {
         // given
         int actualResultOfCompress = 0;
         int actualResultOfDecompress = 0;
@@ -282,8 +318,86 @@ public class HuffmanTest {
         actualResultOfDecompress = testHuffman.huffman(pathToTestDir, false);
 
         // then
-        int expectedResultOfCompress = 561;
-        int expectedResultOfDecompress = 166;
+        int expectedResultOfCompress = 567;
+        int expectedResultOfDecompress = 167;
+        assertEquals(expectedResultOfCompress, actualResultOfCompress);
+        assertEquals(expectedResultOfDecompress, actualResultOfDecompress);
+    }
+
+    @Test
+    public void should_correctlyCompressAndDecompress_examplaryFile_lorem_ipsum() {
+        // given
+        int actualResultOfCompress = 0;
+        int actualResultOfDecompress = 0;
+
+        // when
+        prepareFile("lorem_ipsum.txt");
+        actualResultOfCompress = testHuffman.huffman(pathToTestDir, true);
+        actualResultOfDecompress = testHuffman.huffman(pathToTestDir, false);
+
+        // then
+        int expectedResultOfCompress = 379554;
+        int expectedResultOfDecompress = 88384;
+        assertEquals(expectedResultOfCompress, actualResultOfCompress);
+        assertEquals(expectedResultOfDecompress, actualResultOfDecompress);
+    }
+
+    @Test
+    public void should_giveIdenticalFileAfterDecompress() {
+        // given
+        String fileName = "lorem_ipsum.txt";
+
+        // when
+        prepareFile("lorem_ipsum.txt");
+        testHuffman.huffman(pathToTestDir, true);
+        testHuffman.huffman(pathToTestDir, false);
+
+        // then
+        try {
+            byte[] f1 = Files.readAllBytes(Paths.get(pathToSamplesDir + "/" + fileName));
+            byte[] f2 = Files.readAllBytes(Paths.get(decompressedFile.getPath()));
+            assertArrayEquals(f1, f2);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Problem with file to test");
+        }
+    }
+
+    @Test
+    public void should_correctlyInterpret_polishDiacriticalMarks() {
+        // given
+        String text = "ąćęłńóśźż";
+        int actualResultOfCompress = 0;
+        int actualResultOfDecompress = 0;
+
+        // when
+        prepareWriter(decompressedFile);
+        writeString(text);
+        actualResultOfCompress = testHuffman.huffman(pathToTestDir, true);
+        actualResultOfDecompress = testHuffman.huffman(pathToTestDir, false);
+
+        // then
+        int expectedResultOfCompress = 29;
+        int expectedResultOfDecompress = 9;
+        assertEquals(expectedResultOfCompress, actualResultOfCompress);
+        assertEquals(expectedResultOfDecompress, actualResultOfDecompress);
+    }
+
+    @Test
+    public void should_correctlyInterpret_newLineCharacters() {
+        // given
+        String text = "\n\n\n\n\n\n\n\n";
+        int actualResultOfCompress = 0;
+        int actualResultOfDecompress = 0;
+
+        // when
+        prepareWriter(decompressedFile);
+        writeString(text);
+        actualResultOfCompress = testHuffman.huffman(pathToTestDir, true);
+        actualResultOfDecompress = testHuffman.huffman(pathToTestDir, false);
+
+        // then
+        int expectedResultOfCompress = 8;
+        int expectedResultOfDecompress = 8;
         assertEquals(expectedResultOfCompress, actualResultOfCompress);
         assertEquals(expectedResultOfDecompress, actualResultOfDecompress);
     }
@@ -293,7 +407,7 @@ public class HuffmanTest {
             Files.copy(Paths.get(pathToSamplesDir + "/" + fileName), Paths.get(decompressedFile.getAbsolutePath()),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw new IllegalArgumentException("There is not file to test");
+            throw new IllegalArgumentException("There is no file to test");
         }
     }
 

@@ -1,6 +1,5 @@
 package pl.edu.pw.ee;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,10 +14,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Huffman {
-    private BufferedReader reader;
+    private InputStreamReader reader;
     private BufferedWriter writer;
     private Node root;
-
     private String nameOfDecompressedFile = "decompressedFile.txt";
     private String nameOfCompressedFile = "compressedFile.txt";
     private String nameOfFileForKey = "key.txt";
@@ -33,50 +31,46 @@ public class Huffman {
             if (compress) {
                 readFrequencyOfSigns(listOfNodes);
                 root = createHuffmanTree(listOfNodes);
+
                 if (listOfNodes.size() > 1) {
                     codeValues(root, "");
+                    sortListByLengthOfCode(listOfNodes);
                 } else if (listOfNodes.size() == 1) {
                     listOfNodes.get(0).setCode("0");
                 }
+
                 saveHuffmanTree(listOfNodes);
                 return codeFile(listOfNodes);
-
             } else {
                 readHuffmanTree(listOfNodes);
                 return decodeFile(listOfNodes);
             }
-
         } catch (IOException execption) {
-            throw new IllegalArgumentException("There is problem with file");
+            throw new IllegalArgumentException("Problem with file");
         }
     }
 
     private void readFrequencyOfSigns(List<Node> listOfOccuredChars) throws IOException {
-        reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
-        String line = reader.readLine();
-        String nextLine = reader.readLine();
-        while (line != null) {
-            if (nextLine != null) {
-                line = line + '\n';
-            }
-            for (int i = 0; i < line.length(); i++) {
-                char actualChar = line.charAt(i);
-                Node properNode = null;
-                for (Node node : listOfOccuredChars) {
-                    if (Character.compare(node.getSign(), actualChar) == 0) {
-                        properNode = node;
-                        break;
-                    }
-                }
-                if (properNode == null) {
-                    listOfOccuredChars.add(new Node(actualChar, 1));
-                } else {
-                    properNode.increaseFrequency();
+        reader = new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8);
+        int singleChar = reader.read();
+        while (singleChar != -1) {
+            char actualChar = (char) singleChar;
+            Node properNode = null;
+
+            for (Node node : listOfOccuredChars) {
+                if (Character.compare(node.getSign(), actualChar) == 0) {
+                    properNode = node;
+                    break;
                 }
             }
-            line = nextLine;
-            nextLine = reader.readLine();
+
+            if (properNode == null) {
+                listOfOccuredChars.add(new Node(actualChar, 1));
+            } else {
+                properNode.increaseFrequency();
+            }
+
+            singleChar = reader.read();
         }
         reader.close();
     }
@@ -88,6 +82,7 @@ public class Huffman {
         if (listOfNodes.size() == 1) {
             return listOfNodes.get(0);
         }
+
         List<Node> listToMakeHuffmanTree = new ArrayList<>(listOfNodes);
         while (listToMakeHuffmanTree.size() > 1) {
             sortList(listToMakeHuffmanTree);
@@ -143,36 +138,21 @@ public class Huffman {
     }
 
     private int codeFile(List<Node> listOfCodes) throws IOException {
-        reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
+        reader = new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8);
         writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(compressedFile), StandardCharsets.UTF_8));
-        String encodedText = "";
-        String line = reader.readLine();
-        String nextLine = reader.readLine();
+        int singleChar = reader.read();
         int counter = 0;
-        while (line != null) {
-            if (nextLine != null) {
-                System.out.print(line);
-                line = line + '\n';
-            }
-            for (int i = 0; i < line.length(); i++) {
-                char actualChar = line.charAt(i);
-                for (Node node : listOfCodes) {
-                    if (Character.compare(actualChar, node.getSign()) == 0) {
-                        encodedText = encodedText + node.getCode();
-                        break;
-                    }
+        while (singleChar != -1) {
+            char actualChar = (char) singleChar;
+            for (Node node : listOfCodes) {
+                if (Character.compare(actualChar, node.getSign()) == 0) {
+                    counter += node.getCode().length();
+                    writer.write(node.getCode());
+                    break;
                 }
             }
-            writer.write(encodedText);
-            if (counter >= Integer.MAX_VALUE - encodedText.length() - 1) {
-                throw new IllegalArgumentException("There is too extensive file");
-            }
-            counter += encodedText.length();
-            encodedText = "";
-            line = nextLine;
-            nextLine = reader.readLine() + '\n';
+            singleChar = reader.read();
         }
         writer.close();
         reader.close();
@@ -189,7 +169,7 @@ public class Huffman {
     }
 
     private void readHuffmanTree(List<Node> listOfNodes) throws IOException {
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(keyFile), StandardCharsets.UTF_8));
+        reader = new InputStreamReader(new FileInputStream(keyFile), StandardCharsets.UTF_8);
         Scanner scanner = new Scanner(reader);
         while (scanner.hasNext("\\d+:\\d+")) {
             String node = scanner.next("\\d+:\\d+");
@@ -201,38 +181,32 @@ public class Huffman {
     }
 
     private int decodeFile(List<Node> listOfNodes) throws IOException {
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(compressedFile), StandardCharsets.UTF_8));
+        reader = new InputStreamReader(new FileInputStream(compressedFile), StandardCharsets.UTF_8);
         writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(decompressedFile), StandardCharsets.UTF_8));
-        String line = reader.readLine();
-        String encodedText = "";
+        int singleChar = reader.read();
         int counter = 0;
-        sortListByLengthOfCode(listOfNodes);
-        while (line != null) {
-            line = line + '\n';
-            String code = "";
-            for (int i = 0; i < line.length(); i++) {
-                for (Node node : listOfNodes) {
-                    if (node.getCode().equals(code)) {
-                        encodedText = encodedText + String.valueOf(node.getSign());
-                        code = "";
-                        if (counter >= Integer.MAX_VALUE - 1) {
-                            throw new IllegalArgumentException("There is too extensive file");
-                        }
-                        counter++;
-                        break;
-                    }
-                }
-                if (code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()) {
-                    throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
-                }
-                code = code + String.valueOf(line.charAt(i));
-            }
-            writer.write(encodedText);
-            encodedText = "";
-            line = reader.readLine();
-        }
 
+        String code = "";
+        while (singleChar != -1) {
+            code = code + (char) singleChar;
+            for (Node node : listOfNodes) {
+                if (node.getCode().equals(code)) {
+                    writer.write(String.valueOf(node.getSign()));
+                    code = "";
+
+                    if (counter >= Integer.MAX_VALUE - 1) {
+                        throw new IllegalArgumentException("There is too extensive file");
+                    }
+                    counter++;
+                    break;
+                }
+            }
+            if (code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()) {
+                throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
+            }
+            singleChar = reader.read();
+        }
         writer.close();
         reader.close();
         return counter;
@@ -270,9 +244,5 @@ public class Huffman {
                 decompressedFile.createNewFile();
             }
         }
-    }
-
-    public static void main(String[] argv) {
-        System.out.println("Wynik: " + new Huffman().huffman("input", true));
     }
 }

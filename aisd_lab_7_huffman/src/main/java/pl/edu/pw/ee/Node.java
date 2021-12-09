@@ -88,10 +88,4 @@ public class Node {
             return Integer.compare(comparedNode.getFrequency(), this.getFrequency()) == 0;
         }
     }
-
-    @Override
-    public String toString() {
-        return "[" + sign + "->" + frequency + "->" + code + "]";
-    }
-
 }
