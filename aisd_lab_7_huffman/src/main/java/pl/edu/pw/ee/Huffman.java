@@ -19,12 +19,12 @@ public class Huffman {
     private BufferedWriter writer;
     private Node root;
 
-    String nameOfDecompressedFile = "decompressedFile.txt";
-    String nameOfCompressedFile = "compressedFile.txt";
-    String nameOfFileForKey = "key.txt";
-    File decompressedFile;
-    File compressedFile;
-    File keyFile;
+    private String nameOfDecompressedFile = "decompressedFile.txt";
+    private String nameOfCompressedFile = "compressedFile.txt";
+    private String nameOfFileForKey = "key.txt";
+    private File decompressedFile;
+    private File compressedFile;
+    private File keyFile;
 
     public int huffman(String pathToRootDir, boolean compress) {
         List<Node> listOfNodes = new ArrayList<>();
@@ -33,7 +33,11 @@ public class Huffman {
             if (compress) {
                 readFrequencyOfSigns(listOfNodes);
                 root = createHuffmanTree(listOfNodes);
-                codeValues(root, "");
+                if (listOfNodes.size() > 1) {
+                    codeValues(root, "");
+                } else if (listOfNodes.size() == 1) {
+                    listOfNodes.get(0).setCode("0");
+                }
                 saveHuffmanTree(listOfNodes);
                 return codeFile(listOfNodes);
 
@@ -51,8 +55,11 @@ public class Huffman {
         reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(decompressedFile), StandardCharsets.UTF_8));
         String line = reader.readLine();
+        String nextLine = reader.readLine();
         while (line != null) {
-            line = line + '\n';
+            if (nextLine != null) {
+                line = line + '\n';
+            }
             for (int i = 0; i < line.length(); i++) {
                 char actualChar = line.charAt(i);
                 Node properNode = null;
@@ -68,12 +75,19 @@ public class Huffman {
                     properNode.increaseFrequency();
                 }
             }
-            line = reader.readLine();
+            line = nextLine;
+            nextLine = reader.readLine();
         }
         reader.close();
     }
 
     private Node createHuffmanTree(List<Node> listOfNodes) {
+        if (listOfNodes.size() == 0) {
+            return null;
+        }
+        if (listOfNodes.size() == 1) {
+            return listOfNodes.get(0);
+        }
         List<Node> listToMakeHuffmanTree = new ArrayList<>(listOfNodes);
         while (listToMakeHuffmanTree.size() > 1) {
             sortList(listToMakeHuffmanTree);
@@ -108,7 +122,7 @@ public class Huffman {
         });
     }
 
-    private void sortListByLengthOfCode(List<Node> listOfNodes){
+    private void sortListByLengthOfCode(List<Node> listOfNodes) {
         listOfNodes.sort(new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
@@ -135,9 +149,13 @@ public class Huffman {
                 new OutputStreamWriter(new FileOutputStream(compressedFile), StandardCharsets.UTF_8));
         String encodedText = "";
         String line = reader.readLine();
+        String nextLine = reader.readLine();
         int counter = 0;
         while (line != null) {
-            line = line + '\n';
+            if (nextLine != null) {
+                System.out.print(line);
+                line = line + '\n';
+            }
             for (int i = 0; i < line.length(); i++) {
                 char actualChar = line.charAt(i);
                 for (Node node : listOfCodes) {
@@ -148,9 +166,13 @@ public class Huffman {
                 }
             }
             writer.write(encodedText);
+            if (counter >= Integer.MAX_VALUE - encodedText.length() - 1) {
+                throw new IllegalArgumentException("There is too extensive file");
+            }
             counter += encodedText.length();
             encodedText = "";
-            line = reader.readLine();
+            line = nextLine;
+            nextLine = reader.readLine() + '\n';
         }
         writer.close();
         reader.close();
@@ -194,11 +216,14 @@ public class Huffman {
                     if (node.getCode().equals(code)) {
                         encodedText = encodedText + String.valueOf(node.getSign());
                         code = "";
+                        if (counter >= Integer.MAX_VALUE - 1) {
+                            throw new IllegalArgumentException("There is too extensive file");
+                        }
                         counter++;
                         break;
                     }
                 }
-                if(code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()){
+                if (code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()) {
                     throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
                 }
                 code = code + String.valueOf(line.charAt(i));

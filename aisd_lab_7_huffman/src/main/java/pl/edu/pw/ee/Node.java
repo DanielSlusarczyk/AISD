@@ -7,21 +7,37 @@ public class Node {
     private Node rightNode;
     private String code;
 
-    Node(char sign, int frequnecy) {
+    Node(Character sign, int frequency) {
+        if (sign == null || frequency < 1) {
+            throw new IllegalArgumentException("Sign cannot be null and frequnecy cannot be lower than one");
+        }
+
         this.sign = sign;
-        this.frequency = frequnecy;
+        this.frequency = frequency;
         leftNode = null;
         rightNode = null;
     }
 
     Node(int frequency, Node left, Node right) {
+        if (left == null || right == null || frequency < 1) {
+            throw new IllegalArgumentException(
+                    "Left and rigth node cannot be null and frequnecy cannot be lower than one");
+        }
+
         this.sign = null;
         this.frequency = frequency;
         this.leftNode = left;
         this.rightNode = right;
     }
 
-    Node(char sign, String code) {
+    Node(Character sign, String code) {
+        if (code == null || sign == null) {
+            throw new IllegalArgumentException("Code and sign cannot be null");
+        }
+        if (code.length() < 1) {
+            throw new IllegalArgumentException("Code cannot be empty");
+        }
+
         this.sign = sign;
         this.code = code;
         this.leftNode = null;
@@ -75,7 +91,7 @@ public class Node {
 
     @Override
     public String toString() {
-        return "[" + sign + "->" + frequency + "->" + code +"]";
+        return "[" + sign + "->" + frequency + "->" + code + "]";
     }
 
 }
