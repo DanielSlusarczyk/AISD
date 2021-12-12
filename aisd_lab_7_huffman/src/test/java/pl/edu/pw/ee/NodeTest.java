@@ -3,16 +3,10 @@ package pl.edu.pw.ee;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class NodeTest {
     private Node testNode;
-
-    @Before
-    public void setUp(){
-        
-    }
 
     @Test (expected = IllegalArgumentException.class)
     public void should_throwException_whenSignIsNull_counterContructor(){

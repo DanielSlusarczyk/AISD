@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 
 public class Huffman {
     private InputStreamReader reader;
@@ -20,6 +19,7 @@ public class Huffman {
     private String nameOfDecompressedFile = "decompressedFile.txt";
     private String nameOfCompressedFile = "compressedFile.txt";
     private String nameOfFileForKey = "key.txt";
+    private String traversalResult = "";
     private File decompressedFile;
     private File compressedFile;
     private File keyFile;
@@ -42,11 +42,19 @@ public class Huffman {
                 saveHuffmanTree(listOfNodes);
                 return codeFile(listOfNodes);
             } else {
-                readHuffmanTree(listOfNodes);
+                root = readHuffmanTree(listOfNodes);
+
+                if (listOfNodes.size() > 1) {
+                    codeValues(root, "");
+                    sortListByLengthOfCode(listOfNodes);
+                } else if (listOfNodes.size() == 1) {
+                    listOfNodes.get(0).setCode("0");
+                }
+
                 return decodeFile(listOfNodes);
             }
         } catch (IOException execption) {
-            throw new IllegalArgumentException("Problem with file");
+            throw new IllegalArgumentException("There is problem with files");
         }
     }
 
@@ -113,7 +121,6 @@ public class Huffman {
                 }
                 return -1;
             }
-
         });
     }
 
@@ -159,34 +166,12 @@ public class Huffman {
         return counter;
     }
 
-    private void saveHuffmanTree(List<Node> listOfNodes) throws IOException {
-        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(keyFile), StandardCharsets.UTF_8));
-        for (Node node : listOfNodes) {
-            int decimalVersion = node.getSign();
-            writer.write(decimalVersion + ":" + node.getCode() + " ");
-        }
-        writer.close();
-    }
-
-    private void readHuffmanTree(List<Node> listOfNodes) throws IOException {
-        reader = new InputStreamReader(new FileInputStream(keyFile), StandardCharsets.UTF_8);
-        Scanner scanner = new Scanner(reader);
-        while (scanner.hasNext("\\d+:\\d+")) {
-            String node = scanner.next("\\d+:\\d+");
-            char actualChar = (char) Integer.parseInt(node.substring(0, node.indexOf(':')));
-            String code = node.substring(node.indexOf(':') + 1);
-            listOfNodes.add(new Node(actualChar, code));
-        }
-        scanner.close();
-    }
-
     private int decodeFile(List<Node> listOfNodes) throws IOException {
         reader = new InputStreamReader(new FileInputStream(compressedFile), StandardCharsets.UTF_8);
         writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(decompressedFile), StandardCharsets.UTF_8));
         int singleChar = reader.read();
         int counter = 0;
-
         String code = "";
         while (singleChar != -1) {
             code = code + (char) singleChar;
@@ -196,6 +181,8 @@ public class Huffman {
                     code = "";
 
                     if (counter >= Integer.MAX_VALUE - 1) {
+                        writer.close();
+                        reader.close();
                         throw new IllegalArgumentException("There is too extensive file");
                     }
                     counter++;
@@ -203,6 +190,8 @@ public class Huffman {
                 }
             }
             if (code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()) {
+                writer.close();
+                reader.close();
                 throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
             }
             singleChar = reader.read();
@@ -212,16 +201,71 @@ public class Huffman {
         return counter;
     }
 
+    private void saveHuffmanTree(List<Node> listOfNodes) throws IOException {
+        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(keyFile), StandardCharsets.UTF_8));
+        traverseHuffmanTree(root);
+        writer.write(traversalResult);
+        writer.close();
+    }
+
+    private void traverseHuffmanTree(Node node) throws IOException {
+        if (node != null) {
+            if (node.isLeaf()) {
+                traversalResult += "1" + node.getSign();
+            } else {
+                traversalResult += "0";
+            }
+            traverseHuffmanTree(node.getLeft());
+            traverseHuffmanTree(node.getRight());
+        }
+    }
+
+    private Node readHuffmanTree(List<Node> listOfNodes) throws IOException {
+        reader = new InputStreamReader(new FileInputStream(keyFile), StandardCharsets.UTF_8);
+        int singleChar = reader.read();
+        List<Character> tree = new ArrayList<>();
+
+        while (singleChar != -1) {
+            tree.add((char) singleChar);
+            singleChar = reader.read();
+        }
+        reader.close();
+        root = buildTree(null, tree, listOfNodes);
+        traverseHuffmanTree(root);
+
+        return root;
+    }
+
+    private Node buildTree(Node actualNode, List<Character> tree, List<Node> listOfNodes) {
+        if (tree.size() > 0) {
+            char actualChar = tree.get(0);
+            tree.remove(0);
+            if (Character.compare(actualChar, '0') == 0) {
+                Node node = new Node();
+                node.setLeft(buildTree(node, tree, listOfNodes));
+                node.setRight(buildTree(node, tree, listOfNodes));
+                return node;
+            } else if (Character.compare(actualChar, '1') == 0) {
+                char sign = tree.get(0);
+                tree.remove(0);
+                Node node = new Node(sign, 1);
+                listOfNodes.add(node);
+                return node;
+            }
+        }
+        return actualNode;
+    }
+
     private void validateInput(String pathToRootDir, boolean compress) throws IOException {
         if (pathToRootDir == null) {
-            throw new IllegalArgumentException("Path to dir is null");
+            throw new IllegalArgumentException("Path to the directory is null");
         }
         File verifiedFile = new File(pathToRootDir);
         if (!verifiedFile.isDirectory()) {
-            throw new IllegalArgumentException("Path does not lead to a directory");
+            throw new IllegalArgumentException("Path does not lead to the directory");
         }
         if (!verifiedFile.canRead()) {
-            throw new IllegalArgumentException("Cannot read from directory");
+            throw new IllegalArgumentException("Cannot read from the directory");
         }
 
         decompressedFile = new File(verifiedFile.getPath() + "\\" + nameOfDecompressedFile);

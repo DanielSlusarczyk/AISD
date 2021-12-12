@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Order;
 
 public class HuffmanTest {
     private Huffman testHuffman;
@@ -34,7 +35,6 @@ public class HuffmanTest {
     public void setUp() {
         testHuffman = new Huffman();
         validateInput(pathToTestDir);
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -77,7 +77,7 @@ public class HuffmanTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenCompressWithoutFile() {
+    public void should_throwException_whenCompressWithoutDecompressedFile() {
         // given
         boolean compress = true;
 
@@ -109,23 +109,7 @@ public class HuffmanTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenDecompressWithoutKeyFile() {
-        // given
-        boolean compress = false;
-
-        // when
-        keyFile.delete();
-        if (keyFile.exists()) {
-            assert false;
-        }
-        testHuffman.huffman(pathToTestDir, compress);
-
-        // then
-        assert false;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenTheCompressedCodeIsInvalid() {
+    public void should_throwException_whenCompressedCodeIsInvalid() throws IOException {
         // given
         String text = "abc";
 
@@ -136,7 +120,7 @@ public class HuffmanTest {
         prepareWriter(compressedFile);
         writeString("code");
         testHuffman.huffman(pathToTestDir, false);
-
+        
         // then
         assert false;
     }
@@ -407,6 +391,7 @@ public class HuffmanTest {
             Files.copy(Paths.get(pathToSamplesDir + "/" + fileName), Paths.get(decompressedFile.getAbsolutePath()),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("There is no file to test");
         }
     }
@@ -454,12 +439,12 @@ public class HuffmanTest {
                 keyFile.delete();
                 keyFile.createNewFile();
             } catch (IOException e) {
-                throw new IllegalArgumentException("There is no required test files");
+                throw new IllegalArgumentException("There is no required files for tests");
             }
         }
 
         if (!decompressedFile.canWrite() || !compressedFile.canWrite() || !keyFile.canWrite()) {
-            throw new IllegalArgumentException("Cannot write from test files");
+            throw new IllegalArgumentException("Cannot write from files for tests");
         }
     }
 

@@ -7,6 +7,13 @@ public class Node {
     private Node rightNode;
     private String code;
 
+    Node(){
+        this.sign = null;
+        frequency = 0;
+        leftNode = null;
+        rightNode = null;
+    }
+    
     Node(Character sign, int frequency) {
         if (sign == null || frequency < 1) {
             throw new IllegalArgumentException("Sign cannot be null and frequnecy cannot be lower than one");
@@ -23,7 +30,6 @@ public class Node {
             throw new IllegalArgumentException(
                     "Left and rigth node cannot be null and frequnecy cannot be lower than one");
         }
-
         this.sign = null;
         this.frequency = frequency;
         this.leftNode = left;
@@ -72,8 +78,16 @@ public class Node {
         return leftNode;
     }
 
+    public void setLeft(Node leftNode){
+        this.leftNode = leftNode;
+    }
+
     public Node getRight() {
         return rightNode;
+    }
+
+    public void setRight(Node rightNode){
+        this.rightNode = rightNode;
     }
 
     @Override
@@ -83,6 +97,9 @@ public class Node {
         }
         Node comparedNode = (Node) node;
         if (this.isLeaf() && comparedNode.isLeaf()) {
+            if(this.sign == null){
+                return false;
+            }
             return Character.compare(this.sign, comparedNode.getSign()) == 0;
         } else {
             return Integer.compare(comparedNode.getFrequency(), this.getFrequency()) == 0;
