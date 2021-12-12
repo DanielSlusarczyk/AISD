@@ -73,7 +73,8 @@ public class Huffman {
             }
 
             if (properNode == null) {
-                listOfOccuredChars.add(new Node(actualChar, 1));
+                Node newNode = new Node(actualChar, 1);
+                listOfOccuredChars.add(newNode);
             } else {
                 properNode.increaseFrequency();
             }
@@ -91,37 +92,17 @@ public class Huffman {
             return listOfNodes.get(0);
         }
 
-        List<Node> listToMakeHuffmanTree = new ArrayList<>(listOfNodes);
-        while (listToMakeHuffmanTree.size() > 1) {
-            sortList(listToMakeHuffmanTree);
-            Node first = listToMakeHuffmanTree.get(listToMakeHuffmanTree.size() - 1);
-            Node second = listToMakeHuffmanTree.get(listToMakeHuffmanTree.size() - 2);
-            listToMakeHuffmanTree.remove(listToMakeHuffmanTree.size() - 1);
-            listToMakeHuffmanTree.remove(listToMakeHuffmanTree.size() - 1);
-            listToMakeHuffmanTree.add(new Node(first.getFrequency() + second.getFrequency(), first, second));
+        Heap<Node> heap = new Heap<>();
+        for (Node node : listOfNodes) {
+            heap.put(node);
         }
-        return listToMakeHuffmanTree.get(0);
-    }
 
-    private void sortList(List<Node> listOfNodes) {
-        listOfNodes.sort(new Comparator<Node>() {
-            @Override
-            public int compare(Node o1, Node o2) {
-                if (o1.getFrequency() != o2.getFrequency()) {
-                    return Integer.compare(o2.getFrequency(), o1.getFrequency());
-                }
-                if (!o1.isLeaf() && o2.isLeaf()) {
-                    return 1;
-                }
-                if (o1.isLeaf() && !o2.isLeaf()) {
-                    return -1;
-                }
-                if (o1.isLeaf() && o2.isLeaf()) {
-                    return Character.compare(o1.getSign(), o1.getSign());
-                }
-                return -1;
-            }
-        });
+        while (heap.getSize() > 1) {
+            Node firstMin = heap.pop();
+            Node secondMin = heap.pop();
+            heap.put(new Node(firstMin.getFrequency() + secondMin.getFrequency(), firstMin, secondMin));
+        }
+        return heap.pop();
     }
 
     private void sortListByLengthOfCode(List<Node> listOfNodes) {
@@ -166,7 +147,7 @@ public class Huffman {
         return counter;
     }
 
-    private int decodeFile(List<Node> listOfNodes) throws IOException {
+    private int decodeFile(List<Node> listOfCodes) throws IOException {
         reader = new InputStreamReader(new FileInputStream(compressedFile), StandardCharsets.UTF_8);
         writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(decompressedFile), StandardCharsets.UTF_8));
@@ -175,7 +156,7 @@ public class Huffman {
         String code = "";
         while (singleChar != -1) {
             code = code + (char) singleChar;
-            for (Node node : listOfNodes) {
+            for (Node node : listOfCodes) {
                 if (node.getCode().equals(code)) {
                     writer.write(String.valueOf(node.getSign()));
                     code = "";
@@ -189,7 +170,7 @@ public class Huffman {
                     break;
                 }
             }
-            if (code.length() > listOfNodes.get(listOfNodes.size() - 1).getCode().length()) {
+            if (code.length() > listOfCodes.get(listOfCodes.size() - 1).getCode().length()) {
                 writer.close();
                 reader.close();
                 throw new IllegalArgumentException("There is code without char in " + compressedFile.getName());
@@ -229,10 +210,9 @@ public class Huffman {
             tree.add((char) singleChar);
             singleChar = reader.read();
         }
-        reader.close();
-        root = buildTree(null, tree, listOfNodes);
-        traverseHuffmanTree(root);
 
+        root = buildTree(null, tree, listOfNodes);
+        reader.close();
         return root;
     }
 
@@ -240,6 +220,7 @@ public class Huffman {
         if (tree.size() > 0) {
             char actualChar = tree.get(0);
             tree.remove(0);
+
             if (Character.compare(actualChar, '0') == 0) {
                 Node node = new Node();
                 node.setLeft(buildTree(node, tree, listOfNodes));
@@ -251,6 +232,8 @@ public class Huffman {
                 Node node = new Node(sign, 1);
                 listOfNodes.add(node);
                 return node;
+            } else {
+                throw new IllegalArgumentException("There is not allowed sign in file with key");
             }
         }
         return actualNode;
@@ -273,20 +256,43 @@ public class Huffman {
         keyFile = new File(verifiedFile.getPath() + "\\" + nameOfFileForKey);
 
         if (compress) {
-            if (!decompressedFile.canRead()) {
-                throw new IllegalArgumentException("Cannot read the file " + decompressedFile.getName());
-            }
-            if (!compressedFile.canWrite() || !keyFile.canWrite()) {
-                compressedFile.createNewFile();
-                keyFile.createNewFile();
-            }
+            validateInputForCompress();
         } else {
-            if (!compressedFile.canRead() || !keyFile.canRead()) {
-                throw new IllegalArgumentException("Cannot write/read the file");
+            valideInputForDecompress();
+        }
+    }
+
+    private void validateInputForCompress() throws IOException {
+        if (!decompressedFile.exists()) {
+            throw new IllegalArgumentException("Cannot compress without decompressed file");
+        }
+        if (!decompressedFile.canRead()) {
+            throw new IllegalArgumentException("Cannot read the file " + decompressedFile.getName());
+        }
+        if (!compressedFile.exists() || !keyFile.exists()) {
+            if (!compressedFile.createNewFile() || !keyFile.createNewFile()) {
+                throw new IllegalArgumentException("Cannot create required files");
             }
-            if (!decompressedFile.canWrite()) {
-                decompressedFile.createNewFile();
+        }
+        if (!compressedFile.canWrite() || !keyFile.canWrite()) {
+            throw new IllegalArgumentException("Cannot write to files while compress");
+        }
+    }
+
+    private void valideInputForDecompress() throws IOException {
+        if (!compressedFile.exists() || !keyFile.exists()) {
+            throw new IllegalArgumentException("Cannot decompress without compressed file or key");
+        }
+        if (!compressedFile.canRead() || !keyFile.canRead()) {
+            throw new IllegalArgumentException("Cannot read from the files while decompress");
+        }
+        if (!decompressedFile.exists()) {
+            if (!decompressedFile.createNewFile()) {
+                throw new IllegalArgumentException("Cannot create required file");
             }
+        }
+        if (!decompressedFile.canWrite()) {
+            throw new IllegalArgumentException("Cannot write to file while compress");
         }
     }
 }

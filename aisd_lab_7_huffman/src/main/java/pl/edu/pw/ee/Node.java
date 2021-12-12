@@ -1,19 +1,19 @@
 package pl.edu.pw.ee;
 
-public class Node {
+public class Node implements Comparable<Node> {
     private Character sign;
     private int frequency;
     private Node leftNode;
     private Node rightNode;
     private String code;
 
-    Node(){
+    Node() {
         this.sign = null;
         frequency = 0;
         leftNode = null;
         rightNode = null;
     }
-    
+
     Node(Character sign, int frequency) {
         if (sign == null || frequency < 1) {
             throw new IllegalArgumentException("Sign cannot be null and frequnecy cannot be lower than one");
@@ -78,7 +78,7 @@ public class Node {
         return leftNode;
     }
 
-    public void setLeft(Node leftNode){
+    public void setLeft(Node leftNode) {
         this.leftNode = leftNode;
     }
 
@@ -86,7 +86,7 @@ public class Node {
         return rightNode;
     }
 
-    public void setRight(Node rightNode){
+    public void setRight(Node rightNode) {
         this.rightNode = rightNode;
     }
 
@@ -97,12 +97,29 @@ public class Node {
         }
         Node comparedNode = (Node) node;
         if (this.isLeaf() && comparedNode.isLeaf()) {
-            if(this.sign == null){
+            if (this.sign == null) {
                 return false;
             }
             return Character.compare(this.sign, comparedNode.getSign()) == 0;
         } else {
             return Integer.compare(comparedNode.getFrequency(), this.getFrequency()) == 0;
         }
+    }
+
+    @Override
+    public int compareTo(Node comparedNode) {
+        if (this.getFrequency() != comparedNode.getFrequency()) {
+            return Integer.compare(comparedNode.getFrequency(), this.getFrequency());
+        }
+        if (!this.isLeaf() && comparedNode.isLeaf()) {
+            return 1;
+        }
+        if (this.isLeaf() && !comparedNode.isLeaf()) {
+            return -1;
+        }
+        if (this.isLeaf() && comparedNode.isLeaf()) {
+            return Character.compare(this.getSign(), comparedNode.getSign());
+        }
+        return -1;
     }
 }

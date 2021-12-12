@@ -17,7 +17,6 @@ import java.nio.file.StandardCopyOption;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Order;
 
 public class HuffmanTest {
     private Huffman testHuffman;
@@ -63,7 +62,7 @@ public class HuffmanTest {
         assert false;
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenPathLeadToFile() {
         // given
         String pathToRootDir = compressedFile.getPath();
@@ -109,7 +108,7 @@ public class HuffmanTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenCompressedCodeIsInvalid() throws IOException {
+    public void should_throwException_whenCompressedCodeIsInvalid() {
         // given
         String text = "abc";
 
@@ -120,7 +119,24 @@ public class HuffmanTest {
         prepareWriter(compressedFile);
         writeString("code");
         testHuffman.huffman(pathToTestDir, false);
-        
+
+        // then
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throwException_whenKeyFileIsInvalid() {
+        // given
+        String text = "abc";
+
+        // when
+        prepareWriter(decompressedFile);
+        writeString(text);
+        testHuffman.huffman(pathToTestDir, true);
+        prepareWriter(keyFile);
+        writeString("01a01cb");
+        testHuffman.huffman(pathToTestDir, false);
+
         // then
         assert false;
     }
@@ -342,7 +358,7 @@ public class HuffmanTest {
             byte[] f2 = Files.readAllBytes(Paths.get(decompressedFile.getPath()));
             assertArrayEquals(f1, f2);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Problem with file to test");
+            throw new IllegalArgumentException("There is problem with file to test");
         }
     }
 
@@ -447,5 +463,4 @@ public class HuffmanTest {
             throw new IllegalArgumentException("Cannot write from files for tests");
         }
     }
-
 }
