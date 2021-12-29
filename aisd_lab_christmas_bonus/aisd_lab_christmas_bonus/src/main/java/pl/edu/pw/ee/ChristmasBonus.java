@@ -4,11 +4,11 @@ public class ChristmasBonus {
 
     public int findMaxLength(int[] schedule, int changes) {
         validateInput(schedule, changes);
-        if(schedule.length == 0 || schedule.length == 1){
+        if (schedule.length == 0 || schedule.length == 1) {
             return schedule.length;
         }
-        int[] frequnecy = new int[findMaxElement(schedule) + 1];
 
+        int[] frequnecy = new int[findMaxElement(schedule) + 1];
         int startIndex = 0;
         int maxFrequency = 0;
         int result = 0;
@@ -36,21 +36,20 @@ public class ChristmasBonus {
         return maxValue;
     }
 
-    private void validateInput(int[]schedule, int changes){
-        if(schedule == null){
+    private void validateInput(int[] schedule, int changes) {
+        if (schedule == null) {
             throw new IllegalArgumentException("The schedule is null");
         }
-        if(schedule.length > 99999){
+        if (schedule.length > 99999) {
             throw new IllegalArgumentException("The length of the array is greater than 99 999");
         }
-        if(changes < 0 || changes > schedule.length){
+        if (changes < 0 || changes > schedule.length) {
             throw new IllegalArgumentException("The number of changes is incorrect");
         }
-        for(int block : schedule){
-            if(block < 1 || block > 99999){
+        for (int block : schedule) {
+            if (block < 1 || block > 99999) {
                 throw new IllegalArgumentException("The number of block is incorrect");
             }
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package pl.edu.pw.ee;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class ChristmasBonusTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenLegthOfScheduleIsTooBig() {
+    public void schould_throwException_whenLengthOfScheduleIsTooBig() {
         // given
         int[] schedule = new int[100000];
         int changes = 0;
@@ -116,7 +116,7 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 0;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 1;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 1;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
@@ -158,11 +158,11 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 2;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
-    public void schould_findLongestSubarray_whenChangesIsUnnecessary() {
+    public void schould_findLongestSubarray_whenChangesAreUnnecessary() {
         // given
         int[] schedule = { 3, 3, 3, 3, 3, 3, 3 };
         int changes = 5;
@@ -172,7 +172,7 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = schedule.length;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 5;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
@@ -200,13 +200,13 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = schedule.length;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
     }
 
     @Test
     public void schould_findLongestSubarray_whenIsZeroChanges() {
         // given
-        int[] schedule = {1,1,2,1,1,5,5,5,5,4};
+        int[] schedule = { 1, 1, 2, 1, 1, 5, 5, 5, 5, 4 };
         int changes = 0;
 
         // when
@@ -214,6 +214,50 @@ public class ChristmasBonusTest {
 
         // then
         int expectedLength = 4;
-        assertEquals(expectedLength, actualLength, 0);
+        assertEquals(expectedLength, actualLength);
+    }
+
+    @Test
+    public void schould_findLongestSubarray_whenEntireArrayCanBeChanged() {
+        // given
+        int[] schedule = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        int changes = schedule.length;
+
+        // when
+        int actualLength = longestRepeat.findMaxLength(schedule, changes);
+
+        // then
+        int expectedLength = schedule.length;
+        assertEquals(expectedLength, actualLength);
+    }
+
+    @Test
+    public void schould_findLongestSubarray_whenScheduleIsAlternating() {
+        // given
+        int[] schedule = { 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3 };
+        int changes = schedule.length / 2;
+
+        // when
+        int actualLength = longestRepeat.findMaxLength(schedule, changes);
+
+        // then
+        int expectedLength = schedule.length;
+        assertEquals(expectedLength, actualLength);
+    }
+
+    @Test
+    public void schould_findLongestSubarray_inDifferentCases() {
+        // given
+        int[] schedule = { 2, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3 };
+
+        // when
+        int[] actualResults = new int[5];
+        for (int changes = 0; changes < 5; changes++) {
+            actualResults[changes] = longestRepeat.findMaxLength(schedule, changes);
+        }
+
+        // then
+        int[] expectedResults = { 5, 8, 12, 13, 19 };
+        assertArrayEquals(expectedResults, actualResults);
     }
 }
