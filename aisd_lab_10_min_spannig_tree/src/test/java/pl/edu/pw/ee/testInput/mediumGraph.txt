@@ -1,0 +1,14 @@
+A B 32
+B C 20
+C D 17
+D E 30
+E F 2
+F G 50
+G B 10
+C F 20
+C H 33
+H E 6
+E J 83
+H F 20
+H G 10
+G D 58
