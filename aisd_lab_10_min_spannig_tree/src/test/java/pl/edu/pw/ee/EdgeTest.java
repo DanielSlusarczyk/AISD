@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class EdgeTest {
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenStartIsNull() {
         // given
         Node start = null;
@@ -14,13 +14,13 @@ public class EdgeTest {
         int cost = 10;
 
         // when
-        new Edge(start,end,cost);
+        new Edge(start, end, cost);
 
         // then
         assert false;
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenEndIsNull() {
         // given
         Node start = new Node("A");
@@ -28,13 +28,13 @@ public class EdgeTest {
         int cost = 10;
 
         // when
-        new Edge(start,end,cost);
+        new Edge(start, end, cost);
 
         // then
         assert false;
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenCostIsNegative() {
         // given
         Node start = new Node("A");
@@ -42,13 +42,13 @@ public class EdgeTest {
         int cost = -1;
 
         // when
-        new Edge(start,end,cost);
+        new Edge(start, end, cost);
 
         // then
         assert false;
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenCostIsZero() {
         // given
         Node start = new Node("A");
@@ -56,10 +56,37 @@ public class EdgeTest {
         int cost = 0;
 
         // when
-        new Edge(start,end,cost);
+        new Edge(start, end, cost);
 
         // then
         assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throwException_whenCompareToNull() {
+        // given
+        Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);
+        Edge secondEdge = null;
+
+        // when
+        firstEdge.compareTo(secondEdge);
+
+        // then
+        assert false;
+    }
+
+    @Test
+    public void should_notBeEqual_whenEdgeIsNull() {
+        // given
+        Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);
+        Edge secondEdge = null;
+
+        // when
+        boolean actualResult = firstEdge.equals(secondEdge);
+
+        // then
+        boolean expectedResult = false;
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test

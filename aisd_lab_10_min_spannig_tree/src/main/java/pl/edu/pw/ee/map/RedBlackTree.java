@@ -175,47 +175,4 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                 ? false
                 : node.isRed();
     }
-
-    public void deleteMax() {
-        root = deleteMax(root);
-    }
-
-    private Node<K, V> deleteMax(Node<K, V> node) {
-        if (node != null) {
-            if (isRed(node.getLeft())) {
-                node = rotateRight(node);
-            }
-
-            if (node.getRight() == null) {
-                System.out.println(node.getValue());
-                return null;
-            }
-
-            if (!isRed(node.getRight()) && !isRed(node.getRight().getLeft())) {
-                swapColor(node);
-                swapColor(node.getLeft());
-                swapColor(node.getRight());
-                if (isRed(node.getLeft().getLeft())) {
-                    node = rotateRight(node);
-                    swapColor(node);
-                    swapColor(node.getLeft());
-                    swapColor(node.getRight());
-                }
-            }
-
-            node.setRight(deleteMax(node.getRight()));
-            return reorganizeTree(node);
-        }
-        return node;
-    }
-
-    private void swapColor(Node<K, V> node) {
-        if (node != null) {
-            if (isRed(node)) {
-                node.setColor(BLACK);
-            } else {
-                node.setColor(RED);
-            }
-        }
-    }
 }

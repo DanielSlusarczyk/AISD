@@ -34,7 +34,4 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
         return tree.getSize();
     }
 
-    public void deleteMax() {
-        tree.deleteMax();
-    }
 }

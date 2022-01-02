@@ -31,6 +31,9 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public int compareTo(Edge compared) {
+        if (compared == null) {
+            throw new IllegalArgumentException("Cannot compare Edge to null");
+        }
         return Double.compare(compared.getCost(), this.cost);
     }
 
@@ -59,12 +62,12 @@ public class Edge implements Comparable<Edge> {
         return false;
     }
 
-    private void validateInput(Node start, Node end, int cost){
-        if(start==null||end==null){
+    private void validateInput(Node start, Node end, int cost) {
+        if (start == null || end == null) {
             throw new IllegalArgumentException("The beginning and end of the edge cannot be null");
         }
 
-        if(cost < 1){
+        if (cost < 1) {
             throw new IllegalArgumentException("The edge weight cannot be less than 1");
         }
     }

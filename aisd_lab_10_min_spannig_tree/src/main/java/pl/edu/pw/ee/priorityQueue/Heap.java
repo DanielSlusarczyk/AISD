@@ -17,13 +17,14 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
 
     @Override
     public void put(T item) {
+        validateInput(item);
         items.add(size, item);
         size++;
         heapUp(size - 1);
     }
 
-    public void put(List<T> items){
-        for(T item : items){
+    public void put(List<T> items) {
+        for (T item : items) {
             this.put(item);
         }
     }
@@ -39,12 +40,12 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         return items.get(size);
     }
 
-    public int getSize() {
-        return size;
-    }
-
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     private void heapUp(int index) {
@@ -99,5 +100,11 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
 
     private int getIndexOfParent(int index) {
         return index > 0 && index < size ? ((index - 1) / 2) : -1;
+    }
+
+    private void validateInput(T item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Cannot put null");
+        }
     }
 }

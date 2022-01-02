@@ -17,7 +17,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenPathIsNull() {
+    public void should_throwException_whenPathIsNull() {
         // given
         String path = null;
 
@@ -29,7 +29,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenPathIsIncorrect() {
+    public void should_throwException_whenPathIsIncorrect() {
         // given
         String path = "incorrect\\path";
 
@@ -41,7 +41,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenPathLeadToDirectory() {
+    public void should_throwException_whenPathLeadToDirectory() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput";
 
@@ -53,7 +53,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileIsEmpty() {
+    public void should_throwException_whenFileIsEmpty() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\empty.txt";
 
@@ -65,7 +65,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasOnlyNewLineSign() {
+    public void should_throwException_whenFileHasOnlyNewLineSign() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\newLineSign.txt";
 
@@ -77,7 +77,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_breakInTheText() {
+    public void should_throwException_whenFileHasIncorrectFormat_breakInTheText() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\breakInTheText.txt";
 
@@ -89,7 +89,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_incompleteCostOfEdge() {
+    public void should_throwException_whenFileHasIncorrectFormat_incompleteCostOfEdge() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\incompleteCostOfEdge.txt";
 
@@ -101,7 +101,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_negativeCostOfEdge() {
+    public void should_throwException_whenFileHasIncorrectFormat_negativeCostOfEdge() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\negativeCostOfEdge.txt";
 
@@ -113,7 +113,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_whiteSignInNodeLabel() {
+    public void should_throwException_whenFileHasIncorrectFormat_whiteSignInNodeLabel() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\whiteSignInNodeLabel.txt";
 
@@ -125,7 +125,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_incorrectOrder() {
+    public void should_throwException_whenFileHasIncorrectFormat_incorrectOrder() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\incorrectOrder.txt";
 
@@ -137,7 +137,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_numberAsNodeLabel() {
+    public void should_throwException_whenFileHasIncorrectFormat_numberAsNodeLabel() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\numberAsNodeLabel.txt";
 
@@ -149,7 +149,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_spaceBeforeLine() {
+    public void should_throwException_whenFileHasIncorrectFormat_spaceBeforeLine() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\spaceBeforeLine.txt";
 
@@ -161,7 +161,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_spaceAfterLine() {
+    public void should_throwException_whenFileHasIncorrectFormat_spaceAfterLine() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\spaceAfterLine.txt";
 
@@ -173,7 +173,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenFileHasIncorrectFormat_deficientLine() {
+    public void should_throwException_whenFileHasIncorrectFormat_deficientLine() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\deficientLine.txt";
 
@@ -185,7 +185,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenGraphIsDisconnected() {
+    public void should_throwException_whenGraphIsDisconnected() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\disconnectedGraph.txt";
 
@@ -197,7 +197,7 @@ public class PrimAlgorithmTest {
     }
 
     @Test
-    public void schould_correctlyCreateMST_whenGraphContainsOneEdge() {
+    public void should_correctlyCreateMST_whenGraphContainsOneEdge() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\oneEdgeGraph.txt";
 
@@ -210,11 +210,11 @@ public class PrimAlgorithmTest {
     }
 
     @Test
-    public void schould_correctlyCreateMST_whenGraphContainsOneEdge_fromEachNode() {
+    public void should_correctlyCreateMST_whenGraphContainsOneEdge_fromEachNode() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\oneEdgeGraph.txt";
         List<Edge> listOfActualEdges;
-        String[] firstNodes = { "Y", "U"};
+        String[] firstNodes = { "Y", "U" };
 
         for (int index = 0; index < firstNodes.length; index++) {
             // when
@@ -230,11 +230,31 @@ public class PrimAlgorithmTest {
     }
 
     @Test
-    public void schould_correctlyCreateMST_fromEachNode() {
+    public void should_correctlyCreateMST_fromEachNodes() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph.txt";
         List<Edge> listOfActualEdges;
-        String[] firstNodes = { "A", "B", "C", "D", "E", "F", "G", "H", "J" };
+        String[] startNodes = { "A", "B", "C", "D", "E", "F", "G", "H" };
+
+        for (int index = 0; index < startNodes.length; index++) {
+            // when
+            primAlgorithm.setFirstNode(startNodes[index]);
+            String actualEdges = primAlgorithm.findMST(path);
+            listOfActualEdges = initializeList(actualEdges);
+
+            // then
+            String expectedEdges = "A_32_B|B_13_C|C_17_D|B_10_G|G_7_H|H_6_E|F_2_E|E_83_J";
+            List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
+            assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
+        }
+    }
+
+    @Test
+    public void should_createDifferentMST_fromEachNode_equalWeights() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\equalWeightsGraph.txt";
+        List<Edge> listOfActualEdges;
+        String[] firstNodes = { "A", "B", "C", "D", "E", "F" };
 
         for (int index = 0; index < firstNodes.length; index++) {
             // when
@@ -243,8 +263,15 @@ public class PrimAlgorithmTest {
             listOfActualEdges = initializeList(actualEdges);
 
             // then
-            String expectedEdges = "D_17_C|B_32_A|G_10_B|C_20_F|G_10_H|H_6_E|F_2_E|E_83_J";
-            List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
+            String[] expectedEdges = {
+                    "A_1_F|F_1_E|E_1_D|D_1_C|C_1_B",
+                    "B_1_C|C_1_D|D_1_E|E_1_F|F_1_A",
+                    "C_1_D|D_1_E|E_1_F|F_1_B|B_1_A",
+                    "D_1_E|E_1_F|F_1_C|C_1_B|B_1_A",
+                    "E_1_F|F_1_D|D_1_C|C_1_B|B_1_A",
+                    "F_1_E|E_1_D|D_1_C|C_1_B|B_1_A"
+            };
+            List<Edge> listOfExpectedEdges = initializeList(expectedEdges[index]);
             assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
         }
     }
@@ -255,7 +282,8 @@ public class PrimAlgorithmTest {
         }
         for (Edge edge : listOfCorrectItem) {
             if (!checkList.contains(edge)) {
-                return true;
+                System.out.println("Brak: " + edge);
+                return false;
             }
         }
         return true;

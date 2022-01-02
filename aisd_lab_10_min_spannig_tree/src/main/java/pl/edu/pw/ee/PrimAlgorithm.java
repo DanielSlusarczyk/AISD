@@ -28,47 +28,46 @@ public class PrimAlgorithm implements MinSpanningTree {
         determineMST();
         checkConnectivity();
 
-        return minSpanningTree.substring(0, minSpanningTree.length() - 1);
+        return minSpanningTree.substring(0, minSpanningTree.length() == 0 ? 0 : minSpanningTree.length() - 1);
     }
 
     public void setFirstNode(String labelOfFirstNode) {
         if (labelOfFirstNode != null) {
-            firstNodeLabel = labelOfFirstNode;
+            this.firstNodeLabel = labelOfFirstNode;
         }
     }
 
     private void determineMST() {
-        Heap<Edge> currentQueue = new Heap<>();
+        Heap<Edge> priorityQueue = new Heap<>();
 
         Node firstNode = null;
-        if(firstNodeLabel != null){
+        if (firstNodeLabel != null) {
             firstNode = addedNodes.getValue(firstNodeLabel);
         }
         if (firstNode == null) {
             firstNode = graph.getRoot();
         }
-        System.out.println("Rozpoczynam od: " + firstNode);
-        addNeighbors(currentQueue, firstNode);
+        addNeighbors(priorityQueue, firstNode);
         firstNode.setVisited();
 
-        while (!currentQueue.isEmpty()) {
-            Edge minEdge = currentQueue.pop();
+        while (!priorityQueue.isEmpty()) {
+            Edge minEdge = priorityQueue.pop();
 
             if (!minEdge.getEnd().isVisited()) {
-                numberOfVisitedNodes ++;
+                numberOfVisitedNodes++;
                 minEdge.getEnd().setVisited();
-                System.out.println(minEdge);
                 minSpanningTree = minSpanningTree + minEdge + "|";
-                addNeighbors(currentQueue, minEdge.getEnd());
+                addNeighbors(priorityQueue, minEdge.getEnd());
             }
         }
     }
 
     private void addNeighbors(Heap<Edge> heap, Node node) {
         List<Edge> listOfNeighbors = graph.getValue(node);
-        for (Edge edge : listOfNeighbors) {
-            if (!edge.getEnd().isVisited()) {
-                heap.put(edge);
+
+        for (int index = 0; index < listOfNeighbors.size(); index++) {
+            if (!listOfNeighbors.get(index).getEnd().isVisited()) {
+                heap.put(listOfNeighbors.get(index));
             }
         }
     }
@@ -76,27 +75,28 @@ public class PrimAlgorithm implements MinSpanningTree {
     private void readGraph() {
         try {
             Scanner reader = new Scanner(dataFile);
-            if(!reader.hasNextLine()){
+            if (!reader.hasNextLine()) {
                 reader.close();
                 throw new IllegalArgumentException("The input file is empty");
             }
             while (reader.hasNextLine()) {
-                String actualString = reader.nextLine();
-                if (actualString.matches("^[a-zA-Z]+ [a-zA-Z]+ \\d+$")) {
-                    int firstSpaceIndex = actualString.indexOf(" ");
-                    int secondSpaceIndex = actualString.lastIndexOf(" ");
-                    String startNode = actualString.substring(0, firstSpaceIndex);
-                    String endNode = actualString.substring(firstSpaceIndex + 1, secondSpaceIndex);
-                    int cost = Integer.parseInt(actualString.substring(secondSpaceIndex + 1));
+                String actualLine = reader.nextLine();
+                if (actualLine.matches("^[a-zA-Z]+ [a-zA-Z]+ \\d+$")) {
+                    int firstSpaceIndex = actualLine.indexOf(" ");
+                    int secondSpaceIndex = actualLine.lastIndexOf(" ");
+
+                    String startNode = actualLine.substring(0, firstSpaceIndex);
+                    String endNode = actualLine.substring(firstSpaceIndex + 1, secondSpaceIndex);
+                    int cost = Integer.parseInt(actualLine.substring(secondSpaceIndex + 1));
                     addEdge(startNode, endNode, cost);
                 } else {
                     reader.close();
-                    throw new IllegalArgumentException("Incorrect line [" + dataFile.getName() + "]: " + actualString);
+                    throw new IllegalArgumentException("Incorrect line [" + dataFile.getName() + "]: " + actualLine);
                 }
             }
             reader.close();
 
-        } catch (NumberFormatException | FileNotFoundException exception) {
+        } catch (IndexOutOfBoundsException | NumberFormatException | FileNotFoundException exception) {
             throw new IllegalArgumentException("There is problem with input file");
         }
     }
@@ -126,8 +126,8 @@ public class PrimAlgorithm implements MinSpanningTree {
         graph.getValue(endNode).add(new Edge(endNode, startNode, cost));
     }
 
-    private void checkConnectivity(){
-        if(numberOfVisitedNodes != addedNodes.getSize()){
+    private void checkConnectivity() {
+        if (numberOfVisitedNodes != graph.getSize()) {
             throw new IllegalArgumentException("The graph is disconnected");
         }
     }
