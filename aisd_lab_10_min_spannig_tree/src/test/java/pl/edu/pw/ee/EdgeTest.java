@@ -49,20 +49,6 @@ public class EdgeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenCostIsZero() {
-        // given
-        Node start = new Node("A");
-        Node end = new Node("B");
-        int cost = 0;
-
-        // when
-        new Edge(start, end, cost);
-
-        // then
-        assert false;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenCompareToNull() {
         // given
         Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);

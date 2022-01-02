@@ -102,6 +102,9 @@ public class PrimAlgorithm implements MinSpanningTree {
     }
 
     private void addEdge(String startString, String endString, int cost) {
+        if (startString.equals(endString)) {
+            throw new IllegalArgumentException("The graph cannot have loops");
+        }
         Node startNode = addedNodes.getValue(startString);
         Node endNode = addedNodes.getValue(endString);
         if (addedNodes.getValue(startString) == null) {

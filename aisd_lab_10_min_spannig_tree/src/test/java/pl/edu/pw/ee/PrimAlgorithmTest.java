@@ -196,6 +196,18 @@ public class PrimAlgorithmTest {
         assert false;
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throwException_whenGraphHasLoop() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\loop.txt";
+
+        // when
+        primAlgorithm.findMST(path);
+
+        // then
+        assert false;
+    }
+
     @Test
     public void should_correctlyCreateMST_whenGraphContainsOneEdge() {
         // given

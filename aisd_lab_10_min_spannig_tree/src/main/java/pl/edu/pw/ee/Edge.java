@@ -67,7 +67,7 @@ public class Edge implements Comparable<Edge> {
             throw new IllegalArgumentException("The beginning and end of the edge cannot be null");
         }
 
-        if (cost < 1) {
+        if (cost < 0) {
             throw new IllegalArgumentException("The edge weight cannot be less than 1");
         }
     }
