@@ -1,13 +1,33 @@
 package pl.edu.pw.ee;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class Node implements Comparable<Node> {
     String label;
     boolean visited;
+    List<Node> list;
 
     Node(String label) {
         validateInput(label);
         this.label = label;
         this.visited = false;
+        this.list = new ArrayList<>();
+    }
+
+    public void addToList(Node node){
+        if(node == null){
+            throw new IllegalArgumentException("Node is null");
+        }
+        list.add(node);
+    }
+
+    public boolean check(Node node){
+        if(node == null){
+            throw new IllegalArgumentException("Node is null");
+        }
+        return list.contains(node);
     }
 
     public void setVisited() {
