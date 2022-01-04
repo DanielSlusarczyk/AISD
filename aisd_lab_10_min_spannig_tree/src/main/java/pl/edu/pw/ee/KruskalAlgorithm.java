@@ -39,10 +39,12 @@ public class KruskalAlgorithm implements MinSpanningTree {
             Node endNode = addedNodes.getValue(minEdge.getEnd().getLabel());
 
             if(!startNode.check(endNode) && !endNode.check(startNode)){
-                System.out.println(startNode.check(endNode) + "X" + endNode.check(startNode));
                 startNode.addToList(endNode);
-                endNode.addToList(startNode);
+                startNode.addToList(startNode);
+                endNode.setList(startNode.getNodes());
             }
+            startNode.printList();
+            endNode.printList();
         }
     }
 

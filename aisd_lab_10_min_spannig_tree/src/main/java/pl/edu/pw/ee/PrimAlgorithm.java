@@ -24,6 +24,7 @@ public class PrimAlgorithm implements MinSpanningTree {
         addedNodes = new RbtMap<>();
         minSpanningTree = "";
         numberOfVisitedNodes = 1;
+        
         readGraph();
         determineMST();
         checkConnectivity();

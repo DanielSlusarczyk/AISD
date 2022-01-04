@@ -2,7 +2,6 @@ package pl.edu.pw.ee;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class Node implements Comparable<Node> {
     String label;
@@ -23,11 +22,27 @@ public class Node implements Comparable<Node> {
         list.add(node);
     }
 
+    public List<Node> getNodes(){
+        return list;
+    }
+
+    public void setList(List<Node> newList){
+        this.list = newList;
+    }
+
     public boolean check(Node node){
         if(node == null){
             throw new IllegalArgumentException("Node is null");
         }
         return list.contains(node);
+    }
+
+    public void printList(){
+        System.out.print(label + ": ");
+        for(Node n : list){
+            System.out.print(n + "->");
+        }
+        System.out.println();
     }
 
     public void setVisited() {
