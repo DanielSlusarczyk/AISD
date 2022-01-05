@@ -1,48 +1,14 @@
 package pl.edu.pw.ee;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Node implements Comparable<Node> {
     String label;
     boolean visited;
-    List<Node> list;
+    Node parent;
 
     Node(String label) {
         validateInput(label);
         this.label = label;
         this.visited = false;
-        this.list = new ArrayList<>();
-    }
-
-    public void addToList(Node node){
-        if(node == null){
-            throw new IllegalArgumentException("Node is null");
-        }
-        list.add(node);
-    }
-
-    public List<Node> getNodes(){
-        return list;
-    }
-
-    public void setList(List<Node> newList){
-        this.list = newList;
-    }
-
-    public boolean check(Node node){
-        if(node == null){
-            throw new IllegalArgumentException("Node is null");
-        }
-        return list.contains(node);
-    }
-
-    public void printList(){
-        System.out.print(label + ": ");
-        for(Node n : list){
-            System.out.print(n + "->");
-        }
-        System.out.println();
     }
 
     public void setVisited() {
@@ -55,6 +21,17 @@ public class Node implements Comparable<Node> {
 
     public String getLabel() {
         return label;
+    }
+
+    public void setParent(Node node){
+        this.parent = node;
+    }
+
+    public Node getRepresentative(){
+        if(this.equals(parent)){
+            return this;
+        }
+        return parent.getRepresentative();
     }
 
     @Override
