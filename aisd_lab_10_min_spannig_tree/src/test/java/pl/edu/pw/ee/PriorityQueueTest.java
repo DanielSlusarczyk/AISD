@@ -9,35 +9,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.pw.ee.priorityQueue.Heap;
+import pl.edu.pw.ee.priorityQueue.PriorityQueue;
 
-public class HeapTest {
+public class PriorityQueueTest {
 
-    private Heap<Double> heap;
+    private PriorityQueue<Double> queue;
 
     @Before
     public void setUp() {
-        heap = new Heap<>();
+        queue = new PriorityQueue<>();
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void should_throwException_whenPopFromEmptyHeap() {
+    public void should_throwException_whengetMaxFromEmptyHeap() {
         // given
 
         // when
-        heap.pop();
+        queue.getMax();
 
         // then
         assert false;
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenPutNull() {
+    public void should_throwException_wheninsertNull() {
         // given
-        Double toPut = null;
+        Double toinsert = null;
 
         // when
-        heap.put(toPut);
+        queue.insert(toinsert);
 
         // then
         assert false;
@@ -50,30 +50,30 @@ public class HeapTest {
         // when
 
         // then
-        assertTrue(heap.isEmpty());
+        assertTrue(queue.isEmpty());
     }
 
     @Test
-    public void should_beNotEmpty_afterPut() {
+    public void should_beNotEmpty_afterinsert() {
         // given
 
         // when
-        heap.put(1.0);
+        queue.insert(1.0);
 
         // then
-        assertFalse(heap.isEmpty());
+        assertFalse(queue.isEmpty());
     }
 
     @Test
-    public void should_beEmpty_afterPutAndPop() {
+    public void should_beEmpty_afterinsertAndgetMax() {
         // given
 
         // when
-        heap.put(1.0);
-        heap.pop();
+        queue.insert(1.0);
+        queue.getMax();
 
         // then
-        assertTrue(heap.isEmpty());
+        assertTrue(queue.isEmpty());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class HeapTest {
         // given
 
         // when
-        int actualSize = heap.getSize();
+        int actualSize = queue.getSize();
 
         // then
         int expectedSize = 0;
@@ -89,12 +89,12 @@ public class HeapTest {
     }
 
     @Test
-    public void should_hasSizeOfOne_afterPut() {
+    public void should_hasSizeOfOne_afterinsert() {
         // given
 
         // when
-        heap.put(1.0);
-        int actualSize = heap.getSize();
+        queue.insert(1.0);
+        int actualSize = queue.getSize();
 
         // then
         int expectedSize = 1;
@@ -102,13 +102,13 @@ public class HeapTest {
     }
 
     @Test
-    public void should_hasSizeOfTwo_afterDoublePut() {
+    public void should_hasSizeOfTwo_afterDoubleinsert() {
         // given
 
         // when
-        heap.put(1.0);
-        heap.put(1.1);
-        int actualSize = heap.getSize();
+        queue.insert(1.0);
+        queue.insert(1.1);
+        int actualSize = queue.getSize();
 
         // then
         int expectedSize = 2;
@@ -116,13 +116,13 @@ public class HeapTest {
     }
 
     @Test
-    public void should_hasSizeOfZero_afterPutAndPop() {
+    public void should_hasSizeOfZero_afterinsertAndgetMax() {
         // given
 
         // when
-        heap.put(1.0);
-        heap.pop();
-        int actualSize = heap.getSize();
+        queue.insert(1.0);
+        queue.getMax();
+        int actualSize = queue.getSize();
 
         // then
         int expectedSize = 0;
@@ -132,7 +132,7 @@ public class HeapTest {
     @Test
     public void should_beAbleToStore_edges() {
         // given
-        Heap<Edge> heapOfEdges = new Heap<>();
+        PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B"), new Node("C"), new Node("D"), new Node("E") };
         Edge[] edges = {
                 new Edge(nodes[0], nodes[1], 1),
@@ -142,9 +142,9 @@ public class HeapTest {
 
         // when
         for (Edge edge : edges) {
-            heapOfEdges.put(edge);
+            queueOfEdges.insert(edge);
         }
-        int actualSize = heapOfEdges.getSize();
+        int actualSize = queueOfEdges.getSize();
 
         // then
         int expectedSize = 4;
@@ -154,7 +154,7 @@ public class HeapTest {
     @Test
     public void should_beAbleToStore_edges_inProperOrder() {
         // given
-        Heap<Edge> heapOfEdges = new Heap<>();
+        PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B"), new Node("C"), new Node("D"), new Node("E") };
         Edge[] edges = {
                 new Edge(nodes[0], nodes[1], 1),
@@ -165,10 +165,10 @@ public class HeapTest {
         // when
         Edge[] actualEdges = new Edge[edges.length];
         for (Edge edge : edges) {
-            heapOfEdges.put(edge);
+            queueOfEdges.insert(edge);
         }
         for (int index = 0; index < edges.length; index++) {
-            actualEdges[index] = heapOfEdges.pop();
+            actualEdges[index] = queueOfEdges.getMax();
         }
 
         // then
@@ -179,7 +179,7 @@ public class HeapTest {
     @Test
     public void should_beAbleToStore_equalsEdges() {
         // given
-        Heap<Edge> heapOfEdges = new Heap<>();
+        PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B") };
         Edge[] edges = {
                 new Edge(nodes[0], nodes[1], 1),
@@ -189,9 +189,9 @@ public class HeapTest {
 
         // when
         for (Edge edge : edges) {
-            heapOfEdges.put(edge);
+            queueOfEdges.insert(edge);
         }
-        int actualSize = heapOfEdges.getSize();
+        int actualSize = queueOfEdges.getSize();
 
         // then
         int expectedSize = 4;

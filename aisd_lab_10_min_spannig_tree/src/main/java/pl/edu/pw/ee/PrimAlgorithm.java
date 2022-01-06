@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import pl.edu.pw.ee.map.RbtMap;
-import pl.edu.pw.ee.priorityQueue.Heap;
+import pl.edu.pw.ee.priorityQueue.PriorityQueue;
 import pl.edu.pw.ee.services.MinSpanningTree;
 
 public class PrimAlgorithm implements MinSpanningTree {
@@ -39,7 +39,7 @@ public class PrimAlgorithm implements MinSpanningTree {
     }
 
     private void determineMST() {
-        Heap<Edge> priorityQueue = new Heap<>();
+        PriorityQueue<Edge> priorityQueue = new PriorityQueue<>();
 
         Node firstNode = null;
         if (firstNodeLabel != null) {
@@ -52,7 +52,7 @@ public class PrimAlgorithm implements MinSpanningTree {
         firstNode.setVisited();
 
         while (!priorityQueue.isEmpty()) {
-            Edge minEdge = priorityQueue.pop();
+            Edge minEdge = priorityQueue.getMax();
 
             if (!minEdge.getEnd().isVisited()) {
                 numberOfVisitedNodes++;
@@ -63,12 +63,12 @@ public class PrimAlgorithm implements MinSpanningTree {
         }
     }
 
-    private void addNeighbors(Heap<Edge> heap, Node node) {
+    private void addNeighbors(PriorityQueue<Edge> queue, Node node) {
         List<Edge> listOfNeighbors = graph.getValue(node);
 
         for (int index = 0; index < listOfNeighbors.size(); index++) {
             if (!listOfNeighbors.get(index).getEnd().isVisited()) {
-                heap.put(listOfNeighbors.get(index));
+                queue.insert(listOfNeighbors.get(index));
             }
         }
     }

@@ -5,13 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import pl.edu.pw.ee.map.RbtMap;
-import pl.edu.pw.ee.priorityQueue.Heap;
+import pl.edu.pw.ee.priorityQueue.PriorityQueue;
 import pl.edu.pw.ee.services.MinSpanningTree;
 
 public class KruskalAlgorithm implements MinSpanningTree {
     private File dataFile;
     private RbtMap<String, Node> addedNodes;
-    private Heap<Edge> priorityQueue;
+    private PriorityQueue<Edge> priorityQueue;
     private String minSpanningTree;
     private int nmbOfAddedEdges = 0;
 
@@ -19,9 +19,8 @@ public class KruskalAlgorithm implements MinSpanningTree {
     public String findMST(String pathToFile) {
         validateInput(pathToFile);
         addedNodes = new RbtMap<>();
-        priorityQueue = new Heap<>();
         minSpanningTree = "";
-        
+        priorityQueue = new PriorityQueue<>();
         readGraph();
         determineMST();
         checkConnectivity();
@@ -31,7 +30,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
 
     private void determineMST() {
         while (!priorityQueue.isEmpty()) {
-            Edge minEdge = priorityQueue.pop();
+            Edge minEdge = priorityQueue.getMax();
 
             Node startNodeParent = addedNodes.getValue(minEdge.getStart().getLabel()).getRepresentative();
             Node endNodeParent = addedNodes.getValue(minEdge.getEnd().getLabel()).getRepresentative();
@@ -91,7 +90,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
             addedNodes.setValue(endString, endNode);
         }
 
-        priorityQueue.put(new Edge(startNode, endNode, cost));
+        priorityQueue.insert(new Edge(startNode, endNode, cost));
     }
 
     private void checkConnectivity() {
