@@ -16,17 +16,19 @@ public class PrimAlgorithm implements MinSpanningTree {
     private RbtMap<String, Node> addedNodes;
     private String minSpanningTree;
     private String firstNodeLabel;
-    private int numberOfVisitedNodes = 1;
+    private int nmbOfAddedNodes = 1;
 
-    public String findMST(String pathToFile) {
-        validateInput(pathToFile);
+    public PrimAlgorithm() {
         graph = new RbtMap<>();
         addedNodes = new RbtMap<>();
         minSpanningTree = "";
-        numberOfVisitedNodes = 1;
-        
+    }
+
+    public String findMST(String pathToFile) {
+        validateInput(pathToFile);
+        prepareVariables();
         readGraph();
-        if(graph.getSize() > 0){
+        if (graph.getSize() > 0) {
             determineMST();
             checkConnectivity();
         }
@@ -56,9 +58,9 @@ public class PrimAlgorithm implements MinSpanningTree {
             Edge minEdge = priorityQueue.getMax();
 
             if (!minEdge.getEnd().isVisited()) {
-                numberOfVisitedNodes++;
+                nmbOfAddedNodes++;
                 minEdge.getEnd().setVisited();
-                minSpanningTree = minSpanningTree + minEdge + "|";
+                minSpanningTree += minEdge + "|";
                 addNeighbors(priorityQueue, minEdge.getEnd());
             }
         }
@@ -106,37 +108,52 @@ public class PrimAlgorithm implements MinSpanningTree {
         }
         Node startNode = addedNodes.getValue(startString);
         Node endNode = addedNodes.getValue(endString);
-        if (addedNodes.getValue(startString) == null) {
+        if (startNode == null) {
             startNode = new Node(startString);
             addedNodes.setValue(startString, startNode);
         }
-        if (addedNodes.getValue(endString) == null) {
+        if (endNode == null) {
             endNode = new Node(endString);
             addedNodes.setValue(endString, endNode);
         }
 
         List<Edge> listOfEdgesForStartNode = graph.getValue(startNode);
         if (listOfEdgesForStartNode == null) {
-            graph.setValue(startNode, new ArrayList<>());
+            listOfEdgesForStartNode = new ArrayList<>();
+            graph.setValue(startNode, listOfEdgesForStartNode);
         }
-        graph.getValue(startNode).add(new Edge(startNode, endNode, cost));
+        listOfEdgesForStartNode.add(new Edge(startNode, endNode, cost));
 
         List<Edge> listOfEdgesForEndNode = graph.getValue(endNode);
         if (listOfEdgesForEndNode == null) {
-            graph.setValue(endNode, new ArrayList<>());
+            listOfEdgesForEndNode = new ArrayList<>();
+            graph.setValue(endNode, listOfEdgesForEndNode);
         }
-        graph.getValue(endNode).add(new Edge(endNode, startNode, cost));
+        listOfEdgesForEndNode.add(new Edge(endNode, startNode, cost));
     }
 
     private void checkConnectivity() {
-        if (numberOfVisitedNodes != graph.getSize()) {
+        if (nmbOfAddedNodes != graph.getSize()) {
             throw new IllegalArgumentException("The graph is disconnected");
         }
     }
 
+    private void prepareVariables() {
+        if (addedNodes.getSize() != 0) {
+            addedNodes = new RbtMap<>();
+        }
+        if (graph.getSize() != 0) {
+            graph = new RbtMap<>();
+        }
+        if (minSpanningTree.length() != 0) {
+            minSpanningTree = "";
+        }
+        nmbOfAddedNodes = 1;
+    }
+
     private void validateInput(String pathToFile) {
         if (pathToFile == null) {
-            throw new IllegalArgumentException("Path to the directory is null");
+            throw new IllegalArgumentException("Path to the file is null");
         }
         dataFile = new File(pathToFile);
         if (!dataFile.isFile()) {

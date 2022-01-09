@@ -45,7 +45,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     public K getRoot() {
         return root.getKey();
     }
-    
+
     public String getPreOrder() {
         traversalResult = "";
         returnPreOrder(root);

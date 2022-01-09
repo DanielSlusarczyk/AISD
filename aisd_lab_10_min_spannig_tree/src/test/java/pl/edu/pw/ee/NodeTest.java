@@ -61,20 +61,6 @@ public class NodeTest {
     }
 
     @Test
-    public void should_notBeEqual_whenNodeIsNull() {
-        // given
-        Node firstNode = new Node("A");
-        Node secondNode = null;
-
-        // when
-        boolean actualResult = firstNode.equals(secondNode);
-
-        // then
-        boolean expectedResult = false;
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
     public void should_compareProperly_twoEqualsNodes() {
         // given
         Node firstNode = new Node("A");

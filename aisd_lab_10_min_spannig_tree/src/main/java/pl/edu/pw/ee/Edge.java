@@ -27,34 +27,30 @@ public class Edge implements Comparable<Edge> {
     @Override
     public int compareTo(Edge compared) {
         if (compared == null) {
-            throw new IllegalArgumentException("Cannot compare Edge to null");
+            throw new IllegalArgumentException("Cannot compare the edge to null");
         }
-        return Double.compare(compared.getCost(), this.cost);
+        int result = Double.compare(compared.getCost(), this.cost);
+        if (result == 0) {
+            if (this.getEnd().compareTo(compared.getEnd()) == 0
+                    && this.getStart().compareTo(compared.getStart()) == 0) {
+                result = 0;
+            } else if (this.getEnd().compareTo(compared.getStart()) == 0
+                    && this.getStart().compareTo(compared.getEnd()) == 0) {
+                result = 0;
+            } else {
+                result = compared.getEnd().getLabel().compareTo(this.getEnd().getLabel());
+                if (result == 0) {
+                    result = compared.getStart().getLabel().compareTo(this.getStart().getLabel());
+                }
+            }
+        }
+        return result;
+
     }
 
     @Override
     public String toString() {
         return start + "_" + cost + "_" + end;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof Edge)) {
-            return false;
-        }
-        Edge compared = (Edge) o;
-        if (this.getCost() == compared.getCost()) {
-            if (this.getStart().equals(compared.getStart()) && this.getEnd().equals(compared.getEnd())) {
-                return true;
-            }
-            if (this.getStart().equals(compared.getEnd()) && this.getEnd().equals(compared.getStart())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void validateInput(Node start, Node end, int cost) {
@@ -63,7 +59,7 @@ public class Edge implements Comparable<Edge> {
         }
 
         if (cost < 0) {
-            throw new IllegalArgumentException("The edge weight cannot be less than 1");
+            throw new IllegalArgumentException("The weight of the edge cannot be less than 1");
         }
     }
 }

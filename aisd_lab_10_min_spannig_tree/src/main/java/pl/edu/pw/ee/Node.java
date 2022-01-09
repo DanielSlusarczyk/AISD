@@ -9,6 +9,7 @@ public class Node implements Comparable<Node> {
         validateInput(label);
         this.label = label;
         this.visited = false;
+        this.parent = this;
     }
 
     public void setVisited() {
@@ -23,12 +24,12 @@ public class Node implements Comparable<Node> {
         return label;
     }
 
-    public void setParent(Node node){
+    public void setParent(Node node) {
         this.parent = node;
     }
 
-    public Node getRepresentative(){
-        if(this.equals(parent)){
+    public Node getRepresentative() {
+        if (this.compareTo(parent) == 0) {
             return this;
         }
         return parent.getRepresentative();
@@ -45,18 +46,6 @@ public class Node implements Comparable<Node> {
     @Override
     public String toString() {
         return label;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof Node)) {
-            return false;
-        }
-        Node compared = (Node) o;
-        return label.compareTo(compared.getLabel()) == 0;
     }
 
     private void validateInput(String label) {

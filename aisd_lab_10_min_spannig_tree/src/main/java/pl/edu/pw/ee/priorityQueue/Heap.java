@@ -7,7 +7,6 @@ import java.util.List;
 import pl.edu.pw.ee.priorityQueue.services.HeapInterface;
 
 public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
-
     private int size;
     private List<T> items;
 

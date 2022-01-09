@@ -25,7 +25,7 @@ public class RbtMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenPutValueIsNull() {
+    public void should_throwException_whenValueIsNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
 
@@ -37,7 +37,7 @@ public class RbtMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenPutKeyIsNull() {
+    public void should_throwException_whenKeyIsNull() {
         // given
         RbtMap<String, String> rbtMap = new RbtMap<>();
 
@@ -76,7 +76,7 @@ public class RbtMapTest {
     }
 
     @Test
-    public void should_correctlyGetManyValues_WhenExistInMap() {
+    public void should_correctlyGetManyValues_whenExistInMap() {
         // given
         int testLength = 100;
         List<Double> doubleList = new ArrayList<>();
@@ -127,6 +127,10 @@ public class RbtMapTest {
 
         // then
         Edge expectedValue = edge;
-        assertEquals(expectedValue, actualValue);
+        if (expectedValue.compareTo(actualValue) == 0) {
+            assert true;
+        } else {
+            assert false;
+        }
     }
 }

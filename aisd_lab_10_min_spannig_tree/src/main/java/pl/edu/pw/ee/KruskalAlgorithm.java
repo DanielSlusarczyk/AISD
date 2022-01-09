@@ -15,12 +15,15 @@ public class KruskalAlgorithm implements MinSpanningTree {
     private String minSpanningTree;
     private int nmbOfAddedEdges = 0;
 
+    public KruskalAlgorithm() {
+        addedNodes = new RbtMap<>();
+        minSpanningTree = "";
+    }
+
     @Override
     public String findMST(String pathToFile) {
         validateInput(pathToFile);
-        addedNodes = new RbtMap<>();
-        minSpanningTree = "";
-        priorityQueue = new PriorityQueue<>();
+        prepareVariables();
         readGraph();
         if (priorityQueue.getSize() > 0) {
             determineMST();
@@ -34,10 +37,10 @@ public class KruskalAlgorithm implements MinSpanningTree {
         while (!priorityQueue.isEmpty()) {
             Edge minEdge = priorityQueue.getMax();
 
-            Node startNodeParent = addedNodes.getValue(minEdge.getStart().getLabel()).getRepresentative();
-            Node endNodeParent = addedNodes.getValue(minEdge.getEnd().getLabel()).getRepresentative();
+            Node startNodeParent = minEdge.getStart().getRepresentative();
+            Node endNodeParent = minEdge.getEnd().getRepresentative();
 
-            if (!startNodeParent.equals(endNodeParent)) {
+            if (startNodeParent.compareTo(endNodeParent) != 0) {
                 startNodeParent.setParent(endNodeParent);
                 nmbOfAddedEdges++;
                 minSpanningTree += minEdge + "|";
@@ -65,7 +68,6 @@ public class KruskalAlgorithm implements MinSpanningTree {
                 }
             }
             reader.close();
-
         } catch (IndexOutOfBoundsException | NumberFormatException | IOException exception) {
             throw new IllegalArgumentException("There is problem with input file");
         }
@@ -78,14 +80,12 @@ public class KruskalAlgorithm implements MinSpanningTree {
         Node startNode = addedNodes.getValue(startString);
         Node endNode = addedNodes.getValue(endString);
 
-        if (addedNodes.getValue(startString) == null) {
+        if (startNode == null) {
             startNode = new Node(startString);
-            startNode.setParent(startNode);
             addedNodes.setValue(startString, startNode);
         }
-        if (addedNodes.getValue(endString) == null) {
+        if (endNode == null) {
             endNode = new Node(endString);
-            endNode.setParent(endNode);
             addedNodes.setValue(endString, endNode);
         }
 
@@ -98,9 +98,20 @@ public class KruskalAlgorithm implements MinSpanningTree {
         }
     }
 
+    private void prepareVariables() {
+        if (addedNodes.getSize() != 0) {
+            addedNodes = new RbtMap<>();
+        }
+        if (minSpanningTree.length() != 0) {
+            minSpanningTree = "";
+        }
+        priorityQueue = new PriorityQueue<>();
+        nmbOfAddedEdges = 0;
+    }
+
     private void validateInput(String pathToFile) {
         if (pathToFile == null) {
-            throw new IllegalArgumentException("Path to the directory is null");
+            throw new IllegalArgumentException("Path to the file is null");
         }
         dataFile = new File(pathToFile);
         if (!dataFile.isFile()) {

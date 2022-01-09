@@ -17,7 +17,7 @@ public class HeapTest {
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void should_throwException_whengetMaxFromEmptyHeap() {
+    public void should_throwException_whenPopFromEmptyHeap() {
         // given
 
         // when
@@ -28,7 +28,7 @@ public class HeapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenInsertNull() {
+    public void should_throwException_whenPutNull() {
         // given
         Edge toInsert = null;
 
@@ -66,6 +66,6 @@ public class HeapTest {
             }
             currentEdge = nextEdge;
         }
+        assert true;
     }
-
 }

@@ -20,7 +20,7 @@ public class PriorityQueueTest {
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void should_throwException_whengetMaxFromEmptyHeap() {
+    public void should_throwException_whenGetMaxFromEmptyHeap() {
         // given
 
         // when
@@ -176,7 +176,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beAbleToStoreEqualsEdges() {
+    public void should_beAbleToStore_equalEdges() {
         // given
         PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B") };
@@ -195,5 +195,30 @@ public class PriorityQueueTest {
         // then
         int expectedSize = 4;
         assertEquals(expectedSize, actualSize);
+    }
+
+    @Test
+    public void should_beAbleToStoreAlphabetically_equalsEdges_inProperOrder() {
+        // given
+        PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
+        Node[] nodes = { new Node("A"), new Node("B"), new Node("C"), new Node("D"), new Node("E") };
+        Edge[] edges = {
+                new Edge(nodes[4], nodes[3], 1),
+                new Edge(nodes[3], nodes[2], 1),
+                new Edge(nodes[2], nodes[1], 1),
+                new Edge(nodes[1], nodes[0], 1) };
+
+        // when
+        Edge[] actualEdges = new Edge[edges.length];
+        for (Edge edge : edges) {
+            queueOfEdges.insert(edge);
+        }
+        for (int index = 0; index < edges.length; index++) {
+            actualEdges[index] = queueOfEdges.getMax();
+        }
+
+        // then
+        Edge[] expectedEdges = { edges[3], edges[2], edges[1], edges[0] };
+        assertArrayEquals(expectedEdges, actualEdges);
     }
 }

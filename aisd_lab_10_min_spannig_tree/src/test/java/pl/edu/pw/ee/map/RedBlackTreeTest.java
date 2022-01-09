@@ -16,7 +16,7 @@ public class RedBlackTreeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenPutValueIsNull() {
+    public void should_throwException_whenValueIsNull() {
         // given
 
         // when
@@ -27,7 +27,7 @@ public class RedBlackTreeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenPutKeyIsNull() {
+    public void should_throwException_whenKeyIsNull() {
         // given
 
         // when

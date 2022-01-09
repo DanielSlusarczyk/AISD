@@ -3,7 +3,6 @@ package pl.edu.pw.ee.map;
 import static pl.edu.pw.ee.map.Color.RED;
 
 public class Node<K extends Comparable<K>, V> {
-
     private K key;
     private V value;
     private Node<K, V> left, right;

@@ -73,25 +73,24 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     private int getIndexOfGreaterChildren(int index) {
         if (getNumberOfChildren(index) == 1) {
             return getIndexOfLeftChildren(index);
-        } else if (getNumberOfChildren(index) == 2) {
-            if (items.get(getIndexOfLeftChildren(index)).compareTo(items.get(getIndexOfRightChildren(index))) > 0) {
-                return getIndexOfLeftChildren(index);
-            } else {
-                return getIndexOfRightChildren(index);
-            }
         }
-        return -1;
+
+        if (items.get(getIndexOfLeftChildren(index)).compareTo(items.get(getIndexOfRightChildren(index))) > 0) {
+            return getIndexOfLeftChildren(index);
+        } else {
+            return getIndexOfRightChildren(index);
+        }
     }
 
     private int getIndexOfLeftChildren(int parentIndex) {
-        return items.size() > parentIndex * 2 + 1 ? (parentIndex * 2 + 1) : -1;
+        return parentIndex * 2 + 1;
     }
 
     private int getIndexOfRightChildren(int parentIndex) {
-        return items.size() > parentIndex * 2 + 2 ? (parentIndex * 2 + 2) : -1;
+        return parentIndex * 2 + 2;
     }
 
     private int getIndexOfParent(int index) {
-        return index > 0 && index < size ? ((index - 1) / 2) : -1;
+        return ((index - 1) / 2);
     }
 }

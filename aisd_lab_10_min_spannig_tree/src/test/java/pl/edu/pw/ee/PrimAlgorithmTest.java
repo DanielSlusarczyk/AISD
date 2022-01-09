@@ -40,7 +40,6 @@ public class PrimAlgorithmTest {
         assert false;
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenPathLeadToDirectory() {
         // given
@@ -258,6 +257,23 @@ public class PrimAlgorithmTest {
     }
 
     @Test
+    public void should_correctlyCreateMST() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph_2.txt";
+        List<Edge> listOfActualEdges;
+
+        // when
+        primAlgorithm.setFirstNode("A");
+        String actualEdges = primAlgorithm.findMST(path);
+        listOfActualEdges = initializeList(actualEdges);
+
+        // then
+        String expectedEdges = "A_3_G|G_1_E|E_2_F|E_4_C|C_3_H|A_5_B|G_8_D";
+        List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
+        assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
+    }
+
+    @Test
     public void should_correctlyCreateMST_fromEachNodes() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph.txt";
@@ -291,15 +307,8 @@ public class PrimAlgorithmTest {
             listOfActualEdges = initializeList(actualEdges);
 
             // then
-            String[] expectedEdges = {
-                    "A_1_F|F_1_E|E_1_D|D_1_C|C_1_B",
-                    "B_1_C|C_1_D|D_1_E|E_1_F|F_1_A",
-                    "C_1_D|D_1_E|E_1_F|F_1_B|B_1_A",
-                    "D_1_E|E_1_F|F_1_C|C_1_B|B_1_A",
-                    "E_1_F|F_1_D|D_1_C|C_1_B|B_1_A",
-                    "F_1_E|E_1_D|D_1_C|C_1_B|B_1_A"
-            };
-            List<Edge> listOfExpectedEdges = initializeList(expectedEdges[index]);
+            String expectedEdges = "A_1_B|A_1_C|A_1_D|A_1_E|A_1_F";
+            List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
             assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
         }
     }
@@ -308,9 +317,15 @@ public class PrimAlgorithmTest {
         if (listOfCorrectItem.size() != checkList.size()) {
             return false;
         }
-        for (Edge edge : listOfCorrectItem) {
-            if (!checkList.contains(edge)) {
-                System.out.println("Brak: " + edge);
+        for (Edge correctEdge : listOfCorrectItem) {
+            boolean found = false;
+            for (Edge edge : checkList) {
+                if (edge.compareTo(correctEdge) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 return false;
             }
         }

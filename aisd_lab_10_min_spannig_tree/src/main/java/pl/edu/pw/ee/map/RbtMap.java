@@ -3,7 +3,6 @@ package pl.edu.pw.ee.map;
 import pl.edu.pw.ee.map.services.MapInterface;
 
 public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
-
     private final RedBlackTree<K, V> tree;
 
     public RbtMap() {
@@ -20,11 +19,11 @@ public class RbtMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
         return tree.get(key);
     }
 
-    public K getRoot(){
+    public K getRoot() {
         return tree.getRoot();
     }
 
-    public int getSize(){
+    public int getSize() {
         return tree.getSize();
     }
 }

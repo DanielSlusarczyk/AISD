@@ -7,7 +7,7 @@ import org.junit.Test;
 public class EdgeTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenStartIsNull() {
+    public void should_throwException_whenStartNodeIsNull() {
         // given
         Node start = null;
         Node end = new Node("A");
@@ -21,7 +21,7 @@ public class EdgeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenEndIsNull() {
+    public void should_throwException_whenEndNodeIsNull() {
         // given
         Node start = new Node("A");
         Node end = null;
@@ -62,30 +62,16 @@ public class EdgeTest {
     }
 
     @Test
-    public void should_notBeEqual_whenEdgeIsNull() {
-        // given
-        Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);
-        Edge secondEdge = null;
-
-        // when
-        boolean actualResult = firstEdge.equals(secondEdge);
-
-        // then
-        boolean expectedResult = false;
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
     public void should_beEqual_twoSameEdges() {
         // given
         Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);
         Edge secondEdge = firstEdge;
 
         // when
-        boolean actualResult = firstEdge.equals(secondEdge);
+        int actualResult = firstEdge.compareTo(secondEdge);
 
         // then
-        boolean expectedResult = true;
+        int expectedResult = 0;
         assertEquals(expectedResult, actualResult);
     }
 

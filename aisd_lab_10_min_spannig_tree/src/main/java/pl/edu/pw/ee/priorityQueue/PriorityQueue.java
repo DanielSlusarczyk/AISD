@@ -24,7 +24,7 @@ public class PriorityQueue<T extends Comparable<T>> implements PriorityQueueInte
         return heap.pop();
     }
 
-    public int getSize(){
+    public int getSize() {
         return heap.getSize();
     }
 }

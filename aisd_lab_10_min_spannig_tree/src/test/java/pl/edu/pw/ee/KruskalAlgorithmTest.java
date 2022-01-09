@@ -223,7 +223,7 @@ public class KruskalAlgorithmTest {
     }
 
     @Test
-    public void should_correctlyCreateMST_fromEachNodes() {
+    public void should_correctlyCreateMST_1() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph.txt";
         List<Edge> listOfActualEdges;
@@ -239,18 +239,52 @@ public class KruskalAlgorithmTest {
     }
 
     @Test
-    public void should_correctlyCreateMST_fromEachNode_equalWeights() {
+    public void should_correctlyCreateMST_2() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph_2.txt";
+        List<Edge> listOfActualEdges;
+
+        // when
+        String actualEdges = kruskalAlgorithm.findMST(path);
+        listOfActualEdges = initializeList(actualEdges);
+
+        // then
+        String expectedEdges = "A_5_B|A_3_G|D_8_G|F_2_E|E_4_C|C_3_H|E_1_G";
+        List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
+        assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
+    }
+
+    @Test
+    public void should_correctlyCreateMST_equalWeights() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\equalWeightsGraph.txt";
         List<Edge> listOfActualEdges;
 
         // when
         String actualEdges = kruskalAlgorithm.findMST(path);
-        System.out.println(actualEdges);
         listOfActualEdges = initializeList(actualEdges);
 
         // then
-        String expectedEdges = "E_1_F|C_1_D|A_1_F|B_1_F|A_1_C";
+        String expectedEdges = "A_1_B|A_1_C|A_1_D|A_1_E|A_1_F";
+        List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
+        assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
+    }
+
+    @Test
+    public void should_correctlyCreateMST_doubleRun() {
+        // given
+        String pathOne = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\mediumGraph_2.txt";
+        String pathTwo = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\equalWeightsGraph.txt";
+        List<Edge> listOfActualEdges;
+
+        // when
+        String actualEdges;
+        actualEdges = kruskalAlgorithm.findMST(pathOne);
+        actualEdges = kruskalAlgorithm.findMST(pathTwo);
+        listOfActualEdges = initializeList(actualEdges);
+
+        // then
+        String expectedEdges = "A_1_B|A_1_C|A_1_D|A_1_E|A_1_F";
         List<Edge> listOfExpectedEdges = initializeList(expectedEdges);
         assert checkCorrectness(listOfExpectedEdges, listOfActualEdges);
     }
@@ -259,9 +293,15 @@ public class KruskalAlgorithmTest {
         if (listOfCorrectItem.size() != checkList.size()) {
             return false;
         }
-        for (Edge edge : listOfCorrectItem) {
-            if (!checkList.contains(edge)) {
-                System.out.println("Brak: " + edge);
+        for (Edge correctEdge : listOfCorrectItem) {
+            boolean found = false;
+            for (Edge edge : checkList) {
+                if (edge.compareTo(correctEdge) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 return false;
             }
         }
