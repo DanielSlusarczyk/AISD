@@ -1,6 +1,5 @@
-package pl.edu.pw.ee;
+package pl.edu.pw.ee.priorityQueue;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -9,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.pw.ee.priorityQueue.PriorityQueue;
+import pl.edu.pw.ee.Edge;
+import pl.edu.pw.ee.Node;
 
 public class PriorityQueueTest {
-
     private PriorityQueue<Double> queue;
 
     @Before
@@ -32,12 +31,12 @@ public class PriorityQueueTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_wheninsertNull() {
+    public void should_throwException_whenInsertNull() {
         // given
-        Double toinsert = null;
+        Double toInsert = null;
 
         // when
-        queue.insert(toinsert);
+        queue.insert(toInsert);
 
         // then
         assert false;
@@ -54,7 +53,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beNotEmpty_afterinsert() {
+    public void should_beNotEmpty_afterInsert() {
         // given
 
         // when
@@ -65,7 +64,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beEmpty_afterinsertAndgetMax() {
+    public void should_beEmpty_afterInsertAndGetMax() {
         // given
 
         // when
@@ -89,7 +88,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_hasSizeOfOne_afterinsert() {
+    public void should_hasSizeOfOne_afterInsert() {
         // given
 
         // when
@@ -102,7 +101,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_hasSizeOfTwo_afterDoubleinsert() {
+    public void should_hasSizeOfTwo_afterDoubleInsert() {
         // given
 
         // when
@@ -116,7 +115,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_hasSizeOfZero_afterinsertAndgetMax() {
+    public void should_hasSizeOfZero_afterInsertAndGetMax() {
         // given
 
         // when
@@ -130,7 +129,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beAbleToStore_edges() {
+    public void should_beAbleToStoreEdges() {
         // given
         PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B"), new Node("C"), new Node("D"), new Node("E") };
@@ -152,7 +151,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beAbleToStore_edges_inProperOrder() {
+    public void should_beAbleToStoreEdges_inProperOrder() {
         // given
         PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B"), new Node("C"), new Node("D"), new Node("E") };
@@ -177,7 +176,7 @@ public class PriorityQueueTest {
     }
 
     @Test
-    public void should_beAbleToStore_equalsEdges() {
+    public void should_beAbleToStoreEqualsEdges() {
         // given
         PriorityQueue<Edge> queueOfEdges = new PriorityQueue<>();
         Node[] nodes = { new Node("A"), new Node("B") };

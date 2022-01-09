@@ -76,6 +76,20 @@ public class EdgeTest {
     }
 
     @Test
+    public void should_beEqual_twoSameEdges() {
+        // given
+        Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);
+        Edge secondEdge = firstEdge;
+
+        // when
+        boolean actualResult = firstEdge.equals(secondEdge);
+
+        // then
+        boolean expectedResult = true;
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
     public void should_compareProperly_twoEqualEdges() {
         // given
         Edge firstEdge = new Edge(new Node("B"), new Node("A"), 10);

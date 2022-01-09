@@ -5,7 +5,7 @@ public class Node implements Comparable<Node> {
     boolean visited;
     Node parent;
 
-    Node(String label) {
+    public Node(String label) {
         validateInput(label);
         this.label = label;
         this.visited = false;

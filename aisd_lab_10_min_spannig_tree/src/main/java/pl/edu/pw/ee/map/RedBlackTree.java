@@ -4,9 +4,9 @@ import static pl.edu.pw.ee.map.Color.BLACK;
 import static pl.edu.pw.ee.map.Color.RED;
 
 public class RedBlackTree<K extends Comparable<K>, V> {
-
     private Node<K, V> root;
     private int size = 0;
+    private String traversalResult = "";
 
     public V get(K key) {
         validateKey(key);
@@ -36,14 +36,28 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         root.setColor(BLACK);
     }
 
-    public int getSize(){
+    public int getSize() {
         size = 0;
         calculateSize(root);
         return size;
     }
 
-    public K getRoot(){
+    public K getRoot() {
         return root.getKey();
+    }
+    
+    public String getPreOrder() {
+        traversalResult = "";
+        returnPreOrder(root);
+        return traversalResult.trim();
+    }
+
+    private void returnPreOrder(Node<K, V> node) {
+        if (node != null) {
+            traversalResult = traversalResult + node.getKey() + ":" + node.getValue() + " ";
+            returnPreOrder(node.getLeft());
+            returnPreOrder(node.getRight());
+        }
     }
 
     private void calculateSize(Node<K, V> node) {

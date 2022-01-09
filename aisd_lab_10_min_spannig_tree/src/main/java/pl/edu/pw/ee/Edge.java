@@ -5,7 +5,7 @@ public class Edge implements Comparable<Edge> {
     private Node end;
     private int cost;
 
-    Edge(Node start, Node end, int cost) {
+    public Edge(Node start, Node end, int cost) {
         validateInput(start, end, cost);
         this.start = start;
         this.end = end;
@@ -22,11 +22,6 @@ public class Edge implements Comparable<Edge> {
 
     public double getCost() {
         return cost;
-    }
-
-    public void setVisited() {
-        start.setVisited();
-        end.setVisited();
     }
 
     @Override

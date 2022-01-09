@@ -1,7 +1,7 @@
 package pl.edu.pw.ee;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 import pl.edu.pw.ee.map.RbtMap;
@@ -22,8 +22,10 @@ public class KruskalAlgorithm implements MinSpanningTree {
         minSpanningTree = "";
         priorityQueue = new PriorityQueue<>();
         readGraph();
-        determineMST();
-        checkConnectivity();
+        if (priorityQueue.getSize() > 0) {
+            determineMST();
+            checkConnectivity();
+        }
 
         return minSpanningTree.substring(0, minSpanningTree.length() == 0 ? 0 : minSpanningTree.length() - 1);
     }
@@ -37,7 +39,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
 
             if (!startNodeParent.equals(endNodeParent)) {
                 startNodeParent.setParent(endNodeParent);
-                nmbOfAddedEdges ++;
+                nmbOfAddedEdges++;
                 minSpanningTree += minEdge + "|";
             }
         }
@@ -46,10 +48,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
     private void readGraph() {
         try {
             Scanner reader = new Scanner(dataFile);
-            if (!reader.hasNextLine()) {
-                reader.close();
-                throw new IllegalArgumentException("The input file is empty");
-            }
+
             while (reader.hasNextLine()) {
                 String actualLine = reader.nextLine();
                 if (actualLine.matches("^[a-zA-Z]+ [a-zA-Z]+ \\d+$")) {
@@ -67,7 +66,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
             }
             reader.close();
 
-        } catch (IndexOutOfBoundsException | NumberFormatException | FileNotFoundException exception) {
+        } catch (IndexOutOfBoundsException | NumberFormatException | IOException exception) {
             throw new IllegalArgumentException("There is problem with input file");
         }
     }
@@ -106,9 +105,6 @@ public class KruskalAlgorithm implements MinSpanningTree {
         dataFile = new File(pathToFile);
         if (!dataFile.isFile()) {
             throw new IllegalArgumentException("Path does not lead to the file");
-        }
-        if (!dataFile.canRead()) {
-            throw new IllegalArgumentException("Cannot read from the directory");
         }
     }
 }

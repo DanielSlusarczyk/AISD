@@ -16,9 +16,6 @@ public class PriorityQueue<T extends Comparable<T>> implements PriorityQueueInte
 
     @Override
     public void insert(T item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Cannot insert null");
-        }
         heap.put(item);
     }
 

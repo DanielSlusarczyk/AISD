@@ -40,22 +40,11 @@ public class PrimAlgorithmTest {
         assert false;
     }
 
+
     @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenPathLeadToDirectory() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput";
-
-        // when
-        primAlgorithm.findMST(path);
-
-        // then
-        assert false;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenFileIsEmpty() {
-        // given
-        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\empty.txt";
 
         // when
         primAlgorithm.findMST(path);
@@ -206,6 +195,33 @@ public class PrimAlgorithmTest {
 
         // then
         assert false;
+    }
+
+    @Test
+    public void should_correctlyCreateMST_whenFileIsEmpty() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\empty.txt";
+
+        // when
+        String actualResult = primAlgorithm.findMST(path);
+
+        // then
+        String expectedResult = "";
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    public void should_workCorrectly_whenFirstNodeSetAsNull() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\oneEdgeGraph.txt";
+
+        // when
+        primAlgorithm.setFirstNode(null);
+        String actualResult = primAlgorithm.findMST(path);
+
+        // then
+        String expectedResult = "Y_10_U";
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test

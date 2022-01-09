@@ -53,18 +53,6 @@ public class KruskalAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_throwException_whenFileIsEmpty() {
-        // given
-        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\empty.txt";
-
-        // when
-        kruskalAlgorithm.findMST(path);
-
-        // then
-        assert false;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void should_throwException_whenFileHasOnlyNewLineSign() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\newLineSign.txt";
@@ -209,6 +197,19 @@ public class KruskalAlgorithmTest {
     }
 
     @Test
+    public void should_correctlyCreateMST_whenFileIsEmpty() {
+        // given
+        String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\empty.txt";
+
+        // when
+        String actualResult = kruskalAlgorithm.findMST(path);
+
+        // then
+        String expectedResult = "";
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
     public void should_correctlyCreateMST_whenGraphContainsOneEdge() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\oneEdgeGraph.txt";
@@ -238,7 +239,7 @@ public class KruskalAlgorithmTest {
     }
 
     @Test
-    public void should_createDifferentMST_fromEachNode_equalWeights() {
+    public void should_correctlyCreateMST_fromEachNode_equalWeights() {
         // given
         String path = "src\\test\\java\\pl\\edu\\pw\\ee\\testInput\\equalWeightsGraph.txt";
         List<Edge> listOfActualEdges;

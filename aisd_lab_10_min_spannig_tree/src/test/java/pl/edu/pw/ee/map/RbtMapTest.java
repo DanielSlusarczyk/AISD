@@ -1,4 +1,4 @@
-package pl.edu.pw.ee;
+package pl.edu.pw.ee.map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -10,7 +10,8 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.pw.ee.map.RbtMap;
+import pl.edu.pw.ee.Edge;
+import pl.edu.pw.ee.Node;
 
 public class RbtMapTest {
     private RbtMap<Double, Double> rbtMap;
@@ -75,7 +76,7 @@ public class RbtMapTest {
     }
 
     @Test
-    public void should_CorrectlyGetManyValues_WhenExistInMap() {
+    public void should_correctlyGetManyValues_WhenExistInMap() {
         // given
         int testLength = 100;
         List<Double> doubleList = new ArrayList<>();
@@ -109,5 +110,23 @@ public class RbtMapTest {
 
         // then
         assertNull(actualKey);
+    }
+
+    @Test
+    public void should_correctlyGetValues_whenMapHasEqualElements() {
+        // given
+        int testLength = 100;
+        Edge edge = new Edge(new Node("B"), new Node("A"), 10);
+        RbtMap<Edge, Edge> edgeMap = new RbtMap<>();
+
+        // when
+        for (int i = 0; i < testLength; i++) {
+            edgeMap.setValue(edge, edge);
+        }
+        Edge actualValue = edgeMap.getValue(edge);
+
+        // then
+        Edge expectedValue = edge;
+        assertEquals(expectedValue, actualValue);
     }
 }
