@@ -45,7 +45,6 @@ public class Edge implements Comparable<Edge> {
             }
         }
         return result;
-
     }
 
     @Override
