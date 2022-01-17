@@ -7,15 +7,15 @@ import org.junit.Test;
 
 public class DeterministicFiniteAutomatonTextSearchTest {
     private String pattern = "ABCB";
-    private DeterministicFiniteAutomatonTextSearch dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
+    private DeterministicFiniteAutomatonTextSearch searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
 
     @Test(expected = IllegalArgumentException.class)
-    public void schould_throwException_whenPattternIsNull() {
+    public void should_throwException_whenPattternIsNull() {
         // given
         String pattern = null;
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
 
         // when
         assert false;
@@ -27,7 +27,7 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String pattern = "";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
 
         // when
         assert false;
@@ -39,7 +39,7 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = null;
 
         // then
-        dATS.findFirst(text);
+        searcher.findFirst(text);
 
         // when
         assert false;
@@ -51,7 +51,7 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = null;
 
         // then
-        dATS.findAll(text);
+        searcher.findAll(text);
 
         // when
         assert false;
@@ -64,8 +64,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "ABC";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 0;
@@ -79,8 +79,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "CABC";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 1;
@@ -88,14 +88,14 @@ public class DeterministicFiniteAutomatonTextSearchTest {
     }
 
     @Test
-    public void should_findFirst_patternAtLastIndex() {
+    public void should_findFirst_patternAtLastIndexes() {
         // given
         String pattern = "AB";
         String text = "AAAAAAAAAAB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 9;
@@ -109,8 +109,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = pattern;
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 0;
@@ -124,8 +124,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "BBBBBBBBABBBBBBBB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 8;
@@ -139,8 +139,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "Zażółć gęślą jaźń";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 7;
@@ -154,11 +154,26 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "a\n\n\t\t\r\ra\n\n";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = 4;
+        assertEquals(expectedIndex, actualIndex);
+    }
+
+    @Test
+    public void should_findFirst_textWithPunctuationMarks() {
+        // given
+        String pattern = "%$";
+        String text = ",.?<>/:;\"\'+-_=*/)(*&^%$#@!";
+
+        // then
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
+
+        // when
+        int expectedIndex = 21;
         assertEquals(expectedIndex, actualIndex);
     }
 
@@ -169,8 +184,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = -1;
@@ -184,8 +199,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "BAAABBBBBAAAA";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = -1;
@@ -199,8 +214,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "ABA";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int actualIndex = dATS.findFirst(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actualIndex = searcher.findFirst(text);
 
         // when
         int expectedIndex = -1;
@@ -214,8 +229,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "ABBBB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 0 };
@@ -229,8 +244,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "AABBBB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 1 };
@@ -244,8 +259,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "BAACBBBAB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 7 };
@@ -259,8 +274,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = pattern;
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 0 };
@@ -274,8 +289,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "AAAAAAAAA";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -289,8 +304,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "AAAABCBBBABCAAAAACABDABCD";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 3, 9, 21 };
@@ -304,8 +319,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "AABBAABBAABB";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 0, 4 };
@@ -322,11 +337,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
                 "Ja manie mam na „nie”, a me imię – Niemanie.";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
-        for (int x : actualIndexes) {
-            System.out.println(x);
-        }
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = { 1, 13, 23, 41, 45, 69, 93, 100, 103, 123, 135, 158 };
@@ -340,8 +352,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = {};
@@ -355,8 +367,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "ABCDEFGHIJK";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = {};
@@ -370,8 +382,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         String text = "AAA";
 
         // then
-        dATS = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int[] actualIndexes = dATS.findAll(text);
+        searcher = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int[] actualIndexes = searcher.findAll(text);
 
         // when
         int[] expectedIndexes = {};
