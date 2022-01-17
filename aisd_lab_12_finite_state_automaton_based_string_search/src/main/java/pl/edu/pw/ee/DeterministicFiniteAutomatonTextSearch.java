@@ -43,7 +43,7 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
     private Map<Key, Integer> transMap;
 
     public DeterministicFiniteAutomatonTextSearch(String pattern) {
-        validateInput(pattern);
+        validatePattern(pattern);
 
         this.pattern = pattern;
         buildTransitionMatrix();
@@ -51,7 +51,7 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
 
     @Override
     public int findFirst(String text) {
-        validateInput(text);
+        validateText(text);
         int n = text.length();
         int acceptedState = pattern.length();
         int result = -1;
@@ -77,7 +77,7 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
 
     @Override
     public int[] findAll(String text) {
-        validateInput(text);
+        validateText(text);
         int n = text.length();
         int acceptedState = pattern.length();
         ArrayList<Integer> listOfIndexes = new ArrayList<>();
@@ -104,11 +104,15 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
         return result;
     }
 
-    private void validateInput(String txt) {
+    private void validateText(String txt) {
         if (txt == null) {
             throw new IllegalArgumentException("Input text cannot be null!");
         }
-        if (txt.length() == 0) {
+    }
+
+    private void validatePattern(String pattern) {
+        validateText(pattern);
+        if (pattern.length() == 0) {
             throw new IllegalArgumentException("Input text cannot be null!");
         }
     }
@@ -128,7 +132,6 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
                 while (k > 0 && !isSuffixOfPattern(k, q, sign)) {
                     k--;
                 }
-                System.out.println(String.format("sigma(%d, %c) = %d\n", q, sign, k));
                 transMap.put(new Key(q, sign), k);
             }
         }
