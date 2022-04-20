@@ -5,7 +5,7 @@ Repozytorium z projektami z Algorytmów i Struktur Danych. Wszystkie projekty zo
 Wstępny projekt przedmiotu prezentujący działanie algorytmu __wyszukiania binarnego__ przygotowany przez prowadzącego zajęcia.
 
 ## aisd_lab_1_sorting
-Projekt zakładający porównanie działania algorytmów sortowania: __sortowanie przez kopcowanie__, __sortowanie przez wstawianie, __sortowanie szybkie__, __sortowanie przez wybieranie__.
+Projekt zakładający porównanie działania algorytmów sortowania: __sortowanie przez kopcowanie__, __sortowanie przez wstawianie__, __sortowanie szybkie__, __sortowanie przez wybieranie__.
 
 ## aisd_lab_3_hash_table
 Przykładowa implementacja __tablicy mieszającej__ rozwiązującej kolizje za pomocą __metody łańcuchowej__.
@@ -27,3 +27,9 @@ Przykładowa implementacja algorytmu opartego na grafie - algorytmy wyznaczając
 
 ## aisd_lab_12)finite_state_automaton_based_search
 Przykładowa implementacja __algorytmu wyszukującego wzroca w tekście opartego o automat skończony__.
+
+### Przykładowe testy automatyczne dla projektu aisd_lab_10_min_spanning_tree
+![2022-04-20 22_41_30-HeapTest java - aisd_lab_10_min_spannig_tree - Visual Studio Code](https://user-images.githubusercontent.com/74370363/164319191-27fab80b-1aa5-49d7-97fc-42ba095d66b5.png)
+
+### Pokrycie kodu testami:
+![2022-04-20 22_40_30-aisd_lab_10_min_spannig_tree – Opera](https://user-images.githubusercontent.com/74370363/164319341-21b22b8e-5b1d-4891-b92a-f0575295b4c5.png)
