@@ -29,7 +29,8 @@ Przykładowa implementacja algorytmu opartego na grafie - algorytmy wyznaczając
 Przykładowa implementacja __algorytmu wyszukującego wzroca w tekście opartego o automat skończony__.
 
 ### Przykładowe testy automatyczne dla projektu aisd_lab_10_min_spanning_tree
-![2022-04-20 22_41_30-HeapTest java - aisd_lab_10_min_spannig_tree - Visual Studio Code](https://user-images.githubusercontent.com/74370363/164319191-27fab80b-1aa5-49d7-97fc-42ba095d66b5.png)
+![2022-04-20 22_43_23-HeapTest java - aisd_lab_10_min_spannig_tree - Visual Studio Code](https://user-images.githubusercontent.com/74370363/164319481-cd461b69-7ba4-4285-a9ee-f48ffda66b89.png)
+
 
 ### Pokrycie kodu testami:
 ![2022-04-20 22_40_30-aisd_lab_10_min_spannig_tree – Opera](https://user-images.githubusercontent.com/74370363/164319341-21b22b8e-5b1d-4891-b92a-f0575295b4c5.png)
